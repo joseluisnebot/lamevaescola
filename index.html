@@ -2,146 +2,353 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La Meva Escola</title>
+  <title>La Meva Escola — Eines IA per a docents LOMLOE</title>
+  <meta name="description" content="Eines gratuïtes d'intel·ligència artificial per a mestres i professors. Genera rúbriques, situacions d'aprenentatge, butlletins i més. Alineat amb LOMLOE." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:       #F9F8F6;
-      --surface:  #FFFFFF;
-      --border:   #E8E6E1;
-      --text:     #1A1917;
-      --muted:    #6B6860;
-      --accent:   #2D6A4F;
-      --accent-l: #D8EDE3;
+      --bg: #F7F9F7; --surface: #FFFFFF; --border: #DDE8DD;
+      --text: #1A1917; --muted: #6B7B6B;
+      --accent: #2D6A4F; --accent-l: #D8EDE3; --accent-d: #1B4332;
     }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: rgba(247,249,247,0.95);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 50;
     }
+    .nav-logo { font-size: 1.1rem; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-badge { font-size: 0.72rem; font-weight: 600; background: var(--accent-l); color: var(--accent-d); padding: 0.25rem 0.75rem; border-radius: 999px; }
 
-    .wrapper {
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
+    .hero { text-align: center; padding: 5rem 1.5rem 3.5rem; max-width: 680px; margin: 0 auto; }
+    .hero-pill { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--accent-l); color: var(--accent-d); font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.9rem; border-radius: 999px; margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.12; letter-spacing: -0.04em; margin-bottom: 1rem; }
+    h1 span { color: var(--accent); }
+    .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; }
+    .hero-tags { display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--muted); font-weight: 500; }
+    .hero-tags span::before { content: "✓ "; color: var(--accent); font-weight: 700; }
+
+    .section { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Secció IA — destacada */
+    .ia-section { margin-bottom: 4rem; }
+    .section-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.75rem; }
+    .section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.35rem; }
+    .section-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; }
+    .section-sub { font-size: 0.88rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.5; }
+
+    .ia-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    @media (max-width: 900px) { .ia-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 620px) { .ia-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 380px) { .ia-grid { grid-template-columns: 1fr; } }
+
+    .tool-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 1.25rem; padding: 1.35rem;
+      text-decoration: none; color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+      display: flex; flex-direction: column; gap: 0.6rem;
     }
-
-    .badge {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: var(--accent-l);
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
-      margin-bottom: 2rem;
+    .tool-card:hover { border-color: var(--accent); box-shadow: 0 6px 24px rgba(45,106,79,0.12); transform: translateY(-2px); }
+    .tool-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #EBF7F0, #FFFFFF);
+      grid-column: span 2;
     }
+    @media (max-width: 620px) { .tool-card.featured { grid-column: span 1; } }
 
-    h1 {
-      font-size: clamp(2rem, 6vw, 2.75rem);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-      color: var(--text);
+    .tool-icon { font-size: 1.6rem; line-height: 1; }
+    .tool-badge {
+      display: inline-block; font-size: 0.62rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 0.18rem 0.55rem; border-radius: 999px;
+      background: var(--accent-l); color: var(--accent-d);
     }
+    .tool-badge.hot { background: #FEE2E2; color: #DC2626; }
+    .tool-badge.new { background: #FEF0DC; color: #92400E; }
+    .tool-name { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.3; }
+    .tool-desc { font-size: 0.79rem; color: var(--muted); line-height: 1.55; flex: 1; }
+    .tool-cta { font-size: 0.78rem; font-weight: 700; color: var(--accent); margin-top: 0.1rem; }
 
-    h1 span {
-      color: var(--accent);
+    /* Secció utilitats — més compacta */
+    .util-section { margin-bottom: 4rem; }
+    .util-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.85rem; }
+    @media (max-width: 800px) { .util-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 500px) { .util-grid { grid-template-columns: 1fr 1fr; } }
+
+    .util-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 1rem; padding: 1.1rem 1rem;
+      text-decoration: none; color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      display: flex; flex-direction: column; gap: 0.5rem;
+      text-align: center; align-items: center;
     }
-
-    p {
-      font-size: 1.05rem;
-      font-weight: 300;
-      line-height: 1.7;
-      color: var(--muted);
-      margin-bottom: 2.5rem;
-    }
-
-    .form {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .form input[type="email"] {
-      flex: 1 1 220px;
-      padding: 0.75rem 1rem;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-      font-family: inherit;
-      font-size: 0.95rem;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form input[type="email"]::placeholder { color: #B0ADA6; }
-    .form input[type="email"]:focus { border-color: var(--accent); }
-
-    .form button {
-      padding: 0.75rem 1.4rem;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      white-space: nowrap;
-    }
-
-    .form button:hover { opacity: 0.85; }
-
-    .note {
-      margin-top: 1.25rem;
-      font-size: 0.8rem;
-      color: #B0ADA6;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 3rem 0 2rem;
-    }
+    .util-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(45,106,79,0.09); }
+    .util-icon { font-size: 1.5rem; }
+    .util-name { font-size: 0.82rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; }
+    .util-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.45; }
 
     footer {
-      font-size: 0.78rem;
-      color: #C5C2BB;
+      text-align: center; padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted);
     }
   </style>
+  <link rel="canonical" href="https://lamevaescola.com/">
 </head>
 <body>
-  <div class="wrapper">
-    <div class="badge">Pròximament</div>
+  <nav>
+    <a href="/" class="nav-logo">la meva <span>escola</span></a>
+    <span class="nav-badge">Gratuït · Sense registre</span>
+  </nav>
 
-    <h1>La Meva<br /><span>Escola</span></h1>
-
-    <p>
-      Estem preparant quelcom especial per a escoles i famílies.<br />
-      Una plataforma pensada per acostar la comunitat educativa.
+  <section class="hero">
+    <div class="hero-pill">✦ Eines IA per a docents</div>
+    <h1>Prepara les teves classes<br><span>10× més ràpid</span></h1>
+    <p class="hero-sub">
+      Eines gratuïtes d'intel·ligència artificial per a mestres i professors.<br>
+      Alineades amb <strong>LOMLOE</strong>, en català i castellà.
     </p>
+    <div class="hero-tags">
+      <span>100% gratuït</span>
+      <span>Sense registre</span>
+      <span>Alineat LOMLOE</span>
+      <span>En català</span>
+    </div>
+  </section>
 
-    <hr />
-    <footer>© 2026 lamevaescola.com — tots els drets reservats</footer>
+  <!-- SUSCRIPCIÓ -->
+  <div style="max-width:680px;margin:0 auto 4rem;padding:0 1.5rem">
+    <div style="background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:1.5rem;padding:2.5rem;text-align:center;color:white">
+      <div style="font-size:1.75rem;margin-bottom:0.75rem">🎁</div>
+      <h2 style="font-size:1.4rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.5rem">15 prompts per a docents, gratis</h2>
+      <p style="opacity:0.85;font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem">Subscriu-te i et enviem a l'instant els millors prompts per preparar classes, avaluar i comunicar-te amb les famílies. Sense spam.</p>
+      <form id="sub-form" style="display:flex;gap:0.75rem;max-width:420px;margin:0 auto;flex-wrap:wrap">
+        <input id="sub-name" type="text" placeholder="El teu nom" style="flex:1;min-width:120px;padding:0.7rem 1rem;border-radius:0.6rem;border:none;font-size:0.9rem;font-family:inherit"/>
+        <input id="sub-email" type="email" placeholder="correu@escola.cat" required style="flex:2;min-width:180px;padding:0.7rem 1rem;border-radius:0.6rem;border:none;font-size:0.9rem;font-family:inherit"/>
+        <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.75rem;opacity:0.85;cursor:pointer;text-align:left;width:100%;line-height:1.5">
+          <input type="checkbox" id="sub-rgpd" required style="margin-top:2px;flex-shrink:0"/>
+          <span>Accepto la <a href="/privacitat.html" style="color:#86EFAC;white-space:nowrap">política de privacitat</a> i el tractament del meu correu per rebre la newsletter. Puc cancel·lar quan vulgui.</span>
+        </label>
+        <button type="submit" style="width:100%;padding:0.8rem;background:#FB923C;color:white;font-weight:800;border:none;border-radius:0.6rem;cursor:pointer;font-size:0.95rem;font-family:inherit">Envia'm els prompts →</button>
+      </form>
+      <div id="sub-ok" style="display:none;margin-top:1rem;font-weight:700;font-size:0.95rem">✅ Perfecte! Comprova el teu correu.</div>
+      <div id="sub-err" style="display:none;margin-top:1rem;font-size:0.85rem;color:#FCA5A5"></div>
+      <p style="opacity:0.6;font-size:0.72rem;margin-top:1rem">Sense spam · Cancel·la quan vulguis</p>
+    </div>
   </div>
+
+  <!-- EINES AMB IA -->
+  <div class="section ia-section">
+    <div class="section-header">
+      <div>
+        <div class="section-label">✨ Intel·ligència Artificial</div>
+        <div class="section-title">Eines amb IA</div>
+        <div class="section-sub">Genera documents i materials en segons. Adaptats a LOMLOE i al teu currículum.</div>
+      </div>
+      <a href="/prompts.html" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.82rem;font-weight:700;color:var(--accent);background:var(--accent-l);padding:0.5rem 1rem;border-radius:999px;text-decoration:none;white-space:nowrap">
+        📚 15 prompts gratuïts →
+      </a>
+    </div>
+
+    <div class="ia-grid">
+
+      <a href="/situacions.html" class="tool-card featured">
+        <div class="tool-icon">🗺️</div>
+        <span class="tool-badge hot">Més demanat</span>
+        <div class="tool-name">Situacions d'Aprenentatge</div>
+        <div class="tool-desc">Genera una situació d'aprenentatge completa amb activitats, competències i criteris d'avaluació LOMLOE.</div>
+        <div class="tool-cta">Generar situació →</div>
+      </a>
+
+      <a href="/programacio.html" class="tool-card featured">
+        <div class="tool-icon">📚</div>
+        <span class="tool-badge new">Nou</span>
+        <div class="tool-name">Programació d'Unitat Didàctica</div>
+        <div class="tool-desc">Programació completa amb objectius, continguts, sessions detallades i criteris d'avaluació.</div>
+        <div class="tool-cta">Generar programació →</div>
+      </a>
+
+      <a href="/rubriques.html" class="tool-card">
+        <div class="tool-icon">📋</div>
+        <span class="tool-badge">Popular</span>
+        <div class="tool-name">Rúbriques d'Avaluació</div>
+        <div class="tool-desc">Rúbriques amb 4 nivells d'assoliment per a qualsevol criteri i competència LOMLOE.</div>
+        <div class="tool-cta">Generar rúbrica →</div>
+      </a>
+
+      <a href="/preguntes.html" class="tool-card">
+        <div class="tool-icon">❓</div>
+        <span class="tool-badge new">Nou</span>
+        <div class="tool-name">Preguntes d'Examen</div>
+        <div class="tool-desc">Bateries de preguntes per a qualsevol tema i nivell. Amb la resposta correcta inclosa.</div>
+        <div class="tool-cta">Generar preguntes →</div>
+      </a>
+
+      <a href="/activitats.html" class="tool-card">
+        <div class="tool-icon">⚡</div>
+        <span class="tool-badge">Popular</span>
+        <div class="tool-name">Generador d'Activitats</div>
+        <div class="tool-desc">5 activitats creatives i motivadores per a qualsevol tema, àrea i nivell educatiu.</div>
+        <div class="tool-cta">Generar activitats →</div>
+      </a>
+
+      <a href="/simplificador.html" class="tool-card">
+        <div class="tool-icon">📝</div>
+        <span class="tool-badge new">Nou</span>
+        <div class="tool-name">Simplificador de Textos</div>
+        <div class="tool-desc">Adapta qualsevol text al nivell lector dels alumnes. Simplifica, amplia o adapta per a TDAH i dislèxia.</div>
+        <div class="tool-cta">Adaptar text →</div>
+      </a>
+
+      <a href="/adaptacions.html" class="tool-card">
+        <div class="tool-icon">♿</div>
+        <span class="tool-badge">Popular</span>
+        <div class="tool-name">Adaptacions Curriculars</div>
+        <div class="tool-desc">Adapta qualsevol activitat per a alumnes amb NEE: dislèxia, TDAH, altes capacitats i més.</div>
+        <div class="tool-cta">Generar adaptació →</div>
+      </a>
+
+      <a href="/cartes.html" class="tool-card">
+        <div class="tool-icon">✉️</div>
+        <span class="tool-badge new">Nou</span>
+        <div class="tool-name">Cartes per a Famílies</div>
+        <div class="tool-desc">Autoritzacions, convocatòries, comunicats i més. Redacció professional en un clic.</div>
+        <div class="tool-cta">Generar carta →</div>
+      </a>
+
+      <a href="/butlletins.html" class="tool-card">
+        <div class="tool-icon">💬</div>
+        <span class="tool-badge">Popular</span>
+        <div class="tool-name">Comentaris de Butlletí</div>
+        <div class="tool-desc">Comentaris personalitzats per a l'informe trimestral de cada alumne, adaptats al seu perfil.</div>
+        <div class="tool-cta">Generar comentaris →</div>
+      </a>
+
+      <a href="/informes.html" class="tool-card">
+        <div class="tool-icon">📄</div>
+        <span class="tool-badge">Popular</span>
+        <div class="tool-name">Informes d'Avaluació</div>
+        <div class="tool-desc">Informes finals de trimestre a partir de les teves notes i observacions de classe.</div>
+        <div class="tool-cta">Generar informe →</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- UTILITATS SENSE IA -->
+  <div class="section util-section">
+    <div class="section-header">
+      <div>
+        <div class="section-label">🛠 Utilitats de classe</div>
+        <div class="section-title">Sense IA</div>
+        <div class="section-sub">Eines pràctiques per al dia a dia a l'aula. Ràpides i sense connexió.</div>
+      </div>
+    </div>
+
+    <div class="util-grid">
+
+      <a href="/ruleta.html" class="util-card">
+        <div class="util-icon">🎡</div>
+        <div class="util-name">Ruleta de Noms</div>
+        <div class="util-desc">Tria un alumne a l'atzar amb animació</div>
+      </a>
+
+      <a href="/temporizador.html" class="util-card">
+        <div class="util-icon">⏱️</div>
+        <div class="util-name">Temporizador d'Aula</div>
+        <div class="util-desc">Compte enrere a pantalla completa</div>
+      </a>
+
+      <a href="/grups.html" class="util-card">
+        <div class="util-icon">🎲</div>
+        <div class="util-name">Grups Aleatoris</div>
+        <div class="util-desc">Divideix la classe en grups equilibrats</div>
+      </a>
+
+      <a href="/bingo.html" class="util-card">
+        <div class="util-icon">🎱</div>
+        <div class="util-name">Bingo de Classe</div>
+        <div class="util-desc">Cartrons de bingo personalitzats per imprimir</div>
+      </a>
+
+      <a href="/sopa-de-lletres.html" class="util-card">
+        <div class="util-icon">🔤</div>
+        <div class="util-name">Sopa de Lletres</div>
+        <div class="util-desc">Sopes de lletres amb les teves paraules</div>
+      </a>
+
+      <a href="/calculadora-notes.html" class="util-card">
+        <div class="util-icon">🧮</div>
+        <div class="util-name">Calculadora de Notes</div>
+        <div class="util-desc">Nota ponderada i conversió LOMLOE</div>
+      </a>
+
+      <a href="/horari.html" class="util-card">
+        <div class="util-icon">🗓️</div>
+        <div class="util-name">Horari Setmanal</div>
+        <div class="util-desc">Editor visual d'horari, imprimible</div>
+      </a>
+
+      <a href="/calendari.html" class="util-card">
+        <div class="util-icon">📅</div>
+        <div class="util-name">Calendari Escolar</div>
+        <div class="util-desc">Calendari 2025-26 amb festius i vacances</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- NORMATIVA -->
+  <div class="section" style="margin-bottom:5rem;">
+    <div class="section-header" style="margin-bottom:1.25rem;">
+      <div>
+        <div class="section-label">📋 Radar normatiu</div>
+        <div class="section-title">Normativa educativa al dia</div>
+      </div>
+    </div>
+    <a href="/normativa.html" style="display:block;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:1.5rem;padding:2rem 2.5rem;text-decoration:none;color:white;">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <div style="font-size:2.5rem">📋</div>
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:1.15rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.35rem">DOGC · DOGV · BOIB — Actualitzat cada dia</div>
+          <div style="opacity:0.85;font-size:0.88rem;line-height:1.6">Matrícules, beques, transport escolar, menjador i més. Tot el que afecta als centres educatius de Catalunya, País Valencià i Illes Balears.</div>
+        </div>
+        <div style="font-size:0.88rem;font-weight:800;background:rgba(255,255,255,0.15);padding:0.6rem 1.25rem;border-radius:999px;white-space:nowrap">Veure normativa →</div>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+    <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  </footer>
+
+<script>
+  document.getElementById('sub-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Enviant...';
+    try {
+      const r = await fetch('/api/subscribe', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name: document.getElementById('sub-name').value, email: document.getElementById('sub-email').value })
+      });
+      const d = await r.json();
+      if (d.ok) { document.getElementById('sub-form').style.display='none'; document.getElementById('sub-ok').style.display='block'; }
+      else { document.getElementById('sub-err').style.display='block'; document.getElementById('sub-err').textContent = d.error || 'Error, torna-ho a intentar'; btn.disabled=false; btn.textContent='Envia\'m els prompts →'; }
+    } catch { document.getElementById('sub-err').style.display='block'; document.getElementById('sub-err').textContent='Error de connexió'; btn.disabled=false; btn.textContent='Envia\'m els prompts →'; }
+  });
+</script>
+<script src="/cookies.js"></script>
 </body>
 </html>

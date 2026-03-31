@@ -9,7 +9,7 @@ Plataforma educativa enfocada en acompañamiento infantil. Proyecto de la mujer 
 ## Deploy
 ```bash
 cd /root/lamevaescola
-export CLOUDFLARE_API_TOKEN=lEduOPo2NZzDKY7gyEMjkMJkZHf1MFKBg6T_5aau
+export CLOUDFLARE_API_TOKEN=KbzsvBydROCvDbDtOab3dJHV_6w5REZhPnJkheix
 export CLOUDFLARE_ACCOUNT_ID=0c4d9c91bb0f3a4c905545ecc158ec65
 npx wrangler pages deploy . --project-name=lamevaescola --branch=main
 ```

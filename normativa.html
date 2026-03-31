@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Normativa Educativa — DOGC, DOGV i BOIB | La Meva Escola</title>
+  <meta name="description" content="Tota la normativa educativa de Catalunya, País Valencià i Illes Balears en un sol lloc. Matrícules, beques, transport escolar, menjador i més." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F9F7; --surface: #FFFFFF; --border: #DDE8DD;
+      --text: #1A1917; --muted: #6B7B6B;
+      --accent: #2D6A4F; --accent-l: #D8EDE3; --accent-d: #1B4332;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: rgba(247,249,247,0.95);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+
+    .hero { text-align: center; padding: 3.5rem 1.5rem 2rem; max-width: 680px; margin: 0 auto; }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--accent-l); color: var(--accent-d);
+      font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.9rem;
+      border-radius: 999px; margin-bottom: 1.25rem;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.04em; margin-bottom: 0.75rem; }
+    h1 span { color: var(--accent); }
+    .hero-sub { font-size: 0.95rem; color: var(--muted); line-height: 1.7; }
+
+    .content { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+    /* FILTRES */
+    .filtres { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .filtres-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .filtres-sep { width: 1px; background: var(--border); margin: 0 0.25rem; }
+
+    .pill {
+      padding: 0.4rem 0.9rem; border-radius: 999px; border: 1.5px solid var(--border);
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; background: var(--surface);
+      color: var(--muted); transition: all 0.15s; font-family: inherit;
+    }
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+    .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .pill.cat.active { background: #DC2626; border-color: #DC2626; }
+    .pill.val.active { background: #D97706; border-color: #D97706; }
+    .pill.bal.active { background: #7C3AED; border-color: #7C3AED; }
+
+    /* TIPUS pills */
+    .pill.matricula.active { background: #0369A1; border-color: #0369A1; }
+    .pill.beca.active      { background: #065F46; border-color: #065F46; }
+    .pill.transport.active { background: #92400E; border-color: #92400E; }
+    .pill.menjador.active  { background: #831843; border-color: #831843; }
+
+    /* CARDS */
+    .normativa-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .norm-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 1rem; padding: 1.25rem 1.5rem;
+      display: grid; grid-template-columns: auto 1fr; gap: 1rem;
+      align-items: start; transition: border-color 0.15s;
+      text-decoration: none; color: var(--text);
+    }
+    .norm-card:hover { border-color: var(--accent); }
+
+    .norm-date {
+      min-width: 52px; text-align: center;
+      background: var(--bg); border-radius: 0.6rem;
+      padding: 0.4rem 0.5rem;
+    }
+    .norm-day { font-size: 1.3rem; font-weight: 800; line-height: 1; color: var(--text); }
+    .norm-month { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .norm-body { min-width: 0; }
+    .norm-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+
+    .tag {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 0.15rem 0.5rem; border-radius: 999px;
+    }
+    .tag-cat { background: #FEE2E2; color: #DC2626; }
+    .tag-val { background: #FEF3C7; color: #D97706; }
+    .tag-bal { background: #EDE9FE; color: #7C3AED; }
+    .tag-matricula { background: #DBEAFE; color: #0369A1; }
+    .tag-beca      { background: #D1FAE5; color: #065F46; }
+    .tag-transport { background: #FEF3C7; color: #92400E; }
+    .tag-menjador  { background: #FCE7F3; color: #831843; }
+    .tag-general   { background: var(--accent-l); color: var(--accent-d); }
+
+    .norm-titol { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; line-height: 1.4; }
+    .norm-resum { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 0.5rem; }
+    .norm-link { font-size: 0.78rem; font-weight: 700; color: var(--accent); }
+
+    /* ORIGEN labels */
+    .origen-cat { font-size: 0.7rem; color: #DC2626; font-weight: 600; }
+    .origen-val { font-size: 0.7rem; color: #D97706; font-weight: 600; }
+    .origen-bal { font-size: 0.7rem; color: #7C3AED; font-weight: 600; }
+
+    /* EMPTY / LOADING */
+    .empty { text-align: center; padding: 4rem 1rem; color: var(--muted); }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .spinner {
+      width: 28px; height: 28px; border: 3px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin: 3rem auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* LOAD MORE */
+    .btn-more {
+      display: block; width: 100%; margin-top: 1.5rem;
+      padding: 0.8rem; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 0.75rem; font-family: inherit; font-size: 0.88rem;
+      font-weight: 700; color: var(--muted); cursor: pointer; transition: all 0.15s;
+    }
+    .btn-more:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* STATS */
+    .stats-bar {
+      display: flex; gap: 1rem; margin-bottom: 1.25rem;
+      font-size: 0.78rem; color: var(--muted); flex-wrap: wrap;
+    }
+    .stats-bar strong { color: var(--text); }
+
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/normativa.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Radar de Normativa Educativa","url":"https://lamevaescola.com/normativa.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">la meva <span>escola</span></a>
+    <a href="/" style="font-size:0.82rem;color:var(--muted);text-decoration:none;">← Tornar</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-pill">📋 Radar normatiu</div>
+    <h1>Normativa educativa<br><span>DOGC · DOGV · BOIB</span></h1>
+    <p class="hero-sub">Tota la normativa educativa de Catalunya, País Valencià i Illes Balears en un sol lloc.<br>Matrícules, beques, transport, menjador i molt més.</p>
+  </section>
+
+  <div class="content">
+
+    <!-- FILTRES -->
+    <div class="filtres">
+      <div class="filtres-group">
+        <button class="pill active" data-comunitat="" onclick="filtrar('comunitat','',this)">Totes</button>
+        <button class="pill cat" data-comunitat="catalunya" onclick="filtrar('comunitat','catalunya',this)">🔴 Catalunya</button>
+        <button class="pill val" data-comunitat="valencia" onclick="filtrar('comunitat','valencia',this)">🟡 País Valencià</button>
+        <button class="pill bal" data-comunitat="balears" onclick="filtrar('comunitat','balears',this)">🟣 Illes Balears</button>
+      </div>
+      <div class="filtres-sep"></div>
+      <div class="filtres-group">
+        <button class="pill active" data-tipus="" onclick="filtrar('tipus','',this)">Tot tipus</button>
+        <button class="pill matricula" data-tipus="matricula" onclick="filtrar('tipus','matricula',this)">📝 Matrícula</button>
+        <button class="pill beca" data-tipus="beca" onclick="filtrar('tipus','beca',this)">💰 Beques</button>
+        <button class="pill transport" data-tipus="transport" onclick="filtrar('tipus','transport',this)">🚌 Transport</button>
+        <button class="pill menjador" data-tipus="menjador" onclick="filtrar('tipus','menjador',this)">🍽️ Menjador</button>
+      </div>
+    </div>
+
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <div id="loader" class="spinner"></div>
+    <div class="normativa-list" id="normativa-list"></div>
+    <button class="btn-more" id="btn-more" style="display:none" onclick="carregarMes()">Carregar més →</button>
+
+    <div class="empty" id="empty" style="display:none">
+      <div class="empty-icon">📋</div>
+      <p>No hi ha normativa educativa recent per als filtres seleccionats.</p>
+      <p style="margin-top:0.5rem;font-size:0.82rem">El radar s'actualitza cada dia laborable al matí.</p>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>la meva escola</strong> · Radar normatiu DOGC · DOGV · BOIB<br>
+    <span style="margin-top:0.25rem;display:inline-block;font-size:0.72rem">
+      Actualitzat diàriament · <a href="/privacitat.html" style="color:var(--accent)">Privacitat</a>
+    </span>
+  </footer>
+
+  <script src="/cookies.js"></script>
+  <script>
+    const MESOS = ["gen","feb","mar","abr","mai","jun","jul","ago","set","oct","nov","des"];
+    const COMUNITAT_LABEL = { catalunya: "DOGC · Catalunya", valencia: "DOGV · País Valencià", balears: "BOIB · Illes Balears" };
+    const TIPUS_LABEL = { matricula: "Matrícula", beca: "Beca/Ajut", transport: "Transport escolar", menjador: "Menjador", general: "Educació" };
+
+    let state = { comunitat: "", tipus: "", offset: 0, total: 0, loading: false };
+
+    function filtrar(camp, valor, btn) {
+      // Update active pill
+      const group = btn.closest('.filtres-group');
+      group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      state[camp] = valor;
+      state.offset = 0;
+      document.getElementById('normativa-list').innerHTML = '';
+      carregar(true);
+    }
+
+    async function carregar(reset = false) {
+      if (state.loading) return;
+      state.loading = true;
+      document.getElementById('loader').style.display = reset ? 'block' : 'none';
+      document.getElementById('empty').style.display = 'none';
+      document.getElementById('btn-more').style.display = 'none';
+
+      const params = new URLSearchParams({
+        limit: 20, offset: state.offset,
+        ...(state.comunitat ? { comunitat: state.comunitat } : {}),
+        ...(state.tipus ? { tipus: state.tipus } : {}),
+      });
+
+      try {
+        const r = await fetch(`/api/normativa?${params}`);
+        const data = await r.json();
+        state.total = data.total || 0;
+
+        document.getElementById('loader').style.display = 'none';
+
+        if (reset && data.normativa.length === 0) {
+          document.getElementById('empty').style.display = 'block';
+          document.getElementById('stats-bar').innerHTML = '';
+          state.loading = false;
+          return;
+        }
+
+        document.getElementById('stats-bar').innerHTML =
+          `<span><strong>${state.total}</strong> normatives trobades</span>
+           <span>Actualitzat diàriament al matí</span>`;
+
+        renderCards(data.normativa, reset);
+        state.offset += data.normativa.length;
+
+        if (state.offset < state.total) {
+          document.getElementById('btn-more').style.display = 'block';
+        }
+      } catch (e) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('empty').style.display = 'block';
+        document.getElementById('empty').innerHTML = `<div class="empty-icon">⚠️</div><p>Error carregant la normativa. Torna-ho a intentar.</p>`;
+      }
+      state.loading = false;
+    }
+
+    function carregarMes() { carregar(false); }
+
+    function renderCards(items, reset) {
+      const list = document.getElementById('normativa-list');
+      if (reset) list.innerHTML = '';
+
+      for (const item of items) {
+        const d = new Date(item.data + 'T12:00:00');
+        const dia = d.getDate();
+        const mes = MESOS[d.getMonth()];
+        const comTag = `tag-${item.comunitat}`;
+        const tipTag = `tag-${item.tipus}`;
+
+        const card = document.createElement('a');
+        card.href = item.url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = 'norm-card';
+        card.innerHTML = `
+          <div class="norm-date">
+            <div class="norm-day">${dia}</div>
+            <div class="norm-month">${mes}</div>
+          </div>
+          <div class="norm-body">
+            <div class="norm-tags">
+              <span class="tag ${comTag}">${COMUNITAT_LABEL[item.comunitat] || item.comunitat}</span>
+              <span class="tag ${tipTag}">${TIPUS_LABEL[item.tipus] || item.tipus}</span>
+            </div>
+            <div class="norm-titol">${item.titol}</div>
+            ${item.resum ? `<div class="norm-resum">${item.resum}</div>` : ''}
+            <div class="norm-link">Llegir al butlletí oficial →</div>
+          </div>
+        `;
+        list.appendChild(card);
+      }
+    }
+
+    // Iniciar
+    carregar(true);
+  </script>
+</body>
+</html>

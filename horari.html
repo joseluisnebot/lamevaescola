@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horari Setmanal — la meva escola</title>
+  <meta name="description" content="Crea i imprimeix el teu horari setmanal de classe. Editor visual, imprimible i personalitzable." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#F7F9F7;--surface:#FFFFFF;--border:#DDE8DD;--text:#1A1917;--muted:#6B7B6B;--accent:#2D6A4F;--accent-l:#D8EDE3;--accent-d:#1B4332; }
+    body { font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh; }
+    nav { display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(247,249,247,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50; }
+    .hero { text-align:center;padding:3rem 1.5rem 2rem;max-width:620px;margin:0 auto; }
+    .hero-pill { display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-l);color:var(--accent-d);font-size:0.75rem;font-weight:700;padding:0.35rem 0.9rem;border-radius:999px;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase; }
+    h1 { font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-0.04em;margin-bottom:0.75rem; }
+    h1 span { color:var(--accent); }
+    .hero-sub { font-size:1rem;color:var(--muted);line-height:1.65; }
+    .main { max-width:1000px;margin:0 auto;padding:0 1.5rem 4rem; }
+    .toolbar { display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap; }
+    .toolbar input { background:white;border:1.5px solid var(--border);border-radius:0.6rem;padding:0.55rem 0.9rem;font-size:0.88rem;font-family:inherit;color:var(--text);outline:none; }
+    .toolbar input:focus { border-color:var(--accent); }
+    .btn { background:var(--accent-l);color:var(--accent-d);border:none;border-radius:0.6rem;padding:0.55rem 1rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.15s;white-space:nowrap; }
+    .btn:hover { background:#C3E0D0; }
+    .btn.primary { background:var(--accent);color:white; }
+    .btn.primary:hover { background:var(--accent-d); }
+    .horari-wrap { overflow-x:auto;background:white;border:1.5px solid var(--border);border-radius:1.25rem;box-shadow:0 4px 24px rgba(45,106,79,0.06); }
+    .horari-table { border-collapse:collapse;width:100%;min-width:600px; }
+    .horari-table th { background:var(--accent);color:white;padding:0.65rem 0.5rem;font-size:0.82rem;font-weight:700;text-align:center;letter-spacing:0.02em; }
+    .horari-table th.hora-col { background:var(--accent-d);width:80px; }
+    .horari-table td { border:1px solid var(--border);padding:0;vertical-align:middle; }
+    .horari-table td.hora-cell { background:#F0FAF4;font-size:0.75rem;font-weight:700;color:var(--accent-d);text-align:center;padding:0.4rem 0.3rem;line-height:1.3; }
+    .cell-input { width:100%;border:none;background:transparent;text-align:center;font-size:0.8rem;font-family:inherit;color:var(--text);padding:0.5rem 0.25rem;min-height:52px;resize:none;outline:none;cursor:pointer; }
+    .cell-input:focus { background:var(--accent-l);color:var(--accent-d); }
+    .cell-input.pati { background:#FEF0DC;color:#92400E;font-weight:600; }
+    .color-row { background:var(--bg); }
+    footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
+    @media print {
+      nav, .toolbar, footer { display:none!important; }
+      .horari-wrap { border:none;box-shadow:none;border-radius:0; }
+      body { background:white; }
+      .cell-input { font-size:0.75rem; }
+    }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/horari.html">
+</head>
+<body>
+<nav>
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">📅 Sense IA</div>
+  <h1>Horari <span>Setmanal</span></h1>
+  <p class="hero-sub">Crea i imprimeix el teu horari de classe. Fes clic a qualsevol casella per editar-la.</p>
+</section>
+
+<div class="main">
+  <div class="toolbar">
+    <input type="text" id="titol-horari" placeholder="Títol de l'horari (ex: 5è A — Curs 2025-26)" style="flex:1;min-width:200px;" />
+    <button class="btn" onclick="netejar()">🗑 Netejar</button>
+    <button class="btn primary" onclick="window.print()">🖨️ Imprimir</button>
+  </div>
+
+  <div class="horari-wrap">
+    <table class="horari-table" id="horari-table"></table>
+  </div>
+</div>
+
+<footer>
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <span style="margin-top:0.25rem;display:inline-block"><a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+</footer>
+
+<script>
+const DIES = ['Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres'];
+const HORES = [
+  '8:00 – 9:00',
+  '9:00 – 10:00',
+  '10:00 – 11:00',
+  '11:00 – 12:00 (Pati)',
+  '12:00 – 13:00',
+  '13:00 – 14:00',
+  '15:00 – 16:00',
+  '16:00 – 17:00',
+];
+const PATI_IDX = 3;
+
+const KEY = 'lme_horari_v1';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+}
+function save(data) {
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+
+function buildTable() {
+  const saved = load();
+  const table = document.getElementById('horari-table');
+  table.innerHTML = '';
+
+  const head = document.createElement('tr');
+  head.innerHTML = '<th class="hora-col">Hora</th>' + DIES.map(d => `<th>${d}</th>`).join('');
+  table.appendChild(head);
+
+  HORES.forEach((hora, hi) => {
+    const tr = document.createElement('tr');
+    const isPati = hi === PATI_IDX;
+    tr.innerHTML = `<td class="hora-cell">${hora}</td>`;
+    DIES.forEach((_, di) => {
+      const key = `${hi}_${di}`;
+      const val = saved[key] || '';
+      const td = document.createElement('td');
+      const ta = document.createElement('textarea');
+      ta.className = 'cell-input' + (isPati ? ' pati' : '');
+      ta.value = isPati && !val ? 'Pati' : val;
+      ta.rows = 2;
+      ta.dataset.key = key;
+      ta.addEventListener('input', () => {
+        const d = load(); d[key] = ta.value; save(d);
+      });
+      td.appendChild(ta);
+      tr.appendChild(td);
+    });
+    table.appendChild(tr);
+  });
+}
+
+function netejar() {
+  if (confirm('Segur que vols netejar tot l\'horari?')) {
+    localStorage.removeItem(KEY);
+    buildTable();
+  }
+}
+
+buildTable();
+</script>
+<script src="/cookies.js"></script>
+</body>
+</html>

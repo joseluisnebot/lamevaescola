@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>15 Prompts per a Docents LOMLOE — La Meva Escola</title>
+  <meta name="description" content="Els millors prompts d'IA per a mestres i professors. Estalvia hores preparant classes, rúbriques, butlletins i adaptacions. Alineat amb LOMLOE." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F9F7; --surface: #FFFFFF; --border: #DDE8DD;
+      --text: #1A1917; --muted: #6B7B6B;
+      --accent: #2D6A4F; --accent-l: #D8EDE3; --accent-d: #1B4332;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: rgba(247,249,247,0.95);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+
+    .hero {
+      text-align: center; padding: 4rem 1.5rem 2.5rem;
+      max-width: 640px; margin: 0 auto;
+    }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--accent-l); color: var(--accent-d);
+      font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.9rem;
+      border-radius: 999px; margin-bottom: 1.25rem;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.04em; margin-bottom: 0.75rem; }
+    h1 span { color: var(--accent); }
+    .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.7; }
+
+    .content { max-width: 720px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+    .section-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .prompt-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 1rem; padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem; position: relative;
+    }
+    .prompt-card:hover { border-color: var(--accent); }
+    .prompt-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem; }
+    .prompt-meta { display: flex; align-items: center; gap: 0.5rem; }
+    .prompt-num {
+      width: 28px; height: 28px; background: var(--accent); color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 800; flex-shrink: 0;
+    }
+    .prompt-category {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--accent);
+      background: var(--accent-l); padding: 0.2rem 0.6rem; border-radius: 999px;
+    }
+    .prompt-name { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+    .prompt-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem; line-height: 1.55; }
+    .prompt-text {
+      font-family: monospace; font-size: 0.82rem; color: var(--accent-d);
+      background: #F0FAF4; border: 1px solid var(--border);
+      border-radius: 0.5rem; padding: 0.75rem 1rem;
+      line-height: 1.6; white-space: pre-wrap;
+    }
+    .btn-copy {
+      font-family: inherit; font-size: 0.75rem; font-weight: 600;
+      color: var(--accent); background: var(--accent-l);
+      border: none; border-radius: 999px; padding: 0.3rem 0.8rem;
+      cursor: pointer; flex-shrink: 0; transition: background 0.15s;
+    }
+    .btn-copy:hover { background: #bfd9cc; }
+
+    /* LOCKED */
+    .locked-section { position: relative; margin-top: 0.5rem; }
+    .locked-overlay {
+      position: absolute; inset: 0; z-index: 10;
+      background: linear-gradient(to bottom, rgba(247,249,247,0) 0%, rgba(247,249,247,0.85) 35%, rgba(247,249,247,1) 60%);
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      padding-bottom: 2rem;
+    }
+    .locked-card {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F);
+      border-radius: 1.5rem; padding: 2rem 2rem;
+      text-align: center; color: white; max-width: 480px; width: 100%;
+    }
+    .locked-card h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .locked-card p { font-size: 0.85rem; opacity: 0.85; line-height: 1.6; margin-bottom: 1.25rem; }
+    .locked-form { display: flex; flex-direction: column; gap: 0.6rem; }
+    .locked-form input[type="text"],
+    .locked-form input[type="email"] {
+      padding: 0.7rem 1rem; border-radius: 0.6rem; border: none;
+      font-size: 0.9rem; font-family: inherit; width: 100%;
+    }
+    .locked-form label { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.72rem; opacity: 0.8; cursor: pointer; text-align: left; line-height: 1.5; color: white; }
+    .locked-form button {
+      padding: 0.8rem; background: #FB923C; color: white;
+      font-weight: 800; border: none; border-radius: 0.6rem;
+      cursor: pointer; font-size: 0.95rem; font-family: inherit;
+    }
+    .locked-note { font-size: 0.7rem; opacity: 0.6; margin-top: 0.5rem; }
+
+    .locked-prompt {
+      filter: blur(3px); pointer-events: none; user-select: none;
+      opacity: 0.5;
+    }
+
+    footer {
+      text-align: center; padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted);
+    }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/prompts.html">
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">la meva <span>escola</span></a>
+    <a href="/" style="font-size:0.82rem;color:var(--muted);text-decoration:none;">← Tornar</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-pill">✦ Biblioteca de prompts</div>
+    <h1>15 prompts per estalviar<br><span>hores cada setmana</span></h1>
+    <p class="hero-sub">Copia, enganxa i adapta. Funcionen amb ChatGPT, Claude i qualsevol altra IA.</p>
+  </section>
+
+  <div class="content">
+
+    <div class="section-label">Prompts gratuïts — 1 al 5</div>
+
+    <!-- PROMPT 1 -->
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-meta">
+          <div class="prompt-num">1</div>
+          <div>
+            <div class="prompt-name">Rúbrica d'avaluació LOMLOE</div>
+            <span class="prompt-category">Avaluació</span>
+          </div>
+        </div>
+        <button class="btn-copy" onclick="copiar(this, 'p1')">Copiar</button>
+      </div>
+      <div class="prompt-desc">Genera una rúbrica completa amb 4 nivells d'assoliment per a qualsevol criteri i competència.</div>
+      <div class="prompt-text" id="p1">Crea una rúbrica d'avaluació per a [assignatura] de [nivell educatiu] sobre el criteri: "[criteri d'avaluació]". Inclou 4 nivells: Iniciació (1-4), En procés (5-6), Assoliment satisfactori (7-8) i Excel·lent (9-10). Per a cada nivell, escriu entre 2 i 3 indicadors observables i concrets. Alinea la rúbrica amb la competència clau LOMLOE [CCL/STEM/CD/CPSAA/CC/CE/CCEC]. Format: taula amb indicadors a les files i nivells a les columnes.</div>
+    </div>
+
+    <!-- PROMPT 2 -->
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-meta">
+          <div class="prompt-num">2</div>
+          <div>
+            <div class="prompt-name">Situació d'Aprenentatge completa</div>
+            <span class="prompt-category">Programació</span>
+          </div>
+        </div>
+        <button class="btn-copy" onclick="copiar(this, 'p2')">Copiar</button>
+      </div>
+      <div class="prompt-desc">Genera una SA sencera amb activitats seqüenciades, competències i producte final.</div>
+      <div class="prompt-text" id="p2">Dissenya una situació d'aprenentatge per a [nivell educatiu] a l'assignatura de [assignatura] sobre el tema "[tema]". Ha d'incloure: 1) Títol motivador, 2) Contextualització i justificació (3-4 línies), 3) Producte final, 4) Entre 4 i 5 activitats seqüenciades amb nom, descripció, durada estimada i agrupament (individual/parelles/grup), 5) Competències clau LOMLOE treballades, 6) Criteris d'avaluació associats, 7) Instruments d'avaluació. Adapta el to i la complexitat al nivell indicat.</div>
+    </div>
+
+    <!-- PROMPT 3 -->
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-meta">
+          <div class="prompt-num">3</div>
+          <div>
+            <div class="prompt-name">Comentari de butlletí personalitzat</div>
+            <span class="prompt-category">Famílies</span>
+          </div>
+        </div>
+        <button class="btn-copy" onclick="copiar(this, 'p3')">Copiar</button>
+      </div>
+      <div class="prompt-desc">Redacta el comentari trimestral per a un alumne en qüestió de segons.</div>
+      <div class="prompt-text" id="p3">Escriu 3 versions d'un comentari per al butlletí trimestral de [nom de l'alumne], alumne/a de [curs]. Nota global: [nota]. Punts forts: [llista breu]. Aspectes a millorar: [llista breu]. Les 3 versions han de tenir 50, 100 i 150 paraules respectivament. Usa un to positiu, constructiu i professional. No repeteixis les mateixes frases entre versions. Idioma: [català/castellà].</div>
+    </div>
+
+    <!-- PROMPT 4 -->
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-meta">
+          <div class="prompt-num">4</div>
+          <div>
+            <div class="prompt-name">Adaptació per a alumnes amb NEE</div>
+            <span class="prompt-category">Inclusió</span>
+          </div>
+        </div>
+        <button class="btn-copy" onclick="copiar(this, 'p4')">Copiar</button>
+      </div>
+      <div class="prompt-desc">Adapta qualsevol activitat per a dislèxia, TDAH, TEA o altes capacitats.</div>
+      <div class="prompt-text" id="p4">Adapta aquesta activitat per a un alumne de [nivell] amb [dislèxia / TDAH / TEA / altes capacitats / altra NEE]: [enganxa l'activitat original aquí]. L'adaptació ha de: mantenir els mateixos objectius curriculars, ajustar el format i el suport visual, indicar quins materials addicionals pot necessitar l'alumne, i proporcionar 4-5 orientacions pràctiques per al docent. Si és una adaptació significativa, indica quins criteris d'avaluació es modifiquen.</div>
+    </div>
+
+    <!-- PROMPT 5 -->
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-meta">
+          <div class="prompt-num">5</div>
+          <div>
+            <div class="prompt-name">Activitats gamificades de repàs</div>
+            <span class="prompt-category">Activitats</span>
+          </div>
+        </div>
+        <button class="btn-copy" onclick="copiar(this, 'p5')">Copiar</button>
+      </div>
+      <div class="prompt-desc">5 activitats dinàmiques per reforçar qualsevol contingut de forma motivadora.</div>
+      <div class="prompt-text" id="p5">Crea 5 activitats de repàs gamificades sobre [tema] per a [nivell educatiu]. Per a cada activitat especifica: nom creatiu, descripció del funcionament (màxim 5 línies), durada (màxim 15 minuts), agrupament i materials necessaris. Les activitats han de ser variades: inclou almenys una competitiva, una cooperativa i una creativa. No uses tecnologia excepte si es pot fer sense internet.</div>
+    </div>
+
+    <!-- LOCKED SECTION -->
+    <div class="section-label" style="margin-top:2rem">Prompts exclusius — 6 al 15</div>
+
+    <div class="locked-section">
+      <!-- Blurred prompts preview -->
+      <div class="locked-prompt">
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div class="prompt-meta">
+              <div class="prompt-num" style="background:#9CA3AF">6</div>
+              <div>
+                <div class="prompt-name">Comunicat professional per a famílies</div>
+                <span class="prompt-category" style="background:#E5E7EB;color:#6B7280">Famílies</span>
+              </div>
+            </div>
+          </div>
+          <div class="prompt-desc">Redacta comunicats clars i professionals per a qualsevol situació...</div>
+          <div class="prompt-text" style="background:#F3F4F6">Redacta un comunicat per a les famílies sobre [tema: excursió, incident, progrés...]...</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div class="prompt-meta">
+              <div class="prompt-num" style="background:#9CA3AF">7</div>
+              <div>
+                <div class="prompt-name">Preguntes d'examen per nivells</div>
+                <span class="prompt-category" style="background:#E5E7EB;color:#6B7280">Avaluació</span>
+              </div>
+            </div>
+          </div>
+          <div class="prompt-desc">Genera bateries de preguntes amb dificultat progressiva i solucionari...</div>
+          <div class="prompt-text" style="background:#F3F4F6">Crea 10 preguntes d'avaluació sobre [tema] per a [nivell]. Mix: 4 tipus test, 3 resposta curta...</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div class="prompt-meta">
+              <div class="prompt-num" style="background:#9CA3AF">8</div>
+              <div>
+                <div class="prompt-name">Feedback constructiu per a l'alumne</div>
+                <span class="prompt-category" style="background:#E5E7EB;color:#6B7280">Avaluació</span>
+              </div>
+            </div>
+          </div>
+          <div class="prompt-desc">Comentaris de retroalimentació que motiven i orienten...</div>
+          <div class="prompt-text" style="background:#F3F4F6">Escriu un feedback constructiu per a [nom] sobre el seu treball de [tema]...</div>
+        </div>
+      </div>
+
+      <!-- Overlay with subscription form -->
+      <div class="locked-overlay">
+        <div class="locked-card">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem">🔒</div>
+          <h3>Els 10 prompts restants, al teu correu</h3>
+          <p>Subscriu-te gratis i t'enviem a l'instant els 15 prompts complets + novetats cada mes.</p>
+          <form class="locked-form" id="locked-form">
+            <input type="text" id="locked-name" placeholder="El teu nom" />
+            <input type="email" id="locked-email" placeholder="correu@escola.cat" required />
+            <label>
+              <input type="checkbox" id="locked-rgpd" required style="width:auto;flex-shrink:0;margin-top:2px"/>
+              <span>Accepto la <a href="/privacitat.html" style="color:#86EFAC">política de privacitat</a> i el tractament del meu correu.</span>
+            </label>
+            <button type="submit">Envia'm els 10 prompts restants →</button>
+          </form>
+          <div id="locked-ok" style="display:none;font-weight:700;font-size:0.95rem;margin-top:0.75rem">✅ Comprova el teu correu!</div>
+          <div id="locked-err" style="display:none;font-size:0.82rem;color:#FCA5A5;margin-top:0.5rem"></div>
+          <div class="locked-note">Sense spam · Cancel·la quan vulguis</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+    <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/" style="color:var(--accent)">Torna a les eines →</a></span>
+  </footer>
+
+  <script>
+    function copiar(btn, id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copiat!';
+        setTimeout(() => btn.textContent = 'Copiar', 1500);
+      });
+    }
+
+    document.getElementById('locked-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Enviant...';
+      try {
+        const r = await fetch('/api/subscribe', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            name: document.getElementById('locked-name').value,
+            email: document.getElementById('locked-email').value
+          })
+        });
+        const d = await r.json();
+        if (d.ok) {
+          document.getElementById('locked-form').style.display = 'none';
+          document.getElementById('locked-ok').style.display = 'block';
+        } else {
+          document.getElementById('locked-err').style.display = 'block';
+          document.getElementById('locked-err').textContent = d.error || 'Error, torna-ho a intentar';
+          btn.disabled = false; btn.textContent = 'Envia\'m els 10 prompts restants →';
+        }
+      } catch {
+        document.getElementById('locked-err').style.display = 'block';
+        document.getElementById('locked-err').textContent = 'Error de connexió';
+        btn.disabled = false; btn.textContent = 'Envia\'m els 10 prompts restants →';
+      }
+    });
+  </script>
+
+<script src="/cookies.js"></script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartes per a Famílies — la meva escola</title>
+  <meta name="description" content="Genera cartes i comunicats per a les famílies dels teus alumnes. Autoritzacions, convocatòries, comunicats i més." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#F7F9F7;--surface:#FFFFFF;--border:#DDE8DD;--text:#1A1917;--muted:#6B7B6B;--accent:#2D6A4F;--accent-l:#D8EDE3;--accent-d:#1B4332; }
+    body { font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh; }
+    nav { display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(247,249,247,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50; }
+    .hero { text-align:center;padding:3.5rem 1.5rem 2.5rem;max-width:620px;margin:0 auto; }
+    .hero-pill { display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-l);color:var(--accent-d);font-size:0.75rem;font-weight:700;padding:0.35rem 0.9rem;border-radius:999px;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase; }
+    h1 { font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-0.04em;margin-bottom:0.75rem; }
+    h1 span { color:var(--accent); }
+    .hero-sub { font-size:1rem;color:var(--muted);line-height:1.65; }
+    .main { max-width:800px;margin:0 auto;padding:0 1.5rem 4rem; }
+    .card { background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;box-shadow:0 4px 24px rgba(45,106,79,0.08);padding:2rem;margin-bottom:2rem; }
+    .form-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    @media(max-width:560px){ .form-grid { grid-template-columns:1fr; } }
+    .field { display:flex;flex-direction:column;gap:0.4rem; }
+    .field.full { grid-column:1/-1; }
+    label { font-size:0.82rem;font-weight:600;color:var(--text); }
+    select, input, textarea { background:#F7F9F7;border:1.5px solid #DDE8DD;border-radius:0.6rem;padding:0.65rem 0.9rem;font-size:0.9rem;font-family:inherit;color:var(--text);outline:none;transition:border-color 0.15s;width:100%; }
+    select:focus, input:focus, textarea:focus { border-color:#2D6A4F; }
+    textarea { resize:vertical;min-height:90px;line-height:1.6; }
+    .btn-submit { width:100%;background:#2D6A4F;color:#fff;font-weight:700;font-size:0.95rem;border:none;border-radius:0.75rem;padding:0.9rem;cursor:pointer;transition:background 0.15s;margin-top:1.25rem;font-family:inherit; }
+    .btn-submit:hover { background:#1B4332; }
+    .btn-submit:disabled { opacity:0.6;cursor:not-allowed; }
+    .loader { display:none;text-align:center;padding:2rem;color:var(--muted);font-size:0.9rem;gap:0.75rem;align-items:center;justify-content:center; }
+    .loader.active { display:flex; }
+    .spinner { width:22px;height:22px;border:3px solid var(--accent-l);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .error-box { display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;border-radius:0.75rem;padding:0.9rem 1.1rem;font-size:0.88rem;margin-top:1rem; }
+    .error-box.active { display:block; }
+    .result-card { display:none; }
+    .result-card.active { display:block; }
+    .result-header { font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:1rem; }
+    .assumpte-box { background:var(--accent-l);border-radius:0.6rem;padding:0.75rem 1rem;margin-bottom:1.25rem; }
+    .assumpte-label { font-size:0.7rem;font-weight:700;color:var(--accent-d);text-transform:uppercase;margin-bottom:0.2rem; }
+    .assumpte-text { font-size:0.9rem;font-weight:700;color:var(--accent-d); }
+    .carta-cos { font-size:0.92rem;line-height:1.9;color:var(--text);background:#F7F9F7;border-radius:0.75rem;padding:1.5rem;white-space:pre-wrap;margin-bottom:1rem; }
+    .nota-peu { font-size:0.82rem;color:var(--muted);font-style:italic;padding-top:0.75rem;border-top:1px solid var(--border); }
+    .actions { display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border); }
+    .btn-action { background:var(--accent-l);color:var(--accent-d);border:none;border-radius:0.6rem;padding:0.6rem 1.1rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit; }
+    footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/cartes.html">
+</head>
+<body>
+<nav>
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">✉️ Comunicació escola-família</div>
+  <h1>Cartes per a <span>Famílies</span></h1>
+  <p class="hero-sub">Genera cartes i comunicats professionals per a les famílies.<br>Autoritzacions, convocatòries, incidències i més.</p>
+</section>
+
+<div class="main">
+  <div class="card">
+    <div class="form-grid">
+      <div class="field">
+        <label for="escola">Nom de l'escola</label>
+        <input type="text" id="escola" placeholder="Ex: CEIP Sant Jordi" />
+      </div>
+      <div class="field">
+        <label for="curs">Curs / Grup</label>
+        <input type="text" id="curs" placeholder="Ex: 4t A de Primària" />
+      </div>
+      <div class="field full">
+        <label for="tipus">Tipus de carta</label>
+        <select id="tipus">
+          <option value="excursio">Autorització per a excursió o sortida escolar</option>
+          <option value="reunio">Convocatòria a reunió de pares i mares</option>
+          <option value="inici_curs">Carta de benvinguda d'inici de curs</option>
+          <option value="incident">Comunicat sobre incidència o situació especial</option>
+          <option value="felicitacio">Felicitació o reconeixement als alumnes</option>
+          <option value="informacio">Comunicació informativa general</option>
+          <option value="peticio">Sol·licitud de material o col·laboració a les famílies</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label for="assumpte">Assumpte principal</label>
+        <input type="text" id="assumpte" placeholder="Ex: Excursió al Parc de Collserola el 15 de novembre, Reunió trimestral de novembre..." />
+      </div>
+      <div class="field full">
+        <label for="detalls">Detalls addicionals <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <textarea id="detalls" placeholder="Data, hora, lloc, preu, material necessari, instruccions especials..."></textarea>
+      </div>
+      <div class="field full">
+        <label for="ccaa">Comunitat Autònoma</label>
+        <select id="ccaa">
+          <option value="Catalunya">Catalunya</option>
+          <option value="Madrid">Comunitat de Madrid</option>
+          <option value="Andalusia">Andalusia</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana</option>
+          <option value="País Basc">País Basc</option>
+          <option value="Galícia">Galícia</option>
+          <option value="altra">Altra comunitat</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-submit" id="btn-generar" onclick="generarCarta()">Generar carta</button>
+    <div class="loader" id="loader"><div class="spinner"></div> Redactant la carta...</div>
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <div class="card result-card" id="result-card">
+    <div class="result-header">Carta generada</div>
+    <div class="assumpte-box">
+      <div class="assumpte-label">Assumpte</div>
+      <div class="assumpte-text" id="carta-assumpte"></div>
+    </div>
+    <div class="carta-cos" id="carta-cos"></div>
+    <div class="nota-peu" id="nota-peu"></div>
+    <div class="actions">
+      <button class="btn-action" onclick="copiarText()">📋 Copiar text</button>
+      <button class="btn-action" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+</footer>
+
+<script>
+let lastResult = null;
+
+async function generarCarta() {
+  const escola = document.getElementById('escola').value.trim();
+  const curs = document.getElementById('curs').value.trim();
+  const tipus = document.getElementById('tipus').value;
+  const assumpte = document.getElementById('assumpte').value.trim();
+  const detalls = document.getElementById('detalls').value.trim();
+  const ccaa = document.getElementById('ccaa').value;
+  const errorBox = document.getElementById('error-box');
+  errorBox.className = 'error-box';
+
+  if (!escola || !curs || !assumpte) {
+    errorBox.textContent = 'Si us plau, omple els camps obligatoris: escola, curs i assumpte.';
+    errorBox.className = 'error-box active';
+    return;
+  }
+
+  const btn = document.getElementById('btn-generar');
+  btn.disabled = true;
+  document.getElementById('loader').className = 'loader active';
+  document.getElementById('result-card').className = 'card result-card';
+
+  try {
+    const res = await fetch('/api/generar-carta', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ escola, curs, tipus, assumpte, detalls, ccaa })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Error desconegut');
+    lastResult = data.result;
+    renderCarta(data.result);
+  } catch(e) {
+    errorBox.textContent = 'Error: ' + e.message;
+    errorBox.className = 'error-box active';
+  } finally {
+    btn.disabled = false;
+    document.getElementById('loader').className = 'loader';
+  }
+}
+
+function renderCarta(r) {
+  document.getElementById('carta-assumpte').textContent = r.assumpte;
+  document.getElementById('carta-cos').textContent = r.cos;
+  const notaPeu = document.getElementById('nota-peu');
+  if (r.nota_peu) { notaPeu.textContent = r.nota_peu; notaPeu.style.display = 'block'; }
+  else { notaPeu.style.display = 'none'; }
+  document.getElementById('result-card').className = 'card result-card active';
+  const sb = window.mostrarCompartir && window.mostrarCompartir('Generador de Cartes per a Famílies', window.location.href);
+  if (sb) document.getElementById('result-card').appendChild(sb);
+}
+
+function copiarText() {
+  if (!lastResult) return;
+  const text = 'Assumpte: ' + lastResult.assumpte + '\n\n' + lastResult.cos + (lastResult.nota_peu ? '\n\n' + lastResult.nota_peu : '');
+  navigator.clipboard.writeText(text).then(() => alert('Carta copiada al portapapers.'));
+}
+</script>
+<script src="/compartir.js"></script>
+<script src="/cookies.js"></script>
+</body>
+</html>

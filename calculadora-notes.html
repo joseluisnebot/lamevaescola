@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Notes LOMLOE · la meva escola</title>
+  <meta name="description" content="Calcula notes ponderades per criteris LOMLOE, converteix qualificacions i calcula la nota trimestral. Eina gratuïta per a docents.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F9F7; --surface: #FFFFFF; --border: #DDE8DD;
+      --text: #1A1917; --muted: #6B7B6B;
+      --accent: #2D6A4F; --accent-l: #D8EDE3; --accent-d: #1B4332;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      width: 100%;
+    }
+    h1 {
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.3rem;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Grade rows */
+    .grade-table-header {
+      display: grid;
+      grid-template-columns: 1fr 90px 90px 40px;
+      gap: 0.5rem;
+      padding: 0 0 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.5rem;
+    }
+    .grade-table-header span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .grade-row {
+      display: grid;
+      grid-template-columns: 1fr 90px 90px 40px;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      align-items: center;
+    }
+    @media (max-width: 520px) {
+      .grade-table-header, .grade-row {
+        grid-template-columns: 1fr 72px 72px 36px;
+        gap: 0.3rem;
+      }
+    }
+    .grade-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.5rem 0.6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .grade-input:focus { border-color: var(--accent); }
+    .grade-input[type=number] { text-align: center; }
+    .btn-del {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: #DC2626;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.12s;
+    }
+    .btn-del:hover { background: #FEF2F2; border-color: #DC2626; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.12s, transform 0.08s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-add {
+      background: var(--accent-l);
+      color: var(--accent-d);
+      margin-top: 0.75rem;
+    }
+    .btn-add:hover { background: #c3e0d1; }
+    .btn-print {
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-print:hover { border-color: var(--muted); }
+    .btn-share {
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-share:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Result boxes */
+    .result-box {
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .result-box.fail { background: #FEF2F2; border: 1px solid #fca5a5; }
+    .result-box.pass { background: #FFFBEB; border: 1px solid #FCD34D; }
+    .result-box.good { background: #D8EDE3; border: 1px solid #6ee7b7; }
+    .result-box.excellent { background: #D8EDE3; border: 1px solid var(--accent); }
+    .result-box.neutral { background: var(--bg); border: 1px solid var(--border); }
+
+    .result-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      min-width: 70px;
+    }
+    .result-box.fail .result-number { color: #DC2626; }
+    .result-box.pass .result-number { color: #92400E; }
+    .result-box.good .result-number, .result-box.excellent .result-number { color: #1B4332; }
+    .result-box.neutral .result-number { color: var(--muted); }
+
+    .result-labels { display: flex; flex-direction: column; gap: 0.2rem; }
+    .result-qual {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .result-box.fail .result-qual { color: #DC2626; }
+    .result-box.pass .result-qual { color: #92400E; }
+    .result-box.good .result-qual, .result-box.excellent .result-qual { color: #1B4332; }
+    .result-box.neutral .result-qual { color: var(--muted); }
+
+    .result-lomloe {
+      font-size: 0.82rem;
+      font-weight: 600;
+      opacity: 0.75;
+    }
+
+    .warning-box {
+      background: #FFFBEB;
+      border: 1px solid #FCD34D;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.82rem;
+      color: #92400E;
+      margin-top: 0.75rem;
+      display: none;
+    }
+    .warning-box.visible { display: block; }
+
+    /* Weight bar */
+    .weight-bar-wrap { margin-top: 0.75rem; }
+    .weight-bar-bg {
+      height: 8px;
+      border-radius: 8px;
+      background: var(--border);
+      overflow: hidden;
+      margin-bottom: 0.3rem;
+    }
+    .weight-bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .weight-bar-fill.over { background: #DC2626; }
+    .weight-bar-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Conversor */
+    .conversor-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    input[type=range] {
+      flex: 1;
+      min-width: 120px;
+      accent-color: var(--accent);
+      height: 6px;
+    }
+    .slider-number {
+      width: 68px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+    .slider-number:focus { border-color: var(--accent); }
+    .conv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+    .conv-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+    }
+    .conv-item-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .conv-item-value {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .conv-item.highlight { background: var(--accent-l); border-color: var(--accent); }
+    .conv-item.highlight .conv-item-value { color: var(--accent-d); }
+
+    /* Trimestre */
+    .trimestre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.75rem;
+    }
+    .trimestre-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .trimestre-item label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .trimestre-row {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+    .trim-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.5rem 0.6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+    .trim-input:focus { border-color: var(--accent); }
+    .weight-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .pass-fail-badge {
+      display: inline-block;
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+    }
+    .pass-fail-badge.pass { background: var(--accent-l); color: var(--accent-d); }
+    .pass-fail-badge.fail { background: #FEF2F2; color: #DC2626; }
+
+    /* Action buttons row */
+    .action-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    @media print {
+      nav, footer, .btn, .action-row, .section-label { display: none !important; }
+      .card { break-inside: avoid; border: 1px solid #ccc; }
+      body { background: white; }
+    }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/calculadora-notes.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de Notes LOMLOE","url":"https://lamevaescola.com/calculadora-notes.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(247,249,247,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main>
+  <h1>🧮 Calculadora de Notes</h1>
+  <p class="subtitle">Ponderació de criteris LOMLOE, conversor de qualificacions i nota trimestral.</p>
+
+  <!-- ======== SECTION 1: Weighted grades ======== -->
+  <div class="card" id="card-ponderada">
+    <div class="card-title">📊 Nota ponderada per criteris</div>
+    <p class="card-desc">Defineix els criteris d'avaluació, el seu pes i la nota obtinguda. El total de pesos ha de sumar 100%.</p>
+
+    <div class="grade-table-header">
+      <span>Criteri / Concepte</span>
+      <span style="text-align:center">Pes %</span>
+      <span style="text-align:center">Nota (0–10)</span>
+      <span></span>
+    </div>
+    <div id="criteria-rows"></div>
+
+    <div class="weight-bar-wrap" id="weight-bar-wrap">
+      <div class="weight-bar-bg">
+        <div class="weight-bar-fill" id="weight-fill" style="width:0%"></div>
+      </div>
+      <div class="weight-bar-label" id="weight-label">Total pesos: 0%</div>
+    </div>
+
+    <div class="warning-box" id="weight-warning">
+      ⚠️ El total dels pesos no suma 100%. Revisa els percentatges.
+    </div>
+
+    <button class="btn btn-add" id="btn-add-criterion">+ Afegir criteri</button>
+
+    <div id="result-ponderada"></div>
+
+    <div class="action-row">
+      <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+      <button class="btn btn-share" id="btn-share-1">Compartir eina</button>
+    </div>
+  </div>
+
+  <!-- ======== SECTION 2: Conversor ======== -->
+  <div class="card">
+    <div class="card-title">🔄 Conversor de notes</div>
+    <p class="card-desc">Introdueix una nota numèrica i veuràs la qualificació, el nivell LOMLOE i equivalents internacionals.</p>
+
+    <div class="conversor-wrap">
+      <div class="slider-row">
+        <input type="range" id="conv-slider" min="0" max="10" step="0.1" value="7">
+        <input type="number" class="slider-number" id="conv-number" min="0" max="10" step="0.1" value="7">
+      </div>
+      <div class="conv-grid" id="conv-grid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== SECTION 3: Trimestre ======== -->
+  <div class="card">
+    <div class="card-title">📅 Nota de trimestre</div>
+    <p class="card-desc">Introdueix les notes dels exàmens/avaluacions amb els seus pesos. El camp de recuperació és opcional.</p>
+
+    <div class="trimestre-grid" id="trim-grid">
+      <div class="trimestre-item">
+        <label>1a Avaluació</label>
+        <div class="trimestre-row">
+          <input type="number" class="trim-input" id="t1" min="0" max="10" step="0.01" placeholder="0–10">
+          <span class="weight-hint">×</span>
+          <input type="number" class="trim-input" id="w1" min="0" max="100" value="33" style="max-width:56px">
+          <span class="weight-hint">%</span>
+        </div>
+      </div>
+      <div class="trimestre-item">
+        <label>2a Avaluació</label>
+        <div class="trimestre-row">
+          <input type="number" class="trim-input" id="t2" min="0" max="10" step="0.01" placeholder="0–10">
+          <span class="weight-hint">×</span>
+          <input type="number" class="trim-input" id="w2" min="0" max="100" value="33" style="max-width:56px">
+          <span class="weight-hint">%</span>
+        </div>
+      </div>
+      <div class="trimestre-item">
+        <label>3a Avaluació</label>
+        <div class="trimestre-row">
+          <input type="number" class="trim-input" id="t3" min="0" max="10" step="0.01" placeholder="0–10">
+          <span class="weight-hint">×</span>
+          <input type="number" class="trim-input" id="w3" min="0" max="100" value="34" style="max-width:56px">
+          <span class="weight-hint">%</span>
+        </div>
+      </div>
+      <div class="trimestre-item">
+        <label>Recuperació (opcional)</label>
+        <div class="trimestre-row">
+          <input type="number" class="trim-input" id="t-recup" min="0" max="10" step="0.01" placeholder="—">
+        </div>
+        <span class="weight-hint" style="font-size:0.72rem">Substitueix la nota si és superior</span>
+      </div>
+    </div>
+
+    <div id="result-trimestre" style="margin-top:1.25rem;"></div>
+
+    <div class="action-row">
+      <button class="btn btn-share" id="btn-share-2">Compartir eina</button>
+    </div>
+  </div>
+</main>
+
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents<br>
+  <a href="/privacitat.html" style="color:#2D6A4F">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/compartir.js"></script>
+
+<script>
+  // ——————————————————————————————————
+  // Helpers
+  // ——————————————————————————————————
+  function qualificacio(n) {
+    if (n < 5) return 'Insuficient';
+    if (n < 6) return 'Suficient';
+    if (n < 7) return 'Bé';
+    if (n < 9) return 'Notable';
+    return 'Excel·lent';
+  }
+  function lomloe(n) {
+    if (n < 5) return 'Iniciació (1–4)';
+    if (n < 7) return 'En procés (5–6)';
+    if (n < 9) return 'Assoliment satisfactori (7–8)';
+    return 'Excel·lent (9–10)';
+  }
+  function gradeClass(n) {
+    if (n < 5) return 'fail';
+    if (n < 6) return 'pass';
+    if (n < 9) return 'good';
+    return 'excellent';
+  }
+  function letterGrade(n) {
+    if (n >= 9) return 'A';
+    if (n >= 7) return 'B';
+    if (n >= 6) return 'C';
+    if (n >= 5) return 'D';
+    return 'F';
+  }
+  function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
+
+  // ——————————————————————————————————
+  // SECTION 1: Weighted grade calculator
+  // ——————————————————————————————————
+  let criteriaData = [];
+  let nextId = 0;
+  const criteriaRows = document.getElementById('criteria-rows');
+  const resultPonderada = document.getElementById('result-ponderada');
+  const weightFill = document.getElementById('weight-fill');
+  const weightLabel = document.getElementById('weight-label');
+  const weightWarning = document.getElementById('weight-warning');
+
+  function addCriterion(name = '', weight = '', grade = '') {
+    const id = nextId++;
+    criteriaData.push({ id, name, weight, grade });
+    renderRows();
+  }
+
+  function removeCriterion(id) {
+    criteriaData = criteriaData.filter(c => c.id !== id);
+    renderRows();
+  }
+
+  function renderRows() {
+    criteriaRows.innerHTML = '';
+    criteriaData.forEach((c, idx) => {
+      const row = document.createElement('div');
+      row.className = 'grade-row';
+      row.innerHTML = `
+        <input type="text" class="grade-input" placeholder="Criteri ${idx + 1}" value="${escHtml(c.name)}" data-id="${c.id}" data-field="name">
+        <input type="number" class="grade-input" placeholder="%" min="0" max="100" step="1" value="${escHtml(String(c.weight))}" data-id="${c.id}" data-field="weight">
+        <input type="number" class="grade-input" placeholder="0–10" min="0" max="10" step="0.01" value="${escHtml(String(c.grade))}" data-id="${c.id}" data-field="grade">
+        <button class="btn-del" data-id="${c.id}" title="Eliminar">✕</button>
+      `;
+      criteriaRows.appendChild(row);
+    });
+    criteriaRows.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('input', onCriterionChange);
+    });
+    criteriaRows.querySelectorAll('.btn-del').forEach(btn => {
+      btn.addEventListener('click', () => removeCriterion(parseInt(btn.dataset.id)));
+    });
+    calcPonderada();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  }
+
+  function onCriterionChange(e) {
+    const id = parseInt(e.target.dataset.id);
+    const field = e.target.dataset.field;
+    const c = criteriaData.find(x => x.id === id);
+    if (c) c[field] = e.target.value;
+    calcPonderada();
+  }
+
+  function calcPonderada() {
+    let totalWeight = 0;
+    let weightedSum = 0;
+    let hasGrades = false;
+    let allValid = true;
+
+    criteriaData.forEach(c => {
+      const w = parseFloat(c.weight);
+      const g = parseFloat(c.grade);
+      if (!isNaN(w)) totalWeight += w;
+      if (!isNaN(w) && !isNaN(g)) {
+        weightedSum += (w / 100) * g;
+        hasGrades = true;
+      } else if (c.weight !== '' || c.grade !== '') {
+        // one is set but not the other — partial
+      }
+    });
+
+    // Weight bar
+    const barPct = Math.min(100, totalWeight);
+    weightFill.style.width = barPct + '%';
+    weightFill.classList.toggle('over', totalWeight > 100.01);
+    weightLabel.textContent = `Total pesos: ${Math.round(totalWeight * 10) / 10}%`;
+    weightWarning.classList.toggle('visible', hasGrades && Math.abs(totalWeight - 100) > 0.5);
+
+    // Result
+    if (!hasGrades) {
+      resultPonderada.innerHTML = '';
+      return;
+    }
+
+    const note = Math.round(weightedSum * 100) / 100;
+    const cls = gradeClass(note);
+    resultPonderada.innerHTML = `
+      <div class="result-box ${cls}">
+        <div class="result-number">${note.toFixed(2)}</div>
+        <div class="result-labels">
+          <div class="result-qual">${qualificacio(note)}</div>
+          <div class="result-lomloe">${lomloe(note)}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Init with 3 default rows
+  addCriterion('Comprensió lectora', 30, '');
+  addCriterion('Expressió escrita', 40, '');
+  addCriterion('Participació oral', 30, '');
+
+  document.getElementById('btn-add-criterion').addEventListener('click', () => {
+    addCriterion('', '', '');
+  });
+
+  // ——————————————————————————————————
+  // SECTION 2: Conversor
+  // ——————————————————————————————————
+  const convSlider = document.getElementById('conv-slider');
+  const convNumber = document.getElementById('conv-number');
+  const convGrid = document.getElementById('conv-grid');
+
+  function renderConversor(val) {
+    val = clamp(val, 0, 10);
+    const pct = val * 10;
+    const outOf20 = val * 2;
+    const letter = letterGrade(val);
+    const qual = qualificacio(val);
+    const lom = lomloe(val);
+    const cls = gradeClass(val);
+
+    convGrid.innerHTML = `
+      <div class="conv-item highlight">
+        <div class="conv-item-label">Qualificació</div>
+        <div class="conv-item-value">${qual}</div>
+      </div>
+      <div class="conv-item highlight">
+        <div class="conv-item-label">Nivell LOMLOE</div>
+        <div class="conv-item-value" style="font-size:0.92rem">${lom}</div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-item-label">Percentatge</div>
+        <div class="conv-item-value">${pct.toFixed(0)}%</div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-item-label">Sobre 20 (França)</div>
+        <div class="conv-item-value">${outOf20.toFixed(1)} / 20</div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-item-label">Lletra (EUA)</div>
+        <div class="conv-item-value">${letter}</div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-item-label">Nota numèrica</div>
+        <div class="conv-item-value">${val.toFixed(1)} / 10</div>
+      </div>
+    `;
+  }
+
+  convSlider.addEventListener('input', () => {
+    const v = parseFloat(convSlider.value);
+    convNumber.value = v.toFixed(1);
+    renderConversor(v);
+  });
+  convNumber.addEventListener('input', () => {
+    let v = parseFloat(convNumber.value);
+    if (isNaN(v)) return;
+    v = clamp(v, 0, 10);
+    convSlider.value = v;
+    renderConversor(v);
+  });
+  renderConversor(7);
+
+  // ——————————————————————————————————
+  // SECTION 3: Nota de trimestre
+  // ——————————————————————————————————
+  const trimInputs = ['t1','t2','t3','w1','w2','w3','t-recup'];
+  trimInputs.forEach(id => {
+    document.getElementById(id).addEventListener('input', calcTrimestre);
+  });
+
+  function calcTrimestre() {
+    const t1 = parseFloat(document.getElementById('t1').value);
+    const t2 = parseFloat(document.getElementById('t2').value);
+    const t3 = parseFloat(document.getElementById('t3').value);
+    const w1 = parseFloat(document.getElementById('w1').value) || 0;
+    const w2 = parseFloat(document.getElementById('w2').value) || 0;
+    const w3 = parseFloat(document.getElementById('w3').value) || 0;
+    const tRecup = parseFloat(document.getElementById('t-recup').value);
+
+    const res = document.getElementById('result-trimestre');
+
+    const parts = [];
+    if (!isNaN(t1) && w1 > 0) parts.push({ note: t1, weight: w1 });
+    if (!isNaN(t2) && w2 > 0) parts.push({ note: t2, weight: w2 });
+    if (!isNaN(t3) && w3 > 0) parts.push({ note: t3, weight: w3 });
+
+    if (parts.length === 0) {
+      res.innerHTML = '';
+      return;
+    }
+
+    const totalW = parts.reduce((s, p) => s + p.weight, 0);
+    let raw = parts.reduce((s, p) => s + (p.note * p.weight / 100), 0);
+    if (totalW > 0 && totalW !== 100) {
+      raw = raw * 100 / totalW;
+    }
+    raw = clamp(raw, 0, 10);
+
+    // Apply recuperació if it improves the grade
+    let finalNote = raw;
+    let recupApplied = false;
+    if (!isNaN(tRecup) && tRecup > raw) {
+      // Recovery: use max(raw, recup) but capped at 5 if recovery only makes you pass
+      finalNote = tRecup;
+      recupApplied = true;
+    }
+    finalNote = Math.round(finalNote * 100) / 100;
+
+    const passes = finalNote >= 5;
+    const cls = gradeClass(finalNote);
+
+    res.innerHTML = `
+      <div class="result-box ${cls}" style="flex-direction:column;align-items:flex-start;gap:0.6rem">
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+          <div class="result-number">${finalNote.toFixed(2)}</div>
+          <div class="result-labels">
+            <div class="result-qual">${qualificacio(finalNote)}</div>
+            <div class="result-lomloe">${lomloe(finalNote)}</div>
+          </div>
+          <span class="pass-fail-badge ${passes ? 'pass' : 'fail'}">${passes ? '✓ Aprovat' : '✗ Suspès'}</span>
+        </div>
+        ${recupApplied ? `<div style="font-size:0.8rem;opacity:0.8">Nota base: ${raw.toFixed(2)} → Millora amb recuperació: ${tRecup}</div>` : ''}
+        ${Math.abs(totalW - 100) > 0.5 ? `<div style="font-size:0.78rem;color:#92400E;background:#FFFBEB;padding:0.3rem 0.6rem;border-radius:6px;border:1px solid #FCD34D">⚠️ Els pesos sumen ${totalW.toFixed(0)}%. S'ha normalitzat el càlcul.</div>` : ''}
+      </div>
+    `;
+  }
+
+  // Share buttons
+  document.getElementById('btn-share-1').addEventListener('click', () => {
+    if (window.mostrarCompartir) window.mostrarCompartir('Calculadora de Notes LOMLOE', window.location.href);
+  });
+  document.getElementById('btn-share-2').addEventListener('click', () => {
+    if (window.mostrarCompartir) window.mostrarCompartir('Calculadora de Notes LOMLOE', window.location.href);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simplificador de Textos — la meva escola</title>
+  <meta name="description" content="Adapta qualsevol text al nivell lector dels teus alumnes. Simplifica, amplia o adapta per a TDAH i dislèxia." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#F7F9F7;--surface:#FFFFFF;--border:#DDE8DD;--text:#1A1917;--muted:#6B7B6B;--accent:#2D6A4F;--accent-l:#D8EDE3;--accent-d:#1B4332; }
+    body { font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh; }
+    nav { display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(247,249,247,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50; }
+    .hero { text-align:center;padding:3.5rem 1.5rem 2.5rem;max-width:620px;margin:0 auto; }
+    .hero-pill { display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-l);color:var(--accent-d);font-size:0.75rem;font-weight:700;padding:0.35rem 0.9rem;border-radius:999px;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase; }
+    h1 { font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-0.04em;margin-bottom:0.75rem; }
+    h1 span { color:var(--accent); }
+    .hero-sub { font-size:1rem;color:var(--muted);line-height:1.65; }
+    .main { max-width:800px;margin:0 auto;padding:0 1.5rem 4rem; }
+    .card { background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;box-shadow:0 4px 24px rgba(45,106,79,0.08);padding:2rem;margin-bottom:2rem; }
+    .form-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    @media(max-width:560px){ .form-grid { grid-template-columns:1fr; } }
+    .field { display:flex;flex-direction:column;gap:0.4rem; }
+    .field.full { grid-column:1/-1; }
+    label { font-size:0.82rem;font-weight:600;color:var(--text); }
+    select, textarea { background:#F7F9F7;border:1.5px solid #DDE8DD;border-radius:0.6rem;padding:0.65rem 0.9rem;font-size:0.9rem;font-family:inherit;color:var(--text);outline:none;transition:border-color 0.15s;width:100%; }
+    select:focus, textarea:focus { border-color:#2D6A4F; }
+    textarea { resize:vertical;min-height:160px;line-height:1.6; }
+    .char-count { font-size:0.72rem;color:var(--muted);text-align:right;margin-top:0.25rem; }
+    .btn-submit { width:100%;background:#2D6A4F;color:#fff;font-weight:700;font-size:0.95rem;border:none;border-radius:0.75rem;padding:0.9rem;cursor:pointer;transition:background 0.15s;margin-top:1.25rem;font-family:inherit; }
+    .btn-submit:hover { background:#1B4332; }
+    .btn-submit:disabled { opacity:0.6;cursor:not-allowed; }
+    .loader { display:none;text-align:center;padding:2rem;color:var(--muted);font-size:0.9rem;gap:0.75rem;align-items:center;justify-content:center; }
+    .loader.active { display:flex; }
+    .spinner { width:22px;height:22px;border:3px solid var(--accent-l);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .error-box { display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;border-radius:0.75rem;padding:0.9rem 1.1rem;font-size:0.88rem;margin-top:1rem; }
+    .error-box.active { display:block; }
+    .result-card { display:none; }
+    .result-card.active { display:block; }
+    .result-header { font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:1.25rem; }
+    .text-adaptat { font-size:0.95rem;line-height:1.8;color:var(--text);background:#F7F9F7;border-radius:0.75rem;padding:1.5rem;margin-bottom:1.25rem;white-space:pre-wrap; }
+    .meta-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem; }
+    .meta-item { background:var(--accent-l);border-radius:0.75rem;padding:0.75rem 1rem; }
+    .meta-label { font-size:0.7rem;font-weight:700;color:var(--accent-d);text-transform:uppercase;margin-bottom:0.25rem; }
+    .meta-value { font-size:0.88rem;color:var(--text);font-weight:500; }
+    .paraules-list { display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem; }
+    .paraula-tag { background:#FEF0DC;color:#92400E;font-size:0.78rem;font-weight:600;padding:0.25rem 0.7rem;border-radius:999px; }
+    .actions { display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border); }
+    .btn-action { background:var(--accent-l);color:var(--accent-d);border:none;border-radius:0.6rem;padding:0.6rem 1.1rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit; }
+    footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/simplificador.html">
+</head>
+<body>
+<nav>
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">📝 Adaptació de textos</div>
+  <h1>Simplificador <span>de Textos</span></h1>
+  <p class="hero-sub">Adapta qualsevol text al nivell lector dels teus alumnes.<br>Simplifica, amplia o adapta per a TDAH i dislèxia.</p>
+</section>
+
+<div class="main">
+  <div class="card">
+    <div class="form-grid">
+      <div class="field full">
+        <label for="text">Text original</label>
+        <textarea id="text" placeholder="Enganxa aquí el text que vols adaptar..." oninput="updateCount()"></textarea>
+        <div class="char-count" id="char-count">0 / 2000 caràcters</div>
+      </div>
+      <div class="field">
+        <label for="nivell">Nivell destinatari</label>
+        <select id="nivell">
+          <option value="">— Selecciona —</option>
+          <optgroup label="Primària"><option>Primària 1r-2n</option><option>Primària 3r-4t</option><option>Primària 5è-6è</option></optgroup>
+          <optgroup label="ESO"><option>ESO 1r</option><option>ESO 2n</option><option>ESO 3r</option><option>ESO 4t</option></optgroup>
+          <optgroup label="Batxillerat"><option>Batxillerat 1r</option><option>Batxillerat 2n</option></optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label for="objectiu">Objectiu</label>
+        <select id="objectiu">
+          <option value="simplificar">Simplificar (reduir nivell)</option>
+          <option value="ampliar">Ampliar (augmentar nivell)</option>
+          <option value="adaptar_tdah">Adaptar per a TDAH</option>
+          <option value="adaptar_dislexia">Adaptar per a dislèxia</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label for="ccaa">Comunitat Autònoma</label>
+        <select id="ccaa">
+          <option value="Catalunya">Catalunya</option>
+          <option value="Madrid">Comunitat de Madrid</option>
+          <option value="Andalusia">Andalusia</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana</option>
+          <option value="País Basc">País Basc</option>
+          <option value="Galícia">Galícia</option>
+          <option value="altra">Altra comunitat</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-submit" id="btn-generar" onclick="simplificar()">Adaptar text</button>
+    <div class="loader" id="loader"><div class="spinner"></div> Adaptant el text...</div>
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <div class="card result-card" id="result-card">
+    <div class="result-header">Text adaptat</div>
+    <div class="text-adaptat" id="text-adaptat"></div>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Canvis realitzats</div>
+        <div class="meta-value" id="meta-canvis"></div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Nivell lèxic</div>
+        <div class="meta-value" id="meta-nivell"></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">Paraules clau del text:</div>
+      <div class="paraules-list" id="paraules-list"></div>
+    </div>
+    <div class="actions">
+      <button class="btn-action" onclick="copiarText()">📋 Copiar text</button>
+      <button class="btn-action" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+</footer>
+
+<script>
+let lastResult = null;
+
+function updateCount() {
+  const t = document.getElementById('text').value;
+  document.getElementById('char-count').textContent = Math.min(t.length, 2000) + ' / 2000 caràcters';
+}
+
+async function simplificar() {
+  const text = document.getElementById('text').value.trim();
+  const nivell = document.getElementById('nivell').value;
+  const objectiu = document.getElementById('objectiu').value;
+  const ccaa = document.getElementById('ccaa').value;
+  const errorBox = document.getElementById('error-box');
+  errorBox.className = 'error-box';
+
+  if (!text || !nivell) {
+    errorBox.textContent = 'Si us plau, introdueix el text i selecciona el nivell.';
+    errorBox.className = 'error-box active';
+    return;
+  }
+
+  const btn = document.getElementById('btn-generar');
+  btn.disabled = true;
+  document.getElementById('loader').className = 'loader active';
+  document.getElementById('result-card').className = 'card result-card';
+
+  try {
+    const res = await fetch('/api/simplificar-text', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, nivell, objectiu, ccaa })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Error desconegut');
+    lastResult = data.result;
+    renderResult(data.result);
+  } catch(e) {
+    errorBox.textContent = 'Error: ' + e.message;
+    errorBox.className = 'error-box active';
+  } finally {
+    btn.disabled = false;
+    document.getElementById('loader').className = 'loader';
+  }
+}
+
+function renderResult(r) {
+  document.getElementById('text-adaptat').textContent = r.text_adaptat;
+  document.getElementById('meta-canvis').textContent = r.canvis;
+  document.getElementById('meta-nivell').textContent = r.nivell_lexic;
+  const pl = document.getElementById('paraules-list');
+  pl.innerHTML = (r.paraules_clau || []).map(p => `<span class="paraula-tag">${p}</span>`).join('');
+  document.getElementById('result-card').className = 'card result-card active';
+  const sb = window.mostrarCompartir && window.mostrarCompartir('Simplificador de Textos per a Docents', window.location.href);
+  if (sb) document.getElementById('result-card').appendChild(sb);
+}
+
+function copiarText() {
+  if (!lastResult) return;
+  navigator.clipboard.writeText(lastResult.text_adaptat).then(() => alert('Text copiat al portapapers.'));
+}
+</script>
+<script src="/compartir.js"></script>
+<script src="/cookies.js"></script>
+</body>
+</html>

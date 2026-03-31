@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temporitzador d'Aula · la meva escola</title>
+  <meta name="description" content="Temporitzador visual per a l'aula. Canvis de color, alarma sonora i pantalla completa. Eina gratuïta per a docents.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F9F7; --surface: #FFFFFF; --border: #DDE8DD;
+      --text: #1A1917; --muted: #6B7B6B;
+      --accent: #2D6A4F; --accent-l: #D8EDE3; --accent-d: #1B4332;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.5s, color 0.5s;
+    }
+    body.phase-green { background: #D8EDE3; color: #1B4332; }
+    body.phase-amber { background: #FEF0DC; color: #92400E; }
+    body.phase-red { background: #FEF2F2; color: #DC2626; }
+    body.phase-done { background: #FEF2F2; color: #DC2626; }
+
+    nav { transition: background 0.5s, border-color 0.5s; }
+    body.phase-green nav { background: rgba(216,237,227,0.95); border-bottom-color: #b2d8c4; }
+    body.phase-amber nav { background: rgba(254,240,220,0.95); border-bottom-color: #f3d08a; }
+    body.phase-red nav, body.phase-done nav { background: rgba(254,242,242,0.95); border-bottom-color: #fca5a5; }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      gap: 1.5rem;
+    }
+
+    /* Setup panel */
+    .setup-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      width: 100%;
+      max-width: 560px;
+    }
+    body.phase-green .setup-panel { background: rgba(255,255,255,0.6); border-color: #b2d8c4; }
+    body.phase-amber .setup-panel { background: rgba(255,255,255,0.6); border-color: #f3d08a; }
+    body.phase-red .setup-panel, body.phase-done .setup-panel { background: rgba(255,255,255,0.6); border-color: #fca5a5; }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .activity-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color 0.15s;
+    }
+    .activity-input:focus { border-color: var(--accent); }
+
+    .time-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .time-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      min-width: 70px;
+    }
+    .time-inputs {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .time-number {
+      width: 64px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+    .time-number:focus { border-color: var(--accent); }
+    .time-sep { font-size: 1.2rem; font-weight: 700; color: var(--muted); }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0;
+    }
+    .preset-btn {
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--accent-l);
+      border-color: var(--accent);
+      color: var(--accent-d);
+    }
+
+    /* Timer display */
+    .timer-section {
+      width: 100%;
+      max-width: 560px;
+      text-align: center;
+    }
+    .activity-name-display {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      min-height: 1.4em;
+      margin-bottom: 0.5rem;
+      transition: color 0.5s;
+    }
+    body.phase-green .activity-name-display { color: #2D6A4F; }
+    body.phase-amber .activity-name-display { color: #92400E; opacity: 0.8; }
+    body.phase-red .activity-name-display, body.phase-done .activity-name-display { color: #DC2626; opacity: 0.8; }
+
+    .time-display {
+      font-size: clamp(4rem, 15vw, 10rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.5s;
+      font-feature-settings: "tnum";
+    }
+    body.phase-green .time-display { color: #1B4332; }
+    body.phase-amber .time-display { color: #92400E; }
+    body.phase-red .time-display { color: #DC2626; }
+    body.phase-done .time-display { color: #DC2626; }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0.15; }
+    }
+    .time-display.blinking { animation: blink 0.8s infinite; }
+
+    .done-msg {
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-weight: 700;
+      display: none;
+      margin-top: 0.5rem;
+      color: #DC2626;
+    }
+    .done-msg.visible { display: block; }
+
+    /* Progress bar */
+    .progress-wrap {
+      width: 100%;
+      max-width: 560px;
+      margin-top: 0.75rem;
+    }
+    .progress-bar-bg {
+      height: 10px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.5s linear, background 0.5s;
+      background: var(--accent);
+    }
+    body.phase-green .progress-bar-fill { background: #2D6A4F; }
+    body.phase-amber .progress-bar-fill { background: #F59E0B; }
+    body.phase-red .progress-bar-fill, body.phase-done .progress-bar-fill { background: #DC2626; }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 560px;
+    }
+    .ctrl-btn {
+      flex: 1;
+      min-width: 90px;
+      max-width: 150px;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.12s, transform 0.08s, opacity 0.15s;
+    }
+    .ctrl-btn:active { transform: scale(0.96); }
+    .ctrl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn-start { background: var(--accent); color: #fff; }
+    .btn-start:hover:not(:disabled) { background: var(--accent-d); }
+    .btn-pause { background: #F59E0B; color: #fff; }
+    .btn-pause:hover:not(:disabled) { background: #d97706; }
+    .btn-resume { background: #60A5FA; color: #fff; }
+    .btn-resume:hover:not(:disabled) { background: #2563eb; }
+    .btn-reset { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+    .btn-reset:hover:not(:disabled) { background: var(--bg); border-color: var(--muted); }
+    .btn-fullscreen {
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      flex: 0;
+      min-width: unset;
+      padding: 0.7rem 1rem;
+    }
+    .btn-fullscreen:hover { background: var(--accent-l); color: var(--accent-d); border-color: var(--accent); }
+
+    .share-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.25rem;
+    }
+    .btn-share {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      transition: border-color 0.12s, color 0.12s;
+      display: none;
+    }
+    .btn-share.visible { display: inline-block; }
+    .btn-share:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Fullscreen adjustments */
+    :fullscreen main, :-webkit-full-screen main {
+      justify-content: center;
+      gap: 1rem;
+    }
+    :fullscreen .setup-panel, :-webkit-full-screen .setup-panel {
+      display: none;
+    }
+
+    footer { transition: border-color 0.5s; }
+    body.phase-green footer { border-top-color: #b2d8c4; }
+    body.phase-amber footer { border-top-color: #f3d08a; }
+    body.phase-red footer, body.phase-done footer { border-top-color: #fca5a5; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/temporizador.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Temporitzador d'Aula","url":"https://lamevaescola.com/temporizador.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(247,249,247,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main id="main">
+  <!-- Setup panel -->
+  <div class="setup-panel">
+    <div class="section-title">Configuració</div>
+    <input type="text" class="activity-input" id="activity-input" placeholder="Nom de l'activitat (opcional)…" maxlength="60">
+
+    <div class="time-row">
+      <span class="time-label">Durada</span>
+      <div class="time-inputs">
+        <input type="number" class="time-number" id="input-min" value="5" min="0" max="99">
+        <span class="time-sep">:</span>
+        <input type="number" class="time-number" id="input-sec" value="0" min="0" max="59">
+      </div>
+      <span style="font-size:0.78rem;color:var(--muted)">min : seg</span>
+    </div>
+
+    <div class="section-title" style="margin-top:0.25rem;">Presets ràpids</div>
+    <div class="presets">
+      <button class="preset-btn" data-min="1" data-sec="0">1 min</button>
+      <button class="preset-btn" data-min="2" data-sec="0">2 min</button>
+      <button class="preset-btn" data-min="5" data-sec="0">5 min</button>
+      <button class="preset-btn" data-min="10" data-sec="0">10 min</button>
+      <button class="preset-btn" data-min="15" data-sec="0">15 min</button>
+      <button class="preset-btn" data-min="20" data-sec="0">20 min</button>
+      <button class="preset-btn" data-min="30" data-sec="0">30 min</button>
+    </div>
+  </div>
+
+  <!-- Timer display -->
+  <div class="timer-section">
+    <div class="activity-name-display" id="activity-display"></div>
+    <div class="time-display" id="time-display">05:00</div>
+    <div class="done-msg" id="done-msg">⏰ Temps acabat!</div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="ctrl-btn btn-start" id="btn-start">▶ Iniciar</button>
+    <button class="ctrl-btn btn-pause" id="btn-pause" disabled>⏸ Pausar</button>
+    <button class="ctrl-btn btn-resume" id="btn-resume" disabled>▶ Reprendre</button>
+    <button class="ctrl-btn btn-reset" id="btn-reset">↺ Reiniciar</button>
+    <button class="ctrl-btn btn-fullscreen" id="btn-fullscreen" title="Pantalla completa">⛶</button>
+  </div>
+
+  <!-- Share -->
+  <div class="share-row">
+    <button class="btn-share" id="btn-share">Compartir temporitzador</button>
+  </div>
+</main>
+
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents<br>
+  <a href="/privacitat.html" style="color:#2D6A4F">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/compartir.js"></script>
+
+<script>
+  // Elements
+  const timeDisplay = document.getElementById('time-display');
+  const progressFill = document.getElementById('progress-fill');
+  const doneMsg = document.getElementById('done-msg');
+  const activityDisplay = document.getElementById('activity-display');
+  const activityInput = document.getElementById('activity-input');
+  const inputMin = document.getElementById('input-min');
+  const inputSec = document.getElementById('input-sec');
+  const btnStart = document.getElementById('btn-start');
+  const btnPause = document.getElementById('btn-pause');
+  const btnResume = document.getElementById('btn-resume');
+  const btnReset = document.getElementById('btn-reset');
+  const btnFullscreen = document.getElementById('btn-fullscreen');
+  const btnShare = document.getElementById('btn-share');
+  const body = document.body;
+
+  let totalSeconds = 300;
+  let remainingSeconds = 300;
+  let timerInterval = null;
+  let isRunning = false;
+  let isPaused = false;
+  let hasBeenUsed = false;
+
+  // Audio
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function beep(freq, duration, vol = 0.3) {
+    try {
+      const ac = getAudioCtx();
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.frequency.value = freq;
+      osc.type = 'square';
+      gain.gain.setValueAtTime(vol, ac.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + duration);
+      osc.start(ac.currentTime);
+      osc.stop(ac.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playAlarm() {
+    try {
+      const ac = getAudioCtx();
+      [0, 0.4, 0.8].forEach(delay => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.frequency.value = 880;
+        osc.type = 'square';
+        const t = ac.currentTime + delay;
+        gain.gain.setValueAtTime(0.35, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        osc.start(t);
+        osc.stop(t + 0.3);
+      });
+    } catch(e) {}
+  }
+
+  function formatTime(s) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (h > 0) {
+      return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    }
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+
+  function getPhase() {
+    if (remainingSeconds <= 0) return 'done';
+    const pct = remainingSeconds / totalSeconds;
+    if (pct > 0.5) return 'green';
+    if (pct > 0.25) return 'amber';
+    return 'red';
+  }
+
+  function updateDisplay() {
+    timeDisplay.textContent = formatTime(remainingSeconds);
+    const pct = totalSeconds > 0 ? (remainingSeconds / totalSeconds) * 100 : 0;
+    progressFill.style.width = pct + '%';
+
+    const phase = getPhase();
+    body.className = 'phase-' + phase;
+
+    if (phase === 'done') {
+      timeDisplay.classList.add('blinking');
+      doneMsg.classList.add('visible');
+    } else {
+      timeDisplay.classList.remove('blinking');
+      doneMsg.classList.remove('visible');
+    }
+  }
+
+  function getInputSeconds() {
+    const m = parseInt(inputMin.value) || 0;
+    const s = parseInt(inputSec.value) || 0;
+    return Math.max(1, m * 60 + s);
+  }
+
+  function syncInputsToTotal() {
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    inputMin.value = m;
+    inputSec.value = s;
+  }
+
+  function setActivePreset(min, sec) {
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      const bm = parseInt(b.dataset.min);
+      const bs = parseInt(b.dataset.sec);
+      b.classList.toggle('active', bm === min && bs === sec);
+    });
+  }
+
+  function startTimer() {
+    if (isRunning) return;
+    totalSeconds = getInputSeconds();
+    remainingSeconds = totalSeconds;
+    activityDisplay.textContent = activityInput.value.trim();
+    isRunning = true;
+    isPaused = false;
+    hasBeenUsed = true;
+    btnShare.classList.add('visible');
+
+    btnStart.disabled = true;
+    btnPause.disabled = false;
+    btnResume.disabled = true;
+
+    updateDisplay();
+
+    timerInterval = setInterval(() => {
+      if (remainingSeconds > 0) {
+        remainingSeconds--;
+        updateDisplay();
+        // Beep at 10, 5, 4, 3, 2, 1 seconds
+        if ([10, 5, 4, 3, 2, 1].includes(remainingSeconds)) {
+          beep(remainingSeconds <= 5 ? 1000 : 700, 0.08, 0.15);
+        }
+        if (remainingSeconds === 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          isRunning = false;
+          isPaused = false;
+          btnStart.disabled = true;
+          btnPause.disabled = true;
+          btnResume.disabled = true;
+          updateDisplay();
+          playAlarm();
+        }
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    if (!isRunning || isPaused) return;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    isPaused = true;
+    btnPause.disabled = true;
+    btnResume.disabled = false;
+  }
+
+  function resumeTimer() {
+    if (!isPaused) return;
+    isPaused = false;
+    btnPause.disabled = false;
+    btnResume.disabled = true;
+    timerInterval = setInterval(() => {
+      if (remainingSeconds > 0) {
+        remainingSeconds--;
+        updateDisplay();
+        if ([10, 5, 4, 3, 2, 1].includes(remainingSeconds)) {
+          beep(remainingSeconds <= 5 ? 1000 : 700, 0.08, 0.15);
+        }
+        if (remainingSeconds === 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          isRunning = false;
+          isPaused = false;
+          btnStart.disabled = true;
+          btnPause.disabled = true;
+          btnResume.disabled = true;
+          updateDisplay();
+          playAlarm();
+        }
+      }
+    }, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    isRunning = false;
+    isPaused = false;
+    totalSeconds = getInputSeconds();
+    remainingSeconds = totalSeconds;
+    btnStart.disabled = false;
+    btnPause.disabled = true;
+    btnResume.disabled = true;
+    body.className = '';
+    updateDisplay();
+    doneMsg.classList.remove('visible');
+    timeDisplay.classList.remove('blinking');
+  }
+
+  btnStart.addEventListener('click', startTimer);
+  btnPause.addEventListener('click', pauseTimer);
+  btnResume.addEventListener('click', resumeTimer);
+  btnReset.addEventListener('click', resetTimer);
+
+  btnShare.addEventListener('click', () => {
+    if (window.mostrarCompartir) window.mostrarCompartir("Temporitzador d'Aula", window.location.href);
+  });
+
+  // Presets
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const m = parseInt(btn.dataset.min);
+      const s = parseInt(btn.dataset.sec);
+      inputMin.value = m;
+      inputSec.value = s;
+      setActivePreset(m, s);
+      if (!isRunning && !isPaused) {
+        totalSeconds = m * 60 + s;
+        remainingSeconds = totalSeconds;
+        updateDisplay();
+      }
+    });
+  });
+
+  // Input changes
+  [inputMin, inputSec].forEach(inp => {
+    inp.addEventListener('change', () => {
+      if (!isRunning && !isPaused) {
+        totalSeconds = getInputSeconds();
+        remainingSeconds = totalSeconds;
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        updateDisplay();
+      }
+    });
+  });
+
+  // Fullscreen
+  btnFullscreen.addEventListener('click', () => {
+    const el = document.documentElement;
+    if (!document.fullscreenElement) {
+      (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen).call(el);
+      btnFullscreen.textContent = '✕ Sortir';
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen).call(document);
+      btnFullscreen.textContent = '⛶';
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) btnFullscreen.textContent = '⛶';
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('input')) return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!isRunning && !isPaused) startTimer();
+      else if (isRunning && !isPaused) pauseTimer();
+      else if (isPaused) resumeTimer();
+    }
+    if (e.code === 'KeyR') resetTimer();
+    if (e.code === 'KeyF') btnFullscreen.click();
+  });
+
+  // Init
+  updateDisplay();
+  setActivePreset(5, 0);
+</script>
+</body>
+</html>
