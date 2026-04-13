@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Diplomes · la meva escola</title>
+  <meta name="description" content="Crea diplomes personalitzats per imprimir. Ideal per reconèixer l'esforç i els assoliments dels alumnes.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    main { flex: 1; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; width: 100%; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.35rem; }
+    .subtitle { font-size: 0.92rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; align-items: start; }
+    @media(max-width: 760px) { .layout { grid-template-columns: 1fr; } }
+
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+    .section-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.9rem; }
+
+    .field { margin-bottom: 0.9rem; }
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); margin-bottom: 0.35rem; }
+    input[type=text], select {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.65rem 0.85rem; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s;
+    }
+    input[type=text]:focus, select:focus { border-color: var(--accent); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.65rem 1.2rem; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s, transform 0.1s; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--accent); color: #fff; width: 100%; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.25rem; }
+    .btn-primary:hover { background: var(--accent-d); }
+    .btn-print { background: #1D4ED8; color: #fff; width: 100%; margin-top: 0.65rem; padding: 0.75rem; font-size: 0.95rem; }
+    .btn-print:hover { background: #1e40af; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); width: 100%; margin-top: 0.5rem; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Diploma preview wrapper */
+    #diploma-wrap { display: none; }
+    #diploma-wrap.visible { display: block; }
+
+    /* =========== DIPLOMA STYLES =========== */
+    .diploma {
+      width: 100%; aspect-ratio: 1.41/1; position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 5%; text-align: center; overflow: hidden;
+      font-family: 'Playfair Display', Georgia, serif;
+      border-radius: 8px;
+    }
+
+    /* Style: Clàssic Daurat */
+    .diploma.classic {
+      background: linear-gradient(160deg, #FFFDF0 0%, #FFF8DC 50%, #FFFDF0 100%);
+      border: 6px double #C9A227;
+      box-shadow: 0 0 0 3px #FFF8DC, 0 0 0 8px #C9A227, 0 8px 40px rgba(201,162,39,0.25);
+    }
+    .diploma.classic .d-corner { position: absolute; font-size: 1.8rem; color: #C9A227; opacity: 0.7; }
+    .diploma.classic .d-header-label { font-size: clamp(0.55rem,1.5vw,0.8rem); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #8B6914; font-family: 'Inter', sans-serif; }
+    .diploma.classic .d-title { font-size: clamp(1.4rem,5vw,3rem); font-weight: 800; color: #7A4F0D; letter-spacing: -0.02em; margin: 0.1em 0 0.3em; line-height: 1.1; }
+    .diploma.classic .d-name { font-size: clamp(1.1rem,4vw,2.2rem); font-weight: 700; color: #5A3200; border-bottom: 2px solid #C9A227; padding-bottom: 0.2em; margin-bottom: 0.4em; }
+    .diploma.classic .d-motiu { font-size: clamp(0.65rem,2vw,1rem); color: #7A4F0D; font-style: italic; line-height: 1.5; font-family: 'Playfair Display', serif; }
+    .diploma.classic .d-footer { display: flex; width: 100%; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 1em; font-family: 'Inter', sans-serif; }
+    .diploma.classic .d-footer-item { font-size: clamp(0.5rem,1.3vw,0.75rem); color: #8B6914; text-align: center; }
+    .diploma.classic .d-sig-line { border-top: 1px solid #C9A227; padding-top: 0.3em; min-width: 100px; }
+    .diploma.classic .d-star { color: #C9A227; }
+
+    /* Style: Modern Verd */
+    .diploma.modern {
+      background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
+      border: 3px solid #10B981;
+      box-shadow: 0 0 0 6px rgba(16,185,129,0.12), 0 8px 40px rgba(16,185,129,0.15);
+    }
+    .diploma.modern .d-accent-bar { width: 60px; height: 5px; background: #10B981; border-radius: 999px; margin: 0 auto 1em; }
+    .diploma.modern .d-header-label { font-size: clamp(0.55rem,1.5vw,0.8rem); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #065F46; font-family: 'Inter', sans-serif; }
+    .diploma.modern .d-title { font-size: clamp(1.4rem,5vw,3rem); font-weight: 800; color: #064E3B; letter-spacing: -0.02em; margin: 0.1em 0 0.3em; line-height: 1.1; }
+    .diploma.modern .d-name { font-size: clamp(1.1rem,4vw,2.2rem); font-weight: 700; color: #047857; border-bottom: 2px solid #10B981; padding-bottom: 0.2em; margin-bottom: 0.4em; }
+    .diploma.modern .d-motiu { font-size: clamp(0.65rem,2vw,1rem); color: #065F46; font-style: italic; line-height: 1.5; }
+    .diploma.modern .d-footer { display: flex; width: 100%; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 1em; font-family: 'Inter', sans-serif; }
+    .diploma.modern .d-footer-item { font-size: clamp(0.5rem,1.3vw,0.75rem); color: #065F46; text-align: center; }
+    .diploma.modern .d-sig-line { border-top: 1px solid #10B981; padding-top: 0.3em; min-width: 100px; }
+    .diploma.modern .d-star { color: #10B981; }
+
+    /* Style: Alegre Colorit */
+    .diploma.alegre {
+      background: linear-gradient(135deg, #EDE9FE 0%, #FEE2E2 40%, #FEF9C3 100%);
+      border: 4px solid #8B5CF6;
+      box-shadow: 0 0 0 5px rgba(139,92,246,0.15), 0 8px 40px rgba(139,92,246,0.2);
+    }
+    .diploma.alegre .d-header-label { font-size: clamp(0.55rem,1.5vw,0.8rem); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #6D28D9; font-family: 'Inter', sans-serif; }
+    .diploma.alegre .d-title { font-size: clamp(1.4rem,5vw,3rem); font-weight: 800; color: #4C1D95; letter-spacing: -0.02em; margin: 0.1em 0 0.3em; line-height: 1.1; }
+    .diploma.alegre .d-name { font-size: clamp(1.1rem,4vw,2.2rem); font-weight: 700; color: #5B21B6; border-bottom: 3px solid #8B5CF6; padding-bottom: 0.2em; margin-bottom: 0.4em; }
+    .diploma.alegre .d-motiu { font-size: clamp(0.65rem,2vw,1rem); color: #4C1D95; font-style: italic; line-height: 1.5; }
+    .diploma.alegre .d-footer { display: flex; width: 100%; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 1em; font-family: 'Inter', sans-serif; }
+    .diploma.alegre .d-footer-item { font-size: clamp(0.5rem,1.3vw,0.75rem); color: #6D28D9; text-align: center; }
+    .diploma.alegre .d-sig-line { border-top: 2px solid #8B5CF6; padding-top: 0.3em; min-width: 100px; }
+    .diploma.alegre .d-star { color: #8B5CF6; }
+
+    /* Print */
+    @media print {
+      nav, main > h1, main > p.subtitle, .layout > div:first-child, .print-actions, section, footer, #diploma-wrap > .print-actions { display: none !important; }
+      body { background: white; }
+      main { max-width: 100%; padding: 0; }
+      .layout { display: block; }
+      #diploma-wrap { display: block !important; page-break-inside: avoid; }
+      .diploma { width: 100%; box-shadow: none !important; border-radius: 0; }
+    }
+
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid #DDE8DD; font-size: 0.78rem; color: #6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/diplomes.html">
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main>
+  <h1>🏅 Generador de Diplomes</h1>
+  <p class="subtitle">Crea i imprimeix diplomes personalitzats per reconèixer l'esforç dels teus alumnes.</p>
+
+  <div class="layout">
+    <div>
+      <div class="form-card">
+        <div class="section-title">Dades del diploma</div>
+
+        <div class="field">
+          <label for="d-nom">Nom de l'alumne/a</label>
+          <input type="text" id="d-nom" placeholder="Anna Garcia" />
+        </div>
+        <div class="field">
+          <label for="d-motiu">Motiu del diploma</label>
+          <input type="text" id="d-motiu" placeholder="per la seva excel·lent participació" />
+        </div>
+        <div class="field">
+          <label for="d-centre">Nom del centre (opcional)</label>
+          <input type="text" id="d-centre" placeholder="CEIP Els Pins" />
+        </div>
+        <div class="field">
+          <label for="d-docent">Nom del/la docent (opcional)</label>
+          <input type="text" id="d-docent" placeholder="Marta López" />
+        </div>
+        <div class="field">
+          <label for="d-data">Data</label>
+          <input type="text" id="d-data" placeholder="13 d'abril de 2026" />
+        </div>
+        <div class="field">
+          <label for="d-estil">Estil</label>
+          <select id="d-estil">
+            <option value="classic">Clàssic Daurat</option>
+            <option value="modern">Modern Verd</option>
+            <option value="alegre">Alegre Colorit</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" id="btn-preview">Previsualitzar diploma</button>
+        <button class="btn btn-print" id="btn-print" style="display:none;">🖨️ Imprimir</button>
+        <button class="btn btn-ghost" id="btn-nova" style="display:none;">Nova plantilla</button>
+      </div>
+    </div>
+
+    <div>
+      <div id="diploma-wrap">
+        <div id="diploma-preview"></div>
+        <div class="print-actions" style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+        </div>
+      </div>
+      <div id="placeholder" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:3rem 1.5rem;text-align:center;color:var(--muted);">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">🏅</div>
+        <div>Omple el formulari i fes clic a "Previsualitzar diploma"</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/butlletins.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Butlletins de Qualificació</a>
+    <a href="/informes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Informes d'Alumnes</a>
+    <a href="/ruleta.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Ruleta de Noms</a>
+  </div>
+</section>
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+
+<script>
+  // Default date in Catalan
+  function todayCatalan() {
+    const d = new Date();
+    const months = ['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
+    return `${d.getDate()} de ${months[d.getMonth()]} de ${d.getFullYear()}`;
+  }
+  document.getElementById('d-data').value = todayCatalan();
+
+  const btnPreview = document.getElementById('btn-preview');
+  const btnPrint = document.getElementById('btn-print');
+  const btnNova = document.getElementById('btn-nova');
+  const diplomaWrap = document.getElementById('diploma-wrap');
+  const placeholder = document.getElementById('placeholder');
+
+  function buildDiploma() {
+    const nom = document.getElementById('d-nom').value.trim() || 'Nom de l\'alumne/a';
+    const motiu = document.getElementById('d-motiu').value.trim() || 'per la seva participació exemplar';
+    const centre = document.getElementById('d-centre').value.trim();
+    const docent = document.getElementById('d-docent').value.trim();
+    const data = document.getElementById('d-data').value.trim();
+    const estil = document.getElementById('d-estil').value;
+
+    let html = `<div class="diploma ${estil}">`;
+
+    if (estil === 'classic') {
+      html += `
+        <div class="d-corner" style="top:12px;left:12px;">✦</div>
+        <div class="d-corner" style="top:12px;right:12px;">✦</div>
+        <div class="d-corner" style="bottom:12px;left:12px;">✦</div>
+        <div class="d-corner" style="bottom:12px;right:12px;">✦</div>
+        <div class="d-header-label">✦ La Meva Escola ✦</div>
+        <div class="d-title">DIPLOMA</div>
+        <div class="d-header-label" style="margin-bottom:0.5em">atorga el present reconeixement a</div>
+        <div class="d-name">${nom}</div>
+        <div class="d-motiu">${motiu}</div>
+        <div class="d-footer">
+          ${centre ? `<div class="d-footer-item"><div>${centre}</div></div>` : '<div></div>'}
+          <div class="d-footer-item"><span class="d-star">★★★</span><br/>${data}</div>
+          ${docent ? `<div class="d-footer-item"><div class="d-sig-line">${docent}</div><div>Docent</div></div>` : '<div></div>'}
+        </div>
+      `;
+    } else if (estil === 'modern') {
+      html += `
+        <div class="d-accent-bar"></div>
+        <div class="d-header-label">La Meva Escola · Reconeixement</div>
+        <div class="d-title">DIPLOMA</div>
+        <div class="d-header-label" style="margin-bottom:0.5em">atorgat a</div>
+        <div class="d-name">${nom}</div>
+        <div class="d-motiu">${motiu}</div>
+        <div class="d-footer">
+          ${centre ? `<div class="d-footer-item"><div>${centre}</div></div>` : '<div></div>'}
+          <div class="d-footer-item"><span class="d-star">●</span><br/>${data}</div>
+          ${docent ? `<div class="d-footer-item"><div class="d-sig-line">${docent}</div><div>Docent</div></div>` : '<div></div>'}
+        </div>
+      `;
+    } else {
+      html += `
+        <div style="font-size:clamp(1.5rem,5vw,2.5rem);margin-bottom:0.3em;">🌟</div>
+        <div class="d-header-label">La Meva Escola · Felicitació</div>
+        <div class="d-title">DIPLOMA</div>
+        <div class="d-header-label" style="margin-bottom:0.5em">per a</div>
+        <div class="d-name">${nom}</div>
+        <div class="d-motiu">${motiu}</div>
+        <div class="d-footer">
+          ${centre ? `<div class="d-footer-item"><div>${centre}</div></div>` : '<div></div>'}
+          <div class="d-footer-item"><span class="d-star">★</span><br/>${data}</div>
+          ${docent ? `<div class="d-footer-item"><div class="d-sig-line">${docent}</div><div>Docent</div></div>` : '<div></div>'}
+        </div>
+      `;
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  btnPreview.addEventListener('click', () => {
+    document.getElementById('diploma-preview').innerHTML = buildDiploma();
+    diplomaWrap.classList.add('visible');
+    placeholder.style.display = 'none';
+    btnPrint.style.display = 'inline-flex';
+    btnNova.style.display = 'inline-flex';
+  });
+
+  // Live update on input change
+  ['d-nom','d-motiu','d-centre','d-docent','d-data','d-estil'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      if (diplomaWrap.classList.contains('visible')) {
+        document.getElementById('diploma-preview').innerHTML = buildDiploma();
+      }
+    });
+  });
+
+  btnPrint.addEventListener('click', () => window.print());
+
+  btnNova.addEventListener('click', () => {
+    ['d-nom','d-motiu','d-centre','d-docent'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('d-data').value = todayCatalan();
+    document.getElementById('d-estil').value = 'classic';
+    document.getElementById('diploma-preview').innerHTML = '';
+    diplomaWrap.classList.remove('visible');
+    placeholder.style.display = 'block';
+    btnPrint.style.display = 'none';
+    btnNova.style.display = 'none';
+  });
+</script>
+</body>
+</html>

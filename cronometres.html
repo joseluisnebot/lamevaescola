@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronòmetre per Tasques · la meva escola</title>
+  <meta name="description" content="Gestiona el temps de les tasques d'aula amb cronòmetres visuals. Pantalla gran per projectar. Alertes sonores.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+      --timer-color: #059669;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    main { flex: 1; max-width: 700px; margin: 0 auto; padding: 2rem 1.5rem; width: 100%; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.35rem; }
+    .subtitle { font-size: 0.92rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.25rem; }
+
+    /* Task name */
+    .task-input { width: 100%; border: none; border-bottom: 2px solid var(--border); background: transparent; font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); padding: 0.35rem 0; outline: none; text-align: center; transition: border-color 0.15s; }
+    .task-input:focus { border-color: var(--accent); }
+    .task-input::placeholder { color: var(--muted); font-weight: 400; }
+
+    /* Ring */
+    .ring-wrap { display: flex; flex-direction: column; align-items: center; margin: 1.5rem 0; position: relative; }
+    .ring-svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: #E8E0D8; stroke-width: 10; }
+    .ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.5s linear, stroke 0.5s; }
+    .timer-display {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-size: clamp(2.8rem, 12vw, 5rem); font-weight: 800; letter-spacing: -0.04em;
+      color: var(--timer-color); transition: color 0.5s; text-align: center; line-height: 1;
+    }
+    .timer-display.orange { color: #D97706; }
+    .timer-display.red { color: #DC2626; }
+    .timer-display.done { color: var(--muted); }
+
+    /* Setup row */
+    .setup-row { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .time-input-wrap { display: flex; align-items: center; gap: 0.4rem; }
+    .time-input {
+      width: 64px; padding: 0.55rem 0.5rem; font-size: 1.1rem; font-weight: 700;
+      text-align: center; border: 2px solid var(--border); border-radius: 8px;
+      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); outline: none;
+    }
+    .time-input:focus { border-color: var(--accent); }
+    .time-sep { font-size: 1.4rem; font-weight: 800; color: var(--muted); }
+
+    /* Main buttons */
+    .main-btns { display: flex; gap: 0.65rem; justify-content: center; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.92rem; font-weight: 700; cursor: pointer; border: none; transition: background 0.15s, transform 0.1s; }
+    .btn:active { transform: scale(0.96); }
+    .btn-start { background: #059669; color: #fff; min-width: 100px; }
+    .btn-start:hover { background: #047857; }
+    .btn-pause { background: #D97706; color: #fff; }
+    .btn-pause:hover { background: #B45309; }
+    .btn-reset { background: var(--accent-l); color: var(--accent-d); }
+    .btn-reset:hover { background: #e0c8b0; }
+    .btn-fullscreen { background: var(--bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; }
+    .btn-fullscreen:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Presets */
+    .presets { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.25rem; }
+    .preset-btn { background: var(--bg); border: 2px solid var(--border); color: var(--muted); border-radius: 20px; padding: 0.4rem 1rem; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+    .preset-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-l); }
+
+    /* Fullscreen overlay */
+    #fs-overlay {
+      display: none; position: fixed; inset: 0; background: #0D1B2A;
+      z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
+    }
+    #fs-overlay.active { display: flex; }
+    .fs-task { font-size: clamp(1.2rem, 4vw, 2rem); font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 1rem; }
+    .fs-time { font-size: clamp(5rem, 25vw, 14rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #34D399; transition: color 0.5s; }
+    .fs-time.orange { color: #FBBF24; }
+    .fs-time.red { color: #F87171; animation: blink 0.5s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .fs-close { position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 1rem; font-weight: 700; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+    .fs-close:hover { background: rgba(255,255,255,0.2); }
+
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid #DDE8DD; font-size: 0.78rem; color: #6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/cronometres.html">
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main>
+  <h1>⏱️ Cronòmetre per Tasques</h1>
+  <p class="subtitle">Temporitza les tasques d'aula amb visualització gran per a la PDI.</p>
+
+  <div class="card" style="text-align:center;">
+    <input type="text" class="task-input" id="task-name" placeholder="Nom de la tasca (opcional)" maxlength="60" />
+
+    <div class="ring-wrap">
+      <svg class="ring-svg" id="ring-svg" width="220" height="220" viewBox="0 0 220 220">
+        <circle class="ring-bg" cx="110" cy="110" r="96"/>
+        <circle class="ring-fill" id="ring-fill" cx="110" cy="110" r="96" stroke="#059669"
+          stroke-dasharray="603" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-display" id="timer-display">00:00</div>
+    </div>
+
+    <div class="setup-row">
+      <div class="time-input-wrap">
+        <input type="number" class="time-input" id="inp-min" value="5" min="0" max="99" placeholder="mm" />
+        <span class="time-sep">:</span>
+        <input type="number" class="time-input" id="inp-sec" value="0" min="0" max="59" placeholder="ss" />
+      </div>
+    </div>
+
+    <div class="main-btns">
+      <button class="btn btn-start" id="btn-start">▶ Iniciar</button>
+      <button class="btn btn-pause" id="btn-pause" style="display:none;">⏸ Pausa</button>
+      <button class="btn btn-reset" id="btn-reset">↺ Reset</button>
+      <button class="btn btn-fullscreen" id="btn-fullscreen">⛶ PDI</button>
+    </div>
+
+    <div class="presets">
+      <button class="preset-btn" data-m="1" data-s="0">1 min</button>
+      <button class="preset-btn" data-m="3" data-s="0">3 min</button>
+      <button class="preset-btn" data-m="5" data-s="0">5 min</button>
+      <button class="preset-btn" data-m="10" data-s="0">10 min</button>
+    </div>
+  </div>
+</main>
+
+<!-- Fullscreen overlay -->
+<div id="fs-overlay">
+  <button class="fs-close" id="fs-close">✕ Tancar</button>
+  <div class="fs-task" id="fs-task"></div>
+  <div class="fs-time" id="fs-time">00:00</div>
+</div>
+
+<section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/temporizador.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Temporizador de Classe</a>
+    <a href="/ruleta.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Ruleta de Noms</a>
+    <a href="/torn.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Torn de Paraula</a>
+  </div>
+</section>
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+
+<script>
+  const CIRCUMFERENCE = 2 * Math.PI * 96; // 603.2
+  const ringFill = document.getElementById('ring-fill');
+  const timerDisplay = document.getElementById('timer-display');
+  const fsTime = document.getElementById('fs-time');
+  const fsTask = document.getElementById('fs-task');
+  const fsOverlay = document.getElementById('fs-overlay');
+  const btnStart = document.getElementById('btn-start');
+  const btnPause = document.getElementById('btn-pause');
+  const btnReset = document.getElementById('btn-reset');
+  const btnFullscreen = document.getElementById('btn-fullscreen');
+  const btnFsClose = document.getElementById('fs-close');
+  const inpMin = document.getElementById('inp-min');
+  const inpSec = document.getElementById('inp-sec');
+  const taskName = document.getElementById('task-name');
+
+  let totalSeconds = 0;
+  let remaining = 0;
+  let running = false;
+  let interval = null;
+  let audioCtx = null;
+
+  function getAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function beepAlarm() {
+    try {
+      const ac = getAudio();
+      [880, 660, 880, 660, 880].forEach((freq, i) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.connect(gain); gain.connect(ac.destination);
+        osc.frequency.value = freq; osc.type = 'square';
+        const t = ac.currentTime + i * 0.22;
+        gain.gain.setValueAtTime(0.15, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        osc.start(t); osc.stop(t + 0.2);
+      });
+    } catch(e) {}
+  }
+
+  function fmt(secs) {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+
+  function getColorClass(remaining, total) {
+    if (total === 0) return '';
+    const pct = remaining / total;
+    if (pct <= 0) return 'done';
+    if (pct < 0.25) return 'red';
+    if (pct < 0.5) return 'orange';
+    return '';
+  }
+
+  function updateDisplay() {
+    const timeStr = fmt(Math.max(0, remaining));
+    timerDisplay.textContent = timeStr;
+    fsTime.textContent = timeStr;
+
+    const cls = getColorClass(remaining, totalSeconds);
+    timerDisplay.className = 'timer-display' + (cls ? ' ' + cls : '');
+    fsTime.className = 'fs-time' + (cls ? ' ' + cls : '');
+
+    // Update ring
+    const pct = totalSeconds > 0 ? remaining / totalSeconds : 1;
+    const offset = CIRCUMFERENCE * (1 - Math.max(0, Math.min(1, pct)));
+    ringFill.style.strokeDashoffset = offset;
+    const strokeColor = cls === 'red' ? '#DC2626' : cls === 'orange' ? '#D97706' : '#059669';
+    ringFill.style.stroke = strokeColor;
+  }
+
+  function start() {
+    const m = parseInt(inpMin.value) || 0;
+    const s = parseInt(inpSec.value) || 0;
+    totalSeconds = m * 60 + s;
+    if (totalSeconds <= 0) return;
+    remaining = totalSeconds;
+    running = true;
+    btnStart.style.display = 'none';
+    btnPause.style.display = 'inline-flex';
+    inpMin.disabled = true;
+    inpSec.disabled = true;
+    fsTask.textContent = taskName.value.trim() || '';
+    tick();
+    interval = setInterval(tick, 1000);
+  }
+
+  function tick() {
+    updateDisplay();
+    if (remaining <= 0) {
+      clearInterval(interval);
+      running = false;
+      btnPause.style.display = 'none';
+      btnStart.style.display = 'inline-flex';
+      btnStart.textContent = '▶ Tornar a iniciar';
+      inpMin.disabled = false;
+      inpSec.disabled = false;
+      beepAlarm();
+      return;
+    }
+    remaining--;
+  }
+
+  function pause() {
+    if (!running) {
+      // Resume
+      running = true;
+      btnPause.textContent = '⏸ Pausa';
+      interval = setInterval(tick, 1000);
+    } else {
+      clearInterval(interval);
+      running = false;
+      btnPause.textContent = '▶ Continuar';
+    }
+  }
+
+  function reset() {
+    clearInterval(interval);
+    running = false;
+    remaining = 0;
+    totalSeconds = 0;
+    btnStart.style.display = 'inline-flex';
+    btnStart.textContent = '▶ Iniciar';
+    btnPause.style.display = 'none';
+    btnPause.textContent = '⏸ Pausa';
+    inpMin.disabled = false;
+    inpSec.disabled = false;
+    timerDisplay.textContent = fmt(parseInt(inpMin.value || 0) * 60 + parseInt(inpSec.value || 0));
+    timerDisplay.className = 'timer-display';
+    fsTime.textContent = '00:00';
+    fsTime.className = 'fs-time';
+    ringFill.style.strokeDashoffset = 0;
+    ringFill.style.stroke = '#059669';
+  }
+
+  // Presets
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (running) { clearInterval(interval); running = false; }
+      inpMin.value = btn.dataset.m;
+      inpSec.value = btn.dataset.s || 0;
+      btnStart.style.display = 'inline-flex';
+      btnStart.textContent = '▶ Iniciar';
+      btnPause.style.display = 'none';
+      inpMin.disabled = false;
+      inpSec.disabled = false;
+      remaining = 0; totalSeconds = 0;
+      timerDisplay.textContent = fmt(parseInt(btn.dataset.m) * 60);
+      timerDisplay.className = 'timer-display';
+      ringFill.style.strokeDashoffset = 0;
+      ringFill.style.stroke = '#059669';
+    });
+  });
+
+  // Update display when inputs change
+  inpMin.addEventListener('input', () => { if (!running) timerDisplay.textContent = fmt(parseInt(inpMin.value||0)*60+parseInt(inpSec.value||0)); });
+  inpSec.addEventListener('input', () => { if (!running) timerDisplay.textContent = fmt(parseInt(inpMin.value||0)*60+parseInt(inpSec.value||0)); });
+
+  btnStart.addEventListener('click', () => {
+    // If timer finished, reset first
+    if (remaining === 0 && totalSeconds > 0) { reset(); return; }
+    start();
+  });
+  btnPause.addEventListener('click', pause);
+  btnReset.addEventListener('click', reset);
+
+  btnFullscreen.addEventListener('click', () => {
+    fsTask.textContent = taskName.value.trim() || '';
+    fsTime.textContent = timerDisplay.textContent;
+    fsOverlay.classList.add('active');
+  });
+  btnFsClose.addEventListener('click', () => fsOverlay.classList.remove('active'));
+
+  // Init display
+  timerDisplay.textContent = fmt(parseInt(inpMin.value||5)*60);
+  ringFill.style.strokeDasharray = CIRCUMFERENCE;
+</script>
+</body>
+</html>

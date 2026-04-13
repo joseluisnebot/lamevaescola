@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torn de Paraula · la meva escola</title>
+  <meta name="description" content="Gestiona qui ha participat a classe. Marca els alumnes que han parlat i porta el compte de la participació de manera justa.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    main { flex: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; width: 100%; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.35rem; }
+    .subtitle { font-size: 0.92rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    textarea, input[type=text] {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.75rem; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      color: var(--text); background: var(--bg); resize: vertical; outline: none; transition: border-color 0.15s;
+    }
+    textarea { min-height: 150px; }
+    textarea:focus, input[type=text]:focus { border-color: var(--accent); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.6rem 1.2rem; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s, transform 0.1s; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--accent); color: #fff; width: 100%; margin-top: 0.75rem; padding: 0.7rem; font-size: 0.92rem; }
+    .btn-primary:hover { background: var(--accent-d); }
+    .btn-secondary { background: var(--accent-l); color: var(--accent-d); width: 100%; margin-top: 0.5rem; padding: 0.7rem; font-size: 0.88rem; }
+    .btn-secondary:hover { background: #e0c8b0; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; padding: 0.4rem 0.8rem; border-radius: 6px; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .section-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.75rem; }
+
+    .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
+    .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; text-align: center; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .student-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.65rem; }
+    .student-card {
+      background: var(--surface); border: 2px solid var(--border); border-radius: 10px;
+      padding: 0.7rem 0.5rem; text-align: center; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      user-select: none;
+    }
+    .student-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .student-card.participated { background: var(--accent-l); border-color: var(--accent); }
+    .student-card.suggested { background: #D1FAE5; border-color: #059669; animation: pulse-green 1s ease-in-out 2; }
+    @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,0.3)} 50%{box-shadow:0 0 0 6px rgba(5,150,105,0)} }
+    .student-name { font-size: 0.82rem; font-weight: 700; color: var(--text); word-break: break-word; }
+    .student-card.participated .student-name { color: var(--accent-d); }
+    .student-count { font-size: 1.15rem; font-weight: 800; color: var(--accent-d); margin-bottom: 0.15rem; }
+    .student-card.participated .student-count { color: var(--accent); }
+
+    .action-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid #DDE8DD; font-size: 0.78rem; color: #6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/torn.html">
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main>
+  <h1>🎤 Torn de Paraula</h1>
+  <p class="subtitle">Porta el compte de la participació i assegura que tothom tingui la seva oportunitat.</p>
+
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="section-title">Llista d'alumnes</div>
+        <label for="names-input">Un nom per línia</label>
+        <textarea id="names-input" placeholder="Anna&#10;Bernat&#10;Carla&#10;David&#10;Ester"></textarea>
+        <button class="btn btn-primary" id="btn-load">Carregar classe</button>
+        <button class="btn btn-ghost" id="btn-nova-classe" style="width:100%;margin-top:0.5rem;">Nova classe</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" id="main-panel">
+        <div id="empty-state" class="empty-state">
+          <div class="icon">🎤</div>
+          <div>Introdueix els noms i fes clic a "Carregar classe"</div>
+        </div>
+
+        <div id="class-panel" style="display:none">
+          <div class="stats-bar">
+            <div class="stat-box">
+              <div class="stat-num" id="stat-total">0</div>
+              <div class="stat-label">Alumnes</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num" id="stat-participated">0</div>
+              <div class="stat-label">Han parlat</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num" id="stat-pending">0</div>
+              <div class="stat-label">Pendents</div>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary" id="btn-next" style="flex:1;margin-top:0;">Propera pregunta</button>
+            <button class="btn btn-ghost" id="btn-reset-session">Reiniciar sessió</button>
+          </div>
+
+          <div class="section-title">Fes clic per marcar la participació</div>
+          <div class="student-grid" id="student-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/ruleta.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Ruleta de Noms</a>
+    <a href="/grups.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Grups</a>
+    <a href="/assistencia.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Seguiment d'Assistència</a>
+  </div>
+</section>
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+
+<script>
+  const STORAGE_KEY = 'torn_class_names';
+  let students = []; // [{name, count}]
+  let suggestedIndex = -1;
+
+  const namesInput = document.getElementById('names-input');
+  const btnLoad = document.getElementById('btn-load');
+  const btnNovaClasse = document.getElementById('btn-nova-classe');
+  const btnNext = document.getElementById('btn-next');
+  const btnResetSession = document.getElementById('btn-reset-session');
+  const studentGrid = document.getElementById('student-grid');
+  const classPanel = document.getElementById('class-panel');
+  const emptyState = document.getElementById('empty-state');
+  const statTotal = document.getElementById('stat-total');
+  const statParticipated = document.getElementById('stat-participated');
+  const statPending = document.getElementById('stat-pending');
+
+  // Load saved names
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) namesInput.value = saved;
+
+  function loadClass() {
+    const raw = namesInput.value.trim().split('\n').map(s => s.trim()).filter(s => s);
+    if (raw.length < 1) { alert('Afegeix almenys un alumne.'); return; }
+    localStorage.setItem(STORAGE_KEY, namesInput.value);
+    students = raw.map(name => ({ name, count: 0 }));
+    suggestedIndex = -1;
+    renderClass();
+  }
+
+  function renderClass() {
+    if (students.length === 0) {
+      emptyState.style.display = 'block';
+      classPanel.style.display = 'none';
+      return;
+    }
+    emptyState.style.display = 'none';
+    classPanel.style.display = 'block';
+
+    const totalCount = students.reduce((s, st) => s + st.count, 0);
+    const participated = students.filter(st => st.count > 0).length;
+    statTotal.textContent = students.length;
+    statParticipated.textContent = participated;
+    statPending.textContent = students.length - participated;
+
+    studentGrid.innerHTML = '';
+    students.forEach((st, i) => {
+      const card = document.createElement('div');
+      card.className = 'student-card' + (st.count > 0 ? ' participated' : '') + (i === suggestedIndex ? ' suggested' : '');
+      card.innerHTML = `<div class="student-count">${st.count}</div><div class="student-name">${st.name}</div>`;
+      card.addEventListener('click', () => {
+        students[i].count++;
+        suggestedIndex = -1;
+        renderClass();
+      });
+      studentGrid.appendChild(card);
+    });
+  }
+
+  function propera() {
+    if (students.length === 0) return;
+    // Find student(s) with minimum count
+    const minCount = Math.min(...students.map(s => s.count));
+    const candidates = students.map((s, i) => i).filter(i => students[i].count === minCount);
+    suggestedIndex = candidates[Math.floor(Math.random() * candidates.length)];
+    renderClass();
+    // Scroll to suggested
+    const cards = studentGrid.querySelectorAll('.student-card');
+    if (cards[suggestedIndex]) cards[suggestedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetSession() {
+    if (!confirm('Vols reiniciar els comptadors de participació? Els noms es mantindran.')) return;
+    students.forEach(s => s.count = 0);
+    suggestedIndex = -1;
+    renderClass();
+  }
+
+  function novaClasse() {
+    if (students.length > 0 && !confirm('Vols eliminar la classe actual i començar de nou?')) return;
+    students = [];
+    suggestedIndex = -1;
+    namesInput.value = '';
+    localStorage.removeItem(STORAGE_KEY);
+    renderClass();
+  }
+
+  btnLoad.addEventListener('click', loadClass);
+  btnNext.addEventListener('click', propera);
+  btnResetSession.addEventListener('click', resetSession);
+  btnNovaClasse.addEventListener('click', novaClasse);
+
+  renderClass();
+</script>
+</body>
+</html>

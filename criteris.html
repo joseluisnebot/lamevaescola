@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Criteris d'Avaluació Decret 175/2022 — la meva escola</title>
+  <meta name="description" content="Genera criteris d'avaluació alineats amb el Decret 175/2022 de Catalunya a partir de les competències específiques i el contingut." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    nav { display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50; }
+
+    .hero { text-align:center; padding:3.5rem 1.5rem 2.5rem; max-width:640px; margin:0 auto; }
+    .hero-pill { display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-l);color:var(--accent-d);font-size:0.75rem;font-weight:700;padding:0.35rem 0.9rem;border-radius:999px;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase; }
+    h1 { font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-0.04em;margin-bottom:0.75rem; }
+    h1 span { color:var(--accent); }
+    .hero-sub { font-size:1rem;color:var(--muted);line-height:1.65; }
+
+    .main { max-width:800px; margin:0 auto; padding:0 1.5rem 4rem; }
+
+    .card { background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;box-shadow:0 4px 24px rgba(45,106,79,0.08);padding:2rem;margin-bottom:2rem; }
+
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:560px){ .form-grid { grid-template-columns:1fr; } }
+
+    .field { display:flex;flex-direction:column;gap:0.4rem; }
+    .field.full { grid-column:1/-1; }
+    label { font-size:0.82rem;font-weight:600;color:var(--text); }
+    select, input, textarea {
+      background:#F7F9F7;border:1.5px solid #DDE8DD;border-radius:0.6rem;
+      padding:0.65rem 0.9rem;font-size:0.9rem;font-family:inherit;
+      color:var(--text);outline:none;transition:border-color 0.15s;width:100%;
+    }
+    select:focus, input:focus, textarea:focus { border-color:#2D6A4F; }
+    textarea { resize:vertical; min-height:80px; }
+
+    .btn-submit {
+      width:100%;background:#2D6A4F;color:#fff;font-weight:700;font-size:0.95rem;
+      border:none;border-radius:0.75rem;padding:0.9rem;cursor:pointer;
+      transition:background 0.15s;margin-top:1.25rem;font-family:inherit;
+    }
+    .btn-submit:hover { background:#1B4332; }
+    .btn-submit:disabled { opacity:0.6;cursor:not-allowed; }
+
+    .loader { display:none;text-align:center;padding:2rem;color:var(--muted);font-size:0.9rem;gap:0.75rem;align-items:center;justify-content:center; }
+    .loader.active { display:flex; }
+    .spinner { width:22px;height:22px;border:3px solid var(--accent-l);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .error-box { display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;border-radius:0.75rem;padding:0.9rem 1.1rem;font-size:0.88rem;margin-top:1rem; }
+    .error-box.active { display:block; }
+
+    .result-card { display:none; }
+    .result-card.active { display:block; }
+
+    .section-label { font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:0.4rem; }
+    .section-body { font-size:0.9rem;color:var(--text);line-height:1.7; }
+
+    .competencia-box { background:var(--accent-l);border:1px solid var(--border);border-radius:0.75rem;padding:0.9rem 1.1rem;font-size:0.9rem;font-weight:600;color:var(--accent-d);margin-bottom:1.5rem;line-height:1.6; }
+
+    .criteri-item { background:#F7F9F7;border:1px solid var(--border);border-radius:1rem;padding:1.25rem 1.4rem;margin-bottom:1.25rem; }
+    .criteri-header { display:flex;align-items:flex-start;gap:0.9rem;margin-bottom:0.9rem; }
+    .criteri-num { min-width:32px;height:32px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;flex-shrink:0; }
+    .criteri-text { font-size:0.93rem;font-weight:600;color:var(--text);line-height:1.55; }
+
+    .indicadors-list { list-style:none;padding:0;margin:0 0 0.9rem 0;display:flex;flex-direction:column;gap:0.3rem; }
+    .indicadors-list li { font-size:0.83rem;color:var(--muted);padding:0.2rem 0 0.2rem 1.2rem;position:relative;line-height:1.5; }
+    .indicadors-list li::before { content:"→";position:absolute;left:0;color:var(--accent);font-weight:700; }
+
+    .instrument-tag { display:inline-flex;align-items:center;background:#E8F4ED;color:#1B4332;font-size:0.76rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:999px;margin-bottom:1rem; }
+
+    .nivells-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem; }
+    @media(max-width:500px){ .nivells-grid { grid-template-columns:1fr; } }
+    .nivell-box { border-radius:0.6rem;padding:0.7rem 0.85rem; }
+    .nivell-box.na { background:#FEF2F2;border:1px solid #FECACA; }
+    .nivell-box.as { background:#FEF9C3;border:1px solid #FDE68A; }
+    .nivell-box.an { background:#DBEAFE;border:1px solid #BFDBFE; }
+    .nivell-box.ae { background:#D1FAE5;border:1px solid #A7F3D0; }
+    .nivell-code { font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem; }
+    .nivell-box.na .nivell-code { color:#DC2626; }
+    .nivell-box.as .nivell-code { color:#B45309; }
+    .nivell-box.an .nivell-code { color:#1D4ED8; }
+    .nivell-box.ae .nivell-code { color:#065F46; }
+    .nivell-desc { font-size:0.8rem;color:var(--text);line-height:1.55; }
+
+    .divider-line { border:none;border-top:1px solid var(--border);margin:1.25rem 0; }
+
+    .actions { display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.5rem; }
+    .btn-action { background:var(--accent-l);color:var(--accent-d);border:none;border-radius:0.6rem;padding:0.6rem 1.1rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.15s; }
+    .btn-action:hover { background:#C3E0D0; }
+
+    footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/criteris.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador de Criteris d'Avaluació Decret 175/2022","url":"https://lamevaescola.com/criteris.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">📐 Decret 175/2022</div>
+  <h1>Criteris <span>d'Avaluació</span></h1>
+  <p class="hero-sub">Genera criteris d'avaluació alineats amb el Decret 175/2022 de Catalunya: indicadors observables, instruments i els 4 nivells d'assoliment (NA/AS/AN/AE).</p>
+</section>
+
+<div class="main">
+  <div class="card">
+    <div class="form-grid">
+      <div class="field">
+        <label for="assignatura">Assignatura</label>
+        <select id="assignatura">
+          <option value="">— Selecciona —</option>
+          <option>Matemàtiques</option>
+          <option>Llengua Catalana</option>
+          <option>Llengua Castellana</option>
+          <option>Anglès</option>
+          <option>Ciències Naturals</option>
+          <option>Ciències Socials</option>
+          <option>Educació Física</option>
+          <option>Música</option>
+          <option>Educació Visual i Plàstica</option>
+          <option>Tecnologia</option>
+          <option>Educació en Valors</option>
+          <option>Altra</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="nivell">Nivell</label>
+        <select id="nivell">
+          <option value="">— Selecciona —</option>
+          <option>Primària 1r-2n</option>
+          <option>Primària 3r-4t</option>
+          <option>Primària 5è-6è</option>
+          <option>ESO 1r-2n</option>
+          <option>ESO 3r-4t</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label for="competencia">Competència específica a avaluar <span style="color:var(--accent)">*</span></label>
+        <textarea id="competencia" placeholder="Descriu la competència específica que vols avaluar. Ex: 'Comprensió lectora de textos narratius: identificar el tema principal, els personatges i la seqüència d'esdeveniments'"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="nombre">Nombre de criteris</label>
+        <select id="nombre">
+          <option value="3">3 criteris</option>
+          <option value="4" selected>4 criteris</option>
+          <option value="5">5 criteris</option>
+          <option value="6">6 criteris</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="trimestre">Trimestre</label>
+        <select id="trimestre">
+          <option>1r Trimestre</option>
+          <option>2n Trimestre</option>
+          <option>3r Trimestre</option>
+          <option>Tot el curs</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="btn-generar" onclick="generarCriteris()">Generar criteris d'avaluació</button>
+
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      Generant criteris d'avaluació... (pot trigar 15-25 seg)
+    </div>
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <div class="card result-card" id="result-card">
+    <div class="section-label" style="margin-bottom:0.5rem">Competència treballada</div>
+    <div class="competencia-box" id="res-competencia"></div>
+
+    <div class="section-label" style="margin-bottom:0.75rem">Criteris d'avaluació</div>
+    <div id="res-criteris-list"></div>
+
+    <div class="actions">
+      <button class="btn-action" onclick="copiarText()">📋 Copiar criteris</button>
+      <button class="btn-action" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<section style="max-width:800px;margin:3rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:#2C1A0E">Generador de Criteris d'Avaluació — Decret 175/2022</h2>
+  <p>Genera <strong>criteris d'avaluació</strong> alineats amb el currículum de Catalunya (Decret 175/2022). Cada criteri inclou indicadors observables, l'instrument d'avaluació suggerit i les descripcions dels quatre nivells d'assoliment: <strong>NA</strong> (No Assolit), <strong>AS</strong> (Assolit Suficient), <strong>AN</strong> (Assolit Notable) i <strong>AE</strong> (Assolit Excel·lent).</p>
+  <p>Eina indispensable per a la programació didàctica i per al disseny de rúbriques d'avaluació competencial, adaptada als estàndards del currículum català vigent per a Primària i ESO.</p>
+</section>
+
+<section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/rubriques.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
+    <a href="/objectius.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
+    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+  </div>
+</section>
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+</footer>
+
+<script>
+let lastResult = null;
+
+async function generarCriteris() {
+  const assignatura = document.getElementById('assignatura').value;
+  const nivell = document.getElementById('nivell').value;
+  const competencia = document.getElementById('competencia').value.trim();
+  const nombre = document.getElementById('nombre').value;
+  const trimestre = document.getElementById('trimestre').value;
+
+  const errorBox = document.getElementById('error-box');
+  errorBox.className = 'error-box';
+
+  if (!assignatura || !nivell || !competencia) {
+    errorBox.textContent = 'Si us plau, selecciona l\'assignatura, el nivell i descriu la competència específica.';
+    errorBox.className = 'error-box active';
+    return;
+  }
+
+  const btn = document.getElementById('btn-generar');
+  btn.disabled = true;
+  document.getElementById('loader').className = 'loader active';
+  document.getElementById('result-card').className = 'card result-card';
+
+  try {
+    const res = await fetch('/api/generar-criteris', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ assignatura, nivell, competencia, nombre, trimestre })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Error desconegut');
+
+    lastResult = data.result;
+    renderResult(data.result);
+  } catch(e) {
+    errorBox.textContent = 'Error: ' + e.message;
+    errorBox.className = 'error-box active';
+  } finally {
+    btn.disabled = false;
+    document.getElementById('loader').className = 'loader';
+  }
+}
+
+function renderResult(r) {
+  document.getElementById('res-competencia').textContent = r.competencia;
+
+  const list = document.getElementById('res-criteris-list');
+  list.innerHTML = '';
+
+  (r.criteris || []).forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'criteri-item';
+    div.innerHTML = `
+      <div class="criteri-header">
+        <div class="criteri-num">${c.num}</div>
+        <div class="criteri-text">${c.criteri}</div>
+      </div>
+      <ul class="indicadors-list">${(c.indicadors || []).map(i => `<li>${i}</li>`).join('')}</ul>
+      <div class="instrument-tag">📋 ${c.instrument}</div>
+      <div class="nivells-grid">
+        <div class="nivell-box na"><div class="nivell-code">NA · No Assolit</div><div class="nivell-desc">${c.nivells?.NA || ''}</div></div>
+        <div class="nivell-box as"><div class="nivell-code">AS · Assolit Suficient</div><div class="nivell-desc">${c.nivells?.AS || ''}</div></div>
+        <div class="nivell-box an"><div class="nivell-code">AN · Assolit Notable</div><div class="nivell-desc">${c.nivells?.AN || ''}</div></div>
+        <div class="nivell-box ae"><div class="nivell-code">AE · Assolit Excel·lent</div><div class="nivell-desc">${c.nivells?.AE || ''}</div></div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  document.getElementById('result-card').className = 'card result-card active';
+  const sb = window.mostrarCompartir && window.mostrarCompartir('Criteris d\'Avaluació Decret 175/2022', window.location.href);
+  if (sb) document.getElementById('result-card').appendChild(sb);
+}
+
+function copiarText() {
+  if (!lastResult) return;
+  const r = lastResult;
+  let text = `CRITERIS D'AVALUACIÓ\nCompetència: ${r.competencia}\n\n`;
+  (r.criteris || []).forEach(c => {
+    text += `CRITERI ${c.num}: ${c.criteri}\n`;
+    text += `Indicadors:\n${(c.indicadors || []).map(i => '  • ' + i).join('\n')}\n`;
+    text += `Instrument: ${c.instrument}\n`;
+    text += `NA: ${c.nivells?.NA || ''}\n`;
+    text += `AS: ${c.nivells?.AS || ''}\n`;
+    text += `AN: ${c.nivells?.AN || ''}\n`;
+    text += `AE: ${c.nivells?.AE || ''}\n\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => alert('Criteris copiats al portapapers.'));
+}
+</script>
+<script src="/compartir.js"></script>
+<script src="/pdf.js"></script>
+<script src="/cookies.js"></script>
+</body>
+</html>

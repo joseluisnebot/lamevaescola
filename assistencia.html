@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguiment d'Assistència · la meva escola</title>
+  <meta name="description" content="Registra l'assistència de la teva classe. Marca presències, absències i retards. Exporta el resum mensual.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    main { flex: 1; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; width: 100%; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.35rem; }
+    .subtitle { font-size: 0.92rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .setup-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media(max-width:560px){ .setup-grid { grid-template-columns: 1fr; } }
+
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    textarea, input[type=date] {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.75rem; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s;
+    }
+    textarea { min-height: 130px; resize: vertical; }
+    textarea:focus, input[type=date]:focus { border-color: var(--accent); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.6rem 1.2rem; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s, transform 0.1s; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--accent); color: #fff; padding: 0.75rem; font-size: 0.93rem; }
+    .btn-primary:hover { background: var(--accent-d); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .summary-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.65rem; margin-bottom: 1.5rem; }
+    @media(max-width:480px){ .summary-bar { grid-template-columns: repeat(2,1fr); } }
+    .sum-box { border-radius: 10px; padding: 0.75rem; text-align: center; }
+    .sum-box.present { background: #D1FAE5; border: 1px solid #A7F3D0; }
+    .sum-box.retard { background: #FEF9C3; border: 1px solid #FDE68A; }
+    .sum-box.absent { background: #FEE2E2; border: 1px solid #FECACA; }
+    .sum-box.pending { background: var(--bg); border: 1px solid var(--border); }
+    .sum-num { font-size: 1.5rem; font-weight: 800; }
+    .sum-box.present .sum-num { color: #065F46; }
+    .sum-box.retard .sum-num { color: #92400E; }
+    .sum-box.absent .sum-num { color: #991B1B; }
+    .sum-box.pending .sum-num { color: var(--muted); }
+    .sum-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+
+    .student-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .student-row { display: flex; align-items: center; gap: 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.7rem 1rem; }
+    .student-row-name { flex: 1; font-size: 0.92rem; font-weight: 600; color: var(--text); }
+    .att-btns { display: flex; gap: 0.4rem; }
+    .att-btn { width: 36px; height: 36px; border-radius: 8px; border: 2px solid transparent; font-size: 1rem; cursor: pointer; font-family: inherit; font-weight: 700; transition: border-color 0.12s, background 0.12s, transform 0.1s; background: #F0F0EE; color: var(--muted); display: flex; align-items: center; justify-content: center; }
+    .att-btn:active { transform: scale(0.9); }
+    .att-btn.selected-present { background: #D1FAE5; border-color: #059669; color: #065F46; }
+    .att-btn.selected-retard { background: #FEF9C3; border-color: #D97706; color: #92400E; }
+    .att-btn.selected-absent { background: #FEE2E2; border-color: #DC2626; color: #991B1B; }
+
+    .date-header { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-align: right; margin-bottom: 0.75rem; }
+
+    .actions-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.25rem; }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid #DDE8DD; font-size: 0.78rem; color: #6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/assistencia.html">
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main>
+  <h1>📋 Seguiment d'Assistència</h1>
+  <p class="subtitle">Registra presències, absències i retards. Exporta el resum en un clic.</p>
+
+  <div class="setup-card">
+    <div class="setup-grid">
+      <div>
+        <label for="names-input">Llista d'alumnes (un per línia)</label>
+        <textarea id="names-input" placeholder="Anna&#10;Bernat&#10;Carla&#10;David&#10;Ester"></textarea>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div>
+          <label for="date-input">Data del registre</label>
+          <input type="date" id="date-input" />
+        </div>
+        <button class="btn btn-primary" id="btn-start" style="margin-top:auto;">Iniciar registre</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="register-panel" style="display:none;">
+    <div class="date-header" id="date-display"></div>
+
+    <div class="summary-bar">
+      <div class="sum-box present"><div class="sum-num" id="cnt-present">0</div><div class="sum-label">Presents</div></div>
+      <div class="sum-box retard"><div class="sum-num" id="cnt-retard">0</div><div class="sum-label">Retards</div></div>
+      <div class="sum-box absent"><div class="sum-num" id="cnt-absent">0</div><div class="sum-label">Absents</div></div>
+      <div class="sum-box pending"><div class="sum-num" id="cnt-pending">0</div><div class="sum-label">Sense marcar</div></div>
+    </div>
+
+    <div class="student-list" id="student-list"></div>
+
+    <div class="actions-row">
+      <button class="btn btn-primary" id="btn-export">📤 Exportar resum</button>
+      <button class="btn btn-ghost" id="btn-mark-all-present">Tots presents</button>
+      <button class="btn btn-ghost" id="btn-reset-att">Reiniciar</button>
+    </div>
+  </div>
+
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <div class="icon">📋</div>
+    <div>Introdueix els alumnes i fes clic a "Iniciar registre"</div>
+  </div>
+</main>
+
+<section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/torn.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Torn de Paraula</a>
+    <a href="/ruleta.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Ruleta de Noms</a>
+    <a href="/grups.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Grups</a>
+  </div>
+</section>
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+
+<script>
+  const STORAGE_KEY = 'assistencia_names';
+  let students = []; // [{name, status: 'present'|'retard'|'absent'|null}]
+
+  const namesInput = document.getElementById('names-input');
+  const dateInput = document.getElementById('date-input');
+  const btnStart = document.getElementById('btn-start');
+  const btnExport = document.getElementById('btn-export');
+  const btnMarkAll = document.getElementById('btn-mark-all-present');
+  const btnResetAtt = document.getElementById('btn-reset-att');
+  const registerPanel = document.getElementById('register-panel');
+  const studentList = document.getElementById('student-list');
+  const dateDisplay = document.getElementById('date-display');
+
+  // Default date today
+  dateInput.valueAsDate = new Date();
+
+  // Restore saved names
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) namesInput.value = saved;
+
+  function initRegister() {
+    const raw = namesInput.value.trim().split('\n').map(s => s.trim()).filter(s => s);
+    if (raw.length < 1) { alert('Afegeix almenys un alumne.'); return; }
+    localStorage.setItem(STORAGE_KEY, namesInput.value);
+    students = raw.map(name => ({ name, status: null }));
+    const dateVal = dateInput.value;
+    dateDisplay.textContent = dateVal ? formatDate(dateVal) : '';
+    registerPanel.style.display = 'block';
+    renderList();
+  }
+
+  function formatDate(val) {
+    if (!val) return '';
+    const d = new Date(val + 'T00:00:00');
+    return d.toLocaleDateString('ca-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  function renderList() {
+    studentList.innerHTML = '';
+    const counts = { present: 0, retard: 0, absent: 0, pending: 0 };
+    students.forEach((st, i) => {
+      if (st.status) counts[st.status]++;
+      else counts.pending++;
+
+      const row = document.createElement('div');
+      row.className = 'student-row';
+      row.innerHTML = `
+        <div class="student-row-name">${st.name}</div>
+        <div class="att-btns">
+          <button class="att-btn ${st.status === 'present' ? 'selected-present' : ''}" data-i="${i}" data-s="present" title="Present">✓</button>
+          <button class="att-btn ${st.status === 'retard' ? 'selected-retard' : ''}" data-i="${i}" data-s="retard" title="Retard">~</button>
+          <button class="att-btn ${st.status === 'absent' ? 'selected-absent' : ''}" data-i="${i}" data-s="absent" title="Absent">✗</button>
+        </div>
+      `;
+      studentList.appendChild(row);
+    });
+    document.getElementById('cnt-present').textContent = counts.present;
+    document.getElementById('cnt-retard').textContent = counts.retard;
+    document.getElementById('cnt-absent').textContent = counts.absent;
+    document.getElementById('cnt-pending').textContent = counts.pending;
+  }
+
+  studentList.addEventListener('click', e => {
+    const btn = e.target.closest('[data-s]');
+    if (!btn) return;
+    const i = parseInt(btn.dataset.i);
+    const s = btn.dataset.s;
+    students[i].status = students[i].status === s ? null : s;
+    renderList();
+  });
+
+  btnMarkAll.addEventListener('click', () => {
+    students.forEach(s => s.status = 'present');
+    renderList();
+  });
+
+  btnResetAtt.addEventListener('click', () => {
+    students.forEach(s => s.status = null);
+    renderList();
+  });
+
+  function exportResum() {
+    const dateVal = dateInput.value;
+    const dateStr = dateVal ? formatDate(dateVal) : 'Data no especificada';
+    let text = `REGISTRE D'ASSISTÈNCIA\nData: ${dateStr}\n${'─'.repeat(40)}\n\n`;
+    const presents = students.filter(s => s.status === 'present');
+    const retards = students.filter(s => s.status === 'retard');
+    const absents = students.filter(s => s.status === 'absent');
+    const pending = students.filter(s => !s.status);
+    text += `PRESENTS (${presents.length}): ${presents.map(s => s.name).join(', ') || '—'}\n\n`;
+    text += `RETARDS (${retards.length}): ${retards.map(s => s.name).join(', ') || '—'}\n\n`;
+    text += `ABSENTS (${absents.length}): ${absents.map(s => s.name).join(', ') || '—'}\n\n`;
+    if (pending.length > 0) text += `SENSE MARCAR (${pending.length}): ${pending.map(s => s.name).join(', ')}\n\n`;
+    text += `Total alumnes: ${students.length}`;
+    navigator.clipboard.writeText(text).then(() => alert('Resum copiat al portapapers.'));
+  }
+
+  btnStart.addEventListener('click', initRegister);
+  btnExport.addEventListener('click', exportResum);
+</script>
+</body>
+</html>

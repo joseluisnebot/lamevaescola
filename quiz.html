@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Interactiu d'Aula · la meva escola</title>
+  <meta name="description" content="Crea un quiz interactiu per a la classe. Afegeix preguntes amb 4 opcions i mostra les respostes en pantalla gran.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    main { flex: 1; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; width: 100%; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.35rem; }
+    .subtitle { font-size: 0.92rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .section-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.75rem; }
+
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); margin-bottom: 0.35rem; }
+    input[type=text], select {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.65rem 0.85rem; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s;
+    }
+    input[type=text]:focus, select:focus { border-color: var(--accent); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.6rem 1.2rem; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s, transform 0.1s; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-d); }
+    .btn-secondary { background: var(--accent-l); color: var(--accent-d); }
+    .btn-secondary:hover { background: #e0c8b0; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-success { background: #059669; color: #fff; }
+    .btn-success:hover { background: #047857; }
+
+    /* Edit mode */
+    .q-form { display: grid; gap: 0.75rem; }
+    .q-form-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+    @media(max-width:480px){ .q-form-options { grid-template-columns: 1fr; } }
+    .opt-row { display: flex; align-items: center; gap: 0.5rem; }
+    .opt-letter { font-size: 0.85rem; font-weight: 800; color: var(--accent-d); width: 20px; flex-shrink: 0; }
+    .q-form-bottom { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-add-q { background: var(--accent); color: #fff; }
+    .btn-add-q:hover { background: var(--accent-d); }
+
+    .q-list { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1rem; }
+    .q-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+    .q-item-num { background: var(--accent); color: #fff; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .q-item-text { flex: 1; font-size: 0.88rem; font-weight: 600; }
+    .q-item-correct { font-size: 0.75rem; color: #059669; font-weight: 700; margin-top: 0.2rem; }
+    .q-item-del { background: #FEE2E2; border: none; border-radius: 6px; color: #DC2626; font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 0.3rem 0.6rem; flex-shrink: 0; }
+    .q-item-del:hover { background: #FECACA; }
+
+    .btn-start-quiz { width: 100%; padding: 0.9rem; font-size: 1rem; }
+
+    /* Presentation mode */
+    #presentation { display: none; }
+    .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
+    .quiz-progress { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+    .quiz-score { background: var(--accent-l); color: var(--accent-d); border-radius: 20px; padding: 0.35rem 1rem; font-size: 0.85rem; font-weight: 700; }
+    .quiz-question { font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.3; margin-bottom: 1.75rem; color: var(--text); }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    @media(max-width:560px){ .quiz-options { grid-template-columns: 1fr; } }
+    .quiz-opt-btn {
+      padding: 1rem 1.25rem; border-radius: 12px; border: 2px solid transparent;
+      font-family: 'Inter', sans-serif; font-size: clamp(0.9rem, 2vw, 1.05rem); font-weight: 700;
+      cursor: pointer; text-align: left; transition: transform 0.1s, border-color 0.15s;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .quiz-opt-btn:active { transform: scale(0.98); }
+    .quiz-opt-btn.opt-a { background: #DBEAFE; color: #1D4ED8; }
+    .quiz-opt-btn.opt-b { background: #D1FAE5; color: #065F46; }
+    .quiz-opt-btn.opt-c { background: #FEF9C3; color: #92400E; }
+    .quiz-opt-btn.opt-d { background: #FEE2E2; color: #991B1B; }
+    .quiz-opt-btn.correct { background: #059669; color: #fff; border-color: #047857; }
+    .quiz-opt-btn.wrong { background: #E5E7EB; color: #6B7280; opacity: 0.6; }
+    .quiz-opt-btn.disabled { cursor: default; }
+    .opt-label { font-size: 1.1rem; font-weight: 900; flex-shrink: 0; }
+    .quiz-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+    /* Final screen */
+    #final-screen { display: none; text-align: center; padding: 2.5rem 1rem; }
+    .final-score { font-size: 3rem; font-weight: 900; color: var(--accent); margin: 0.5rem 0; }
+    .final-msg { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid #DDE8DD; font-size: 0.78rem; color: #6B7B6B; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/quiz.html">
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Tornar</a>
+</nav>
+
+<main>
+  <h1>❓ Quiz Interactiu d'Aula</h1>
+  <p class="subtitle">Crea preguntes, projecta en gran i juga amb la classe.</p>
+
+  <!-- Edit mode -->
+  <div id="edit-mode">
+    <div class="card">
+      <div class="section-title">Afegir pregunta</div>
+      <div class="q-form">
+        <div>
+          <label for="q-text">Pregunta</label>
+          <input type="text" id="q-text" placeholder="Escriu la pregunta aquí..." />
+        </div>
+        <div class="q-form-options">
+          <div class="opt-row"><span class="opt-letter">A</span><input type="text" id="q-a" placeholder="Opció A" /></div>
+          <div class="opt-row"><span class="opt-letter">B</span><input type="text" id="q-b" placeholder="Opció B" /></div>
+          <div class="opt-row"><span class="opt-letter">C</span><input type="text" id="q-c" placeholder="Opció C" /></div>
+          <div class="opt-row"><span class="opt-letter">D</span><input type="text" id="q-d" placeholder="Opció D" /></div>
+        </div>
+        <div class="q-form-bottom">
+          <div style="display:flex;align-items:center;gap:0.5rem;flex:1;">
+            <label style="margin:0;white-space:nowrap">Resposta correcta:</label>
+            <select id="q-correct" style="width:auto;">
+              <option value="0">A</option>
+              <option value="1">B</option>
+              <option value="2">C</option>
+              <option value="3">D</option>
+            </select>
+          </div>
+          <button class="btn btn-add-q" id="btn-add-q">+ Afegir pregunta</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="q-list-card" style="display:none;">
+      <div class="section-title">Preguntes afegides (<span id="q-count">0</span>)</div>
+      <div class="q-list" id="q-list"></div>
+      <button class="btn btn-success btn-start-quiz" id="btn-start-quiz">Iniciar Quiz ▶</button>
+    </div>
+  </div>
+
+  <!-- Presentation mode -->
+  <div id="presentation">
+    <div class="card">
+      <div class="quiz-header">
+        <div class="quiz-progress" id="quiz-progress">Pregunta 1 de 5</div>
+        <div class="quiz-score" id="quiz-score">Puntuació: 0</div>
+      </div>
+      <div class="quiz-question" id="quiz-question"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="btn-show-answer" style="display:none;">Mostrar resposta</button>
+        <button class="btn btn-secondary" id="btn-next-q" style="display:none;">Pregunta següent →</button>
+        <button class="btn btn-ghost" id="btn-back-edit">← Tornar a editar</button>
+      </div>
+    </div>
+
+    <div id="final-screen">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🎉</div>
+      <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;">Quiz completat!</div>
+      <div class="final-score" id="final-score-display"></div>
+      <div class="final-msg" id="final-msg"></div>
+      <button class="btn btn-primary" id="btn-restart" style="font-size:0.95rem;padding:0.75rem 2rem;">Tornar a l'inici</button>
+    </div>
+  </div>
+</main>
+
+<section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/bingo.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Bingo Educatiu</a>
+    <a href="/sopa-de-lletres.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Sopa de Lletres</a>
+    <a href="/ruleta.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Ruleta de Noms</a>
+  </div>
+</section>
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
+  <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+
+<script>
+  const LETTERS = ['A', 'B', 'C', 'D'];
+  const OPT_CLASSES = ['opt-a', 'opt-b', 'opt-c', 'opt-d'];
+  let questions = []; // [{text, options:[4], correct:0-3}]
+  let currentQ = 0;
+  let score = 0;
+  let answered = false;
+
+  const editMode = document.getElementById('edit-mode');
+  const presentation = document.getElementById('presentation');
+  const finalScreen = document.getElementById('final-screen');
+  const quizCard = presentation.querySelector('.card');
+
+  const btnAddQ = document.getElementById('btn-add-q');
+  const btnStartQuiz = document.getElementById('btn-start-quiz');
+  const btnShowAnswer = document.getElementById('btn-show-answer');
+  const btnNextQ = document.getElementById('btn-next-q');
+  const btnBackEdit = document.getElementById('btn-back-edit');
+  const btnRestart = document.getElementById('btn-restart');
+
+  function addQuestion() {
+    const text = document.getElementById('q-text').value.trim();
+    const a = document.getElementById('q-a').value.trim();
+    const b = document.getElementById('q-b').value.trim();
+    const c = document.getElementById('q-c').value.trim();
+    const d = document.getElementById('q-d').value.trim();
+    const correct = parseInt(document.getElementById('q-correct').value);
+
+    if (!text || !a || !b || !c || !d) { alert('Omple la pregunta i les 4 opcions.'); return; }
+
+    questions.push({ text, options: [a, b, c, d], correct });
+    // Clear form
+    ['q-text','q-a','q-b','q-c','q-d'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('q-correct').value = '0';
+    renderQList();
+  }
+
+  function renderQList() {
+    const list = document.getElementById('q-list');
+    const card = document.getElementById('q-list-card');
+    document.getElementById('q-count').textContent = questions.length;
+    if (questions.length === 0) { card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    list.innerHTML = '';
+    questions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'q-item';
+      div.innerHTML = `
+        <div class="q-item-num">${i + 1}</div>
+        <div style="flex:1">
+          <div class="q-item-text">${q.text}</div>
+          <div class="q-item-correct">Correcta: ${LETTERS[q.correct]}. ${q.options[q.correct]}</div>
+        </div>
+        <button class="q-item-del" data-i="${i}">✕</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  document.getElementById('q-list').addEventListener('click', e => {
+    const btn = e.target.closest('[data-i]');
+    if (!btn) return;
+    questions.splice(parseInt(btn.dataset.i), 1);
+    renderQList();
+  });
+
+  function startQuiz() {
+    if (questions.length === 0) return;
+    currentQ = 0;
+    score = 0;
+    answered = false;
+    editMode.style.display = 'none';
+    presentation.style.display = 'block';
+    finalScreen.style.display = 'none';
+    quizCard.style.display = 'block';
+    showQuestion();
+  }
+
+  function showQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('quiz-progress').textContent = `Pregunta ${currentQ + 1} de ${questions.length}`;
+    document.getElementById('quiz-score').textContent = `Puntuació: ${score}`;
+    document.getElementById('quiz-question').textContent = q.text;
+
+    const opts = document.getElementById('quiz-options');
+    opts.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = `quiz-opt-btn ${OPT_CLASSES[i]}`;
+      btn.innerHTML = `<span class="opt-label">${LETTERS[i]}</span>${opt}`;
+      btn.addEventListener('click', () => selectAnswer(i));
+      opts.appendChild(btn);
+    });
+
+    btnShowAnswer.style.display = 'inline-flex';
+    btnNextQ.style.display = 'none';
+  }
+
+  function selectAnswer(chosen) {
+    if (answered) return;
+    answered = true;
+    revealAnswer(chosen);
+  }
+
+  function revealAnswer(chosen = -1) {
+    answered = true;
+    const q = questions[currentQ];
+    const btns = document.querySelectorAll('.quiz-opt-btn');
+    btns.forEach((btn, i) => {
+      btn.classList.add('disabled');
+      if (i === q.correct) { btn.classList.add('correct'); btn.classList.remove(OPT_CLASSES[i]); }
+      else if (i === chosen && chosen !== q.correct) { btn.classList.add('wrong'); }
+    });
+    if (chosen === q.correct) score++;
+    document.getElementById('quiz-score').textContent = `Puntuació: ${score}`;
+    btnShowAnswer.style.display = 'none';
+    btnNextQ.style.display = 'inline-flex';
+    btnNextQ.textContent = currentQ < questions.length - 1 ? 'Pregunta següent →' : 'Veure resultat final';
+  }
+
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ >= questions.length) {
+      showFinal();
+    } else {
+      showQuestion();
+    }
+  }
+
+  function showFinal() {
+    quizCard.style.display = 'none';
+    finalScreen.style.display = 'block';
+    document.getElementById('final-score-display').textContent = `${score} / ${questions.length}`;
+    const pct = Math.round((score / questions.length) * 100);
+    let msg = pct >= 80 ? '🌟 Excel·lent!' : pct >= 60 ? '👍 Bon resultat!' : pct >= 40 ? '🙂 Seguiu practicant!' : '📚 Cal repassar el tema.';
+    document.getElementById('final-msg').textContent = msg;
+  }
+
+  function restartQuiz() {
+    editMode.style.display = 'block';
+    presentation.style.display = 'none';
+    finalScreen.style.display = 'none';
+    quizCard.style.display = 'block';
+  }
+
+  btnAddQ.addEventListener('click', addQuestion);
+  btnStartQuiz.addEventListener('click', startQuiz);
+  btnShowAnswer.addEventListener('click', () => revealAnswer());
+  btnNextQ.addEventListener('click', nextQuestion);
+  btnBackEdit.addEventListener('click', restartQuiz);
+  btnRestart.addEventListener('click', restartQuiz);
+
+  // Enter key on form
+  document.getElementById('q-text').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('q-a').focus(); });
+</script>
+</body>
+</html>
