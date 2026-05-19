@@ -1,0 +1,44 @@
+# www → apex (301 permanent)
+https://www.lamevaescola.com/* https://lamevaescola.com/:splat 301
+
+# Redirects 301: eliminar .html de URLs (sense trailing slash)
+/activitats.html  /activitats  301
+/adaptacions.html  /adaptacions  301
+/assistencia.html  /assistencia  301
+/bingo.html  /bingo  301
+/butlletins.html  /butlletins  301
+/calculadora-notes.html  /calculadora-notes  301
+/calendari.html  /calendari  301
+/captures.html  /captures  301
+/cartes.html  /cartes  301
+/comprensio.html  /comprensio  301
+/comunicats.html  /comunicats  301
+/criteris.html  /criteris  301
+/cronometres.html  /cronometres  301
+/decret-175-2022.html  /decret-175-2022  301
+/diplomes.html  /diplomes  301
+/feedback.html  /feedback  301
+/grups.html  /grups  301
+/horari.html  /horari  301
+/informes.html  /informes  301
+/niu.html  /niu  301
+/normativa.html  /normativa  301
+/objectius.html  /objectius  301
+/preguntes.html  /preguntes  301
+/privacitat.html  /privacitat  301
+/programacio.html  /programacio  301
+/prompts.html  /prompts  301
+/quiz.html  /quiz  301
+/rubriques.html  /rubriques  301
+/ruleta.html  /ruleta  301
+/sequenciador.html  /sequenciador  301
+/simplificador.html  /simplificador  301
+/situacions.html  /situacions  301
+/sopa-de-lletres.html  /sopa-de-lletres  301
+/temporizador.html  /temporizador  301
+/torn.html  /torn  301
+/traductor-notes.html  /traductor-notes  301
+/infantil.html  /infantil  301
+/comunitat-valenciana.html  /comunitat-valenciana  301
+/illes-balears.html  /illes-balears  301
+/catalunya.html  /catalunya  301
