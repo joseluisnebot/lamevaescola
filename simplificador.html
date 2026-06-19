@@ -52,6 +52,16 @@
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
   <link rel="canonical" href="https://lamevaescola.com/simplificador.html">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Simplificador de Textos — la meva escola" />
+  <meta property="og:description" content="Adapta qualsevol text al nivell lector dels teus alumnes. Simplifica, amplia o adapta per a TDAH i dislèxia." />
+  <meta property="og:url" content="https://lamevaescola.com/simplificador" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Simplificador de Textos — la meva escola" />
+  <meta name="twitter:description" content="Adapta qualsevol text al nivell lector dels teus alumnes. Simplifica, amplia o adapta per a TDAH i dislèxia." />
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quin tipus de textos puc simplificar?", "acceptedAnswer": {"@type": "Answer", "text": "Qualsevol text escrit: textos de ciències naturals, ciències socials, notícies de premsa, fragments literaris, enunciats de problemes matemàtics, instruccions, descripcions i textos expositius. L'eina funciona tant en català com en castellà."}}, {"@type": "Question", "name": "Puc indicar el curs al qual va dirigit?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Pots seleccionar el nivell des de 1r de primària fins a 4t d'ESO, i l'eina ajusta el vocabulari, la longitud de les frases i la complexitat sintàctica al lèxic habitual de cada etapa educativa."}}, {"@type": "Question", "name": "Manté el significat original?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La simplificació conserva els conceptes clau i la informació essencial del text original. Només adapta la forma: frases més curtes, vocabulari més accessible i estructura més clara. El contingut curricular es preserva íntegrament."}}, {"@type": "Question", "name": "Serveix per a alumnes amb TDAH o dislèxia?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. L'eina inclou una opció específica d'adaptació per a alumnes amb TDAH i dislèxia, que a més de simplificar el text, estructura la informació en frases molt curtes, utilitza negretes per als conceptes clau i evita les excepcions i irregularitats que dificulten la comprensió."}}, {"@type": "Question", "name": "Funciona per a alumnes nouvinguts?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Per a alumnes nouvinguts o amb un nivell baix de la llengua vehicular, el simplificador pot generar una versió molt bàsica del text amb vocabulari elemental, frases molt curtes i estructura predictiva. És una ajuda valuosa per a mestres d'acollida i d'aula d'integració."}}, {"@type": "Question", "name": "Puc ampliar un text en comptes de simplificar-lo?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. L'eina permet tant simplificar (reduir el nivell de dificultat) com ampliar (augmentar la complexitat per a alumnes avançats o d'altes capacitats). Selecciona l'objectiu al formulari i el sistema adapta el text en la direcció indicada."}}, {"@type": "Question", "name": "Hi ha límit de paraules per text?", "acceptedAnswer": {"@type": "Answer", "text": "El límit actual és de 2.000 caràcters per text. Per a textos més llargs, et recomanem treballar per paràgrafs o seccions. L'eina és gratuïta i sense registre, de manera que pots fer tantes adaptacions com necessitis."}}]}</script>
 </head>
 <body>
@@ -94,15 +104,12 @@
       </div>
       <div class="field full">
         <label for="ccaa">Comunitat Autònoma</label>
-        <select id="ccaa">
-          <option value="Catalunya">Catalunya</option>
-          <option value="Madrid">Comunitat de Madrid</option>
-          <option value="Andalusia">Andalusia</option>
-          <option value="Comunitat Valenciana">Comunitat Valenciana</option>
-          <option value="País Basc">País Basc</option>
-          <option value="Galícia">Galícia</option>
-          <option value="altra">Altra comunitat</option>
+        <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
         </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
       </div>
     </div>
     <button class="btn-submit" id="btn-generar" onclick="simplificar()">Adaptar text</button>
@@ -162,15 +169,15 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/adaptacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Adaptacions Curriculars</a>
-    <a href="/activitats.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador d'Activitats</a>
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
-  <a href="/comprensio.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Comprensió Lectora</a>
+    <a href="/adaptacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Adaptacions Curriculars</a>
+    <a href="/activitats" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador d'Activitats</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+  <a href="/comprensio" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Comprensió Lectora</a>
     </div>
 </section>
 <footer>
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

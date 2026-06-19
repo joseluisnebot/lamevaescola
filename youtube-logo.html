@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex">
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #555; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 16px; font-family: sans-serif; }
+  p { color: #fff; font-size: 12px; text-align: center; }
+  .row { display: flex; gap: 32px; align-items: flex-end; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<p>Logo YouTube — 800 × 800 px (es veurà circular)</p>
+<div class="row">
+  <div class="col">
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FDF6EE"/>
+          <stop offset="100%" stop-color="#F2E0CC"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Fons -->
+      <rect width="800" height="800" fill="url(#bg)"/>
+
+      <!-- Anell exterior suau -->
+      <circle cx="400" cy="400" r="390" fill="none" stroke="#C2622A" stroke-width="6" opacity="0.15"/>
+
+      <!-- "la meva" italic lleuger -->
+      <text x="400" y="368"
+        text-anchor="middle"
+        font-family="Lora, Georgia, serif"
+        font-size="88"
+        font-weight="400"
+        font-style="italic"
+        letter-spacing="4"
+        fill="#2C1A0E"
+        opacity="0.8">la meva</text>
+
+      <!-- "escola" bold color -->
+      <text x="400" y="488"
+        text-anchor="middle"
+        font-family="Lora, Georgia, serif"
+        font-size="118"
+        font-weight="700"
+        letter-spacing="-2"
+        fill="#C2622A">escola</text>
+
+      <!-- Línia decorativa -->
+      <rect x="260" y="504" width="280" height="3" rx="1.5" fill="#C2622A" opacity="0.3"/>
+
+      <!-- Punt decoratiu baix -->
+      <circle cx="400" cy="540" r="5" fill="#C2622A" opacity="0.35"/>
+
+    </svg>
+    <p>800×800 — original</p>
+  </div>
+
+  <div class="col">
+    <!-- Preview circular 200px -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 800 800">
+      <defs>
+        <clipPath id="clip"><circle cx="400" cy="400" r="400"/></clipPath>
+        <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FDF6EE"/>
+          <stop offset="100%" stop-color="#F2E0CC"/>
+        </linearGradient>
+      </defs>
+      <rect width="800" height="800" fill="url(#bg2)" clip-path="url(#clip)"/>
+      <circle cx="400" cy="400" r="390" fill="none" stroke="#C2622A" stroke-width="6" opacity="0.15" clip-path="url(#clip)"/>
+      <text x="400" y="368" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="88" font-weight="400" font-style="italic" letter-spacing="4" fill="#2C1A0E" opacity="0.8" clip-path="url(#clip)">la meva</text>
+      <text x="400" y="488" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="118" font-weight="700" letter-spacing="-2" fill="#C2622A" clip-path="url(#clip)">escola</text>
+      <rect x="260" y="504" width="280" height="3" rx="1.5" fill="#C2622A" opacity="0.3" clip-path="url(#clip)"/>
+      <circle cx="400" cy="540" r="5" fill="#C2622A" opacity="0.35" clip-path="url(#clip)"/>
+    </svg>
+    <p>Preview circular<br>(com YouTube)</p>
+  </div>
+</div>
+<p style="margin-top:8px">Clic dret sobre el logo gran → Obre en nova pestanya → Guardar com PNG</p>
+</body>
+</html>

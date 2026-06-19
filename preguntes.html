@@ -49,6 +49,16 @@
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
   <link rel="canonical" href="https://lamevaescola.com/preguntes.html">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Generador de Preguntes d'Examen — la meva escola" />
+  <meta property="og:description" content="Genera preguntes d'examen per a qualsevol tema, assignatura i nivell educatiu. Alineat amb LOMLOE." />
+  <meta property="og:url" content="https://lamevaescola.com/preguntes" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Generador de Preguntes d'Examen — la meva escola" />
+  <meta name="twitter:description" content="Genera preguntes d'examen per a qualsevol tema, assignatura i nivell educatiu. Alineat amb LOMLOE." />
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quins tipus de preguntes genera?", "acceptedAnswer": {"@type": "Answer", "text": "Preguntes de tipus test (4 opcions), veritable o fals, resposta curta, relacionar columnes, ordenar seqüències i preguntes de desenvolupament o comentari. El generador crea una combinació variada de tipologies per obtenir una prova equilibrada."}}, {"@type": "Question", "name": "Inclou la resposta correcta?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Cada pregunta inclou la resposta correcta (o les respostes possibles en el cas de les obertes) per facilitar la correcció i elaborar la plantilla de l'examen."}}, {"@type": "Question", "name": "Puc indicar el nivell de dificultat?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Pots seleccionar entre preguntes bàsiques (memorització i comprensió), intermèdies (aplicació i anàlisi) o avançades (síntesi i avaluació crítica), seguint els nivells cognitius de la taxonomia de Bloom adaptada a la LOMLOE."}}, {"@type": "Question", "name": "Per a quines assignatures i nivells funciona?", "acceptedAnswer": {"@type": "Answer", "text": "Per a totes les assignatures de primària i ESO: Llengua Catalana, Castellana, Matemàtiques, Ciències Naturals, Ciències Socials, Anglès, Tecnologia, Música i més. Pots indicar el curs i el tema concret per obtenir preguntes precises i rellevants."}}, {"@type": "Question", "name": "Les preguntes estan alineades amb els criteris d'avaluació LOMLOE?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. El generador crea preguntes que avaluen les competències específiques i els criteris d'avaluació del currículum vigent, no només els continguts conceptuals. Això permet construir proves d'avaluació alineades amb l'enfocament competencial de la LOMLOE."}}, {"@type": "Question", "name": "Puc usar les preguntes per fer activitats de repàs?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Les preguntes generades serveixen tant per a proves d'avaluació formals com per a activitats de repàs, kahoot, trivial de classe, fitxes de treball autònom o preparació d'exàmens orals."}}, {"@type": "Question", "name": "És gratuït i sense registre?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. L'eina és completament gratuïta, sense registre ni límit de consultes. Ideal per a docents que volen tenir un banc de preguntes sempre disponible sense dependre de plataformes de pagament."}}]}</script>
 </head>
 <body>
@@ -113,15 +123,12 @@
       </div>
       <div class="field full">
         <label for="ccaa">Comunitat Autònoma</label>
-        <select id="ccaa">
-          <option value="Catalunya">Catalunya (LOMLOE + Decret 175/2022)</option>
-          <option value="Madrid">Comunitat de Madrid</option>
-          <option value="Andalusia">Andalusia</option>
-          <option value="Comunitat Valenciana">Comunitat Valenciana</option>
-          <option value="País Basc">País Basc</option>
-          <option value="Galícia">Galícia</option>
-          <option value="altra">Altra comunitat (LOMLOE general)</option>
+        <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
         </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
       </div>
     </div>
     <button class="btn-submit" id="btn-generar" onclick="generarPreguntes()">Generar preguntes</button>
@@ -166,15 +173,15 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/activitats.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador d'Activitats</a>
-    <a href="/rubriques.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
-  <a href="/comprensio.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Comprensió Lectora</a>
+    <a href="/activitats" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador d'Activitats</a>
+    <a href="/rubriques" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+  <a href="/comprensio" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Comprensió Lectora</a>
     </div>
 </section>
 <footer>
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

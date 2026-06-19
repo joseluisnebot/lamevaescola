@@ -101,8 +101,18 @@
 
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
-  <link rel="canonical" href="https://lamevaescola.com/criteris.html">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador de Criteris d'Avaluació Decret 175/2022","url":"https://lamevaescola.com/criteris.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+  <link rel="canonical" href="https://lamevaescola.com/criteris">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Criteris d'Avaluació Decret 175/2022 — la meva escola" />
+  <meta property="og:description" content="Genera criteris d'avaluació alineats amb el Decret 175/2022 de Catalunya a partir de les competències específiques i el contingut." />
+  <meta property="og:url" content="https://lamevaescola.com/criteris" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Criteris d'Avaluació Decret 175/2022 — la meva escola" />
+  <meta name="twitter:description" content="Genera criteris d'avaluació alineats amb el Decret 175/2022 de Catalunya a partir de les competències específiques i el contingut." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador de Criteris d'Avaluació Decret 175/2022","url":"https://lamevaescola.com/criteris","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
 </head>
 <body>
 
@@ -124,6 +134,10 @@
         <label for="assignatura">Assignatura</label>
         <select id="assignatura">
           <option value="">— Selecciona —</option>
+          <optgroup label="Educació Infantil">
+            <option>Infantil 1r cicle (0-3 anys)</option>
+            <option>Infantil 2n cicle (3-6 anys)</option>
+          </optgroup>
           <option>Matemàtiques</option>
           <option>Llengua Catalana</option>
           <option>Llengua Castellana</option>
@@ -177,7 +191,16 @@
       </div>
     </div>
 
-    <button class="btn-submit" id="btn-generar" onclick="generarCriteris()">Generar criteris d'avaluació</button>
+          <div class="field full" style="margin-top:0.5rem;">
+        <label for="ccaa">Comunitat Autònoma</label>
+        <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
+      </div>
+<button class="btn-submit" id="btn-generar" onclick="generarCriteris()">Generar criteris d'avaluació</button>
 
     <div class="loader" id="loader">
       <div class="spinner"></div>
@@ -209,14 +232,14 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/rubriques.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
-    <a href="/objectius.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+    <a href="/rubriques" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
+    <a href="/objectius" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
   </div>
 </section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

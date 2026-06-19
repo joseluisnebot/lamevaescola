@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eines per a Educació Infantil — La Meva Escola | LOMLOE Catalunya</title>
+  <meta name="description" content="Eines gratuïtes d'IA per a mestres d'Educació Infantil de Catalunya, Comunitat Valenciana i Illes Balears. Situacions per racons, programacions i adaptacions NEE. Decret 175/2022, 59/2022 i 32/2023. Gratuït." />
+  <link rel="canonical" href="https://lamevaescola.com/infantil" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Eines per a Educació Infantil — La Meva Escola | LOMLOE Catalunya" />
+  <meta property="og:description" content="Eines gratuïtes d'IA per a mestres d'Educació Infantil de Catalunya, Comunitat Valenciana i Illes Balears. Situacions per racons, programacions i adaptacions NEE. Decret 175/2022, 59/2022 i 32/2023. Gratuït." />
+  <meta property="og:url" content="https://lamevaescola.com/infantil" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Eines per a Educació Infantil — La Meva Escola | LOMLOE Catalunya" />
+  <meta name="twitter:description" content="Eines gratuïtes d'IA per a mestres d'Educació Infantil de Catalunya, Comunitat Valenciana i Illes Balears. Situacions per racons, programacions i adaptacions NEE. Decret 175/2022, 59/2022 i 32/2023. Gratuït." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Eines per a Educació Infantil",
+    "description": "Eines gratuïtes d'IA per a mestres d'Educació Infantil a Catalunya. Situacions d'aprenentatge, programacions, objectius i adaptacions NEE alineades amb el Decret 175/2022.",
+    "url": "https://lamevaescola.com/infantil",
+    "inLanguage": "ca",
+    "publisher": { "@type": "Organization", "name": "La Meva Escola", "url": "https://lamevaescola.com" }
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#FDF8F3; --surface:#FFFFFF; --border:#EDD9C8; --text:#2C1A0E; --muted:#8A6A55; --accent:#C2622A; --accent-l:#FAE8D8; --accent-d:#8B3A18; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    nav { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; background:rgba(253,248,243,0.95); backdrop-filter:blur(8px); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50; }
+    .nav-logo { font-size:1.1rem; font-weight:800; color:var(--text); text-decoration:none; letter-spacing:-0.03em; }
+    .nav-logo span { color:var(--accent); }
+    .hero { text-align:center; padding:3.5rem 1.5rem 2.5rem; max-width:680px; margin:0 auto; }
+    h1 { font-size:clamp(1.8rem,4vw,2.6rem); font-weight:800; line-height:1.15; letter-spacing:-0.04em; margin-bottom:0.75rem; }
+    h1 span { color:var(--accent); }
+    .hero-sub { font-size:1rem; color:var(--muted); line-height:1.65; max-width:520px; margin:0 auto; }
+    .main { max-width:860px; margin:0 auto; padding:0 1.5rem 4rem; }
+    .section-title { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:1.25rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin-bottom:3rem; }
+    .card { background:var(--surface); border:1.5px solid var(--border); border-radius:1.25rem; padding:1.5rem; text-decoration:none; color:var(--text); display:flex; flex-direction:column; gap:0.5rem; transition:box-shadow 0.15s,transform 0.15s; }
+    .card:hover { box-shadow:0 8px 24px rgba(194,98,42,0.12); transform:translateY(-2px); }
+    .card-icon { font-size:1.75rem; }
+    .card-title { font-size:1rem; font-weight:700; color:var(--text); }
+    .card-desc { font-size:0.82rem; color:var(--muted); line-height:1.5; }
+    .card-badge { display:inline-flex; background:var(--accent-l); color:var(--accent-d); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:999px; margin-top:0.25rem; width:fit-content; }
+    .info-block { background:var(--surface); border:1.5px solid var(--border); border-radius:1.25rem; padding:2rem; margin-bottom:2rem; }
+    .info-block h2 { font-size:1.2rem; font-weight:800; margin-bottom:1rem; }
+    .info-block p { font-size:0.9rem; color:var(--muted); line-height:1.7; margin-bottom:0.75rem; }
+    .info-block p:last-child { margin-bottom:0; }
+    .tag-row { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:1rem; }
+    .tag { background:var(--accent-l); color:var(--accent-d); font-size:0.78rem; font-weight:600; padding:0.3rem 0.75rem; border-radius:999px; }
+    footer { text-align:center; padding:2rem 1.5rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--muted); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">la meva <span>escola</span></a>
+  <a href="/" style="font-size:0.85rem;color:var(--muted);text-decoration:none;">← Totes les eines</a>
+</nav>
+
+<div class="hero">
+  <div style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-l);color:var(--accent-d);font-size:0.75rem;font-weight:700;padding:0.35rem 0.9rem;border-radius:999px;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase;">🧒 Educació Infantil</div>
+  <h1>Eines per a mestres <span>d'Infantil</span></h1>
+  <p class="hero-sub">Tot el que necessites per preparar les teves classes d'Infantil: situacions per racons, programacions i objectius. Alineat amb el Decret 175/2022 (Catalunya), Decret 59/2022 (C. Valenciana) i Decret 32/2023 (Illes Balears). Gratuït.</p>
+</div>
+
+<div class="main">
+
+  <!-- Eines principals -->
+  <p class="section-title">Eines recomanades per a Infantil</p>
+  <div class="grid">
+
+    <a href="/situacions" class="card">
+      <span class="card-icon">🗺️</span>
+      <div class="card-title">Situacions d'Aprenentatge</div>
+      <div class="card-desc">Genera situacions d'aprenentatge per racons i projectes d'Infantil alineades amb el Decret 175/2022.</div>
+      <span class="card-badge">⭐ Més usat</span>
+    </a>
+
+    <a href="/programacio" class="card">
+      <span class="card-icon">📅</span>
+      <div class="card-title">Programació d'Unitat</div>
+      <div class="card-desc">Genera la programació completa d'una unitat didàctica o projecte per al cicle d'Infantil.</div>
+      <span class="card-badge">LOMLOE</span>
+    </a>
+
+    <a href="/objectius" class="card">
+      <span class="card-icon">🎯</span>
+      <div class="card-title">Objectius d'Aprenentatge</div>
+      <div class="card-desc">Objectius concrets i mesurables per a les àrees d'Infantil: comunicació, descoberta, autonomia.</div>
+      <span class="card-badge">⭐ Més usat</span>
+    </a>
+
+    <a href="/rubriques" class="card">
+      <span class="card-icon">📊</span>
+      <div class="card-title">Graelles d'Observació</div>
+      <div class="card-desc">Genera graelles d'avaluació i registres d'observació adaptats al segon cicle d'Infantil.</div>
+      <span class="card-badge">Avaluació</span>
+    </a>
+
+    <a href="/adaptacions" class="card">
+      <span class="card-icon">🌈</span>
+      <div class="card-title">Adaptacions NEE</div>
+      <div class="card-desc">Adaptacions per a alumnes amb TEA, retard maduratiu, TDAH i altres necessitats a Infantil.</div>
+      <span class="card-badge">Inclusió</span>
+    </a>
+
+    <a href="/feedback" class="card">
+      <span class="card-icon">💬</span>
+      <div class="card-title">Comunicació amb Famílies</div>
+      <div class="card-desc">Genera comentaris i feedback personalitzats per als butlletins i reunions amb les famílies.</div>
+      <span class="card-badge">Famílies</span>
+    </a>
+
+  </div>
+
+  <!-- Eines de gestió d'aula -->
+  <p class="section-title">Gestió de l'aula</p>
+  <div class="grid">
+
+    <a href="/ruleta" class="card">
+      <span class="card-icon">🎡</span>
+      <div class="card-title">Ruleta de Noms</div>
+      <div class="card-desc">Selecciona alumnes aleatòriament per a l'assemblea o les activitats de grup.</div>
+    </a>
+
+    <a href="/torn" class="card">
+      <span class="card-icon">🎤</span>
+      <div class="card-title">Torn de Paraula</div>
+      <div class="card-desc">Gestiona qui participa a l'assemblea de manera equitativa i visual.</div>
+    </a>
+
+    <a href="/grups" class="card">
+      <span class="card-icon">👥</span>
+      <div class="card-title">Grups per Racons</div>
+      <div class="card-desc">Genera grups aleatoris per als racons d'Infantil en un sol clic.</div>
+    </a>
+
+    <a href="/cronometres" class="card">
+      <span class="card-icon">⏱️</span>
+      <div class="card-title">Cronòmetre per Racons</div>
+      <div class="card-desc">Gestiona el temps dels racons amb un temporitzador visual per projectar a la PDI.</div>
+    </a>
+
+    <a href="/diplomes" class="card">
+      <span class="card-icon">🏅</span>
+      <div class="card-title">Diplomes</div>
+      <div class="card-desc">Crea diplomes personalitzats per al fi de curs, carnestoltes o qualsevol celebració.</div>
+    </a>
+
+    <a href="/bingo" class="card">
+      <span class="card-icon">🎰</span>
+      <div class="card-title">Bingo de Vocabulari</div>
+      <div class="card-desc">Genera cartrons de bingo per treballar vocabulari, colors, formes i conceptes bàsics.</div>
+    </a>
+
+  </div>
+
+
+  <!-- Comunitats -->
+  <p class="section-title">Per comunitat autònoma</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-bottom:3rem">
+    <a href="/catalunya" onclick="localStorage.setItem('lme_ccaa','Catalunya')" style="display:flex;align-items:center;gap:0.875rem;background:white;border:1.5px solid var(--border);border-radius:1.25rem;padding:1.25rem;text-decoration:none;color:var(--text)">
+      <span style="font-size:2rem">🔴</span>
+      <div>
+        <div style="font-weight:700;font-size:0.95rem">Catalunya</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.15rem">Decret 175/2022 · Segon cicle Infantil</div>
+      </div>
+    </a>
+    <a href="/comunitat-valenciana" onclick="localStorage.setItem('lme_ccaa','Comunitat Valenciana')" style="display:flex;align-items:center;gap:0.875rem;background:white;border:1.5px solid var(--border);border-radius:1.25rem;padding:1.25rem;text-decoration:none;color:var(--text)">
+      <span style="font-size:2rem">🟠</span>
+      <div>
+        <div style="font-weight:700;font-size:0.95rem">Comunitat Valenciana</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.15rem">Decret 115/2023 · En valencià</div>
+      </div>
+    </a>
+    <a href="/illes-balears" onclick="localStorage.setItem('lme_ccaa','Illes Balears')" style="display:flex;align-items:center;gap:0.875rem;background:white;border:1.5px solid var(--border);border-radius:1.25rem;padding:1.25rem;text-decoration:none;color:var(--text)">
+      <span style="font-size:2rem">🔵</span>
+      <div>
+        <div style="font-weight:700;font-size:0.95rem">Illes Balears</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.15rem">Decret 32/2023 · En mallorquí</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Bloc informatiu -->
+  <div class="info-block">
+    <h2>Eines d'IA per a mestres d'Educació Infantil a Catalunya</h2>
+    <p>L'Educació Infantil és una etapa fonamental en el desenvolupament dels infants. El <strong>Decret 175/2022</strong> (Catalunya), el <strong>Decret 115/2023</strong> (Comunitat Valenciana) i el <strong>Decret 32/2023</strong> (Illes Balears) estableixen el marc curricular per al segon cicle d'Infantil (3-6 anys), posant èmfasi en l'aprenentatge per experiències, els racons i el joc com a motor d'aprenentatge.</p>
+    <p>Les nostres eines d'intel·ligència artificial estan pensades per ajudar els mestres d'Infantil a planificar situacions d'aprenentatge significatives, generar programacions alineades amb el currículum vigent i elaborar instruments d'avaluació adaptats a les característiques de l'etapa. Tot de manera gratuïta i sense necessitat de registre.</p>
+    <p>Des de les graelles d'observació fins als comentaris per als butlletins de les famílies, passant per les adaptacions per a alumnes amb necessitats educatives especials, La Meva Escola et ofereix tot el que necessites per preparar les teves classes d'Infantil de manera eficient i amb qualitat pedagògica.</p>
+    <div class="tag-row">
+      <span class="tag">Segon cicle Infantil</span>
+      <span class="tag">Decret 175/2022 CAT</span><span class="tag">Decret 115/2023 CV</span><span class="tag">Decret 32/2023 IB</span>
+      <span class="tag">LOMLOE</span>
+      <span class="tag">Racons</span>
+      <span class="tag">Projectes</span>
+      <span class="tag">Avaluació observacional</span>
+      <span class="tag">Gratuït</span>
+    </div>
+  </div>
+
+  <!-- FAQs -->
+  <div class="info-block">
+    <h2>Preguntes freqüents sobre les eines per a Infantil</h2>
+    <dl>
+      <dt style="font-weight:700;margin-top:1rem">El Decret 175/2022 afecta l'Educació Infantil a Catalunya?</dt>
+      <dd style="margin:0.25rem 0 0.75rem 0;color:var(--muted);font-size:0.9rem;line-height:1.6">Sí. El Decret 175/2022 regula l'ordenació dels ensenyaments d'Educació Infantil, Primària i Secundària a Catalunya, incloent-hi el segon cicle d'Infantil (3-6 anys). Estableix les àrees d'aprenentatge, les competències i els criteris d'avaluació específics per a l'etapa.</dd>
+      <dt style="font-weight:700;margin-top:1rem">Les situacions d'aprenentatge funcionen per a Infantil?</dt>
+      <dd style="margin:0.25rem 0 0.75rem 0;color:var(--muted);font-size:0.9rem;line-height:1.6">Sí. Les situacions d'aprenentatge són especialment adequades per a Infantil perquè potencien l'aprenentatge actiu, la manipulació i l'exploració. Pots generar situacions per als racons, els projectes de treball o les rutines diàries de l'aula.</dd>
+      <dt style="font-weight:700;margin-top:1rem">Com s'evalua a Educació Infantil amb LOMLOE?</dt>
+      <dd style="margin:0.25rem 0 0.75rem 0;color:var(--muted);font-size:0.9rem;line-height:1.6">A Infantil l'avaluació és global, contínua i formativa, basada en l'observació sistemàtica. No hi ha qualificacions numèriques. Les graelles d'observació i els registres de seguiment són els principals instruments d'avaluació, i el nostre generador de rúbriques les crea adaptades a l'etapa.</dd>
+    </dl>
+  </div>
+
+</div>
+
+<footer>
+  <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya<br>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · Decrets 175/2022 · 115/2023 · 32/2023 · <a href="/privacitat" style="color:var(--accent)">Privacitat</a></span>
+</footer>
+</body>
+</html>

@@ -5,7 +5,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generador d'Objectius d'Aprenentatge LOMLOE — la meva escola</title>
-  <meta name="description" content="Genera objectius d'aprenentatge concrets i mesurables alineats amb el currículum LOMLOE a partir del tema i nivell." />
+  <meta name="description" content="Genera objectius d'aprenentatge concrets i mesurables per a Educació Infantil, Primària i Secundària alineats amb el Decret 175/2022 i LOMLOE. Eina gratuïta per a docents de Catalunya." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -88,7 +88,17 @@
 
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
-  <link rel="canonical" href="https://lamevaescola.com/objectius.html">
+  <link rel="canonical" href="https://lamevaescola.com/objectius">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Generador d'Objectius d'Aprenentatge LOMLOE — la meva escola" />
+  <meta property="og:description" content="Genera objectius d'aprenentatge concrets i mesurables per a Educació Infantil, Primària i Secundària alineats amb el Decret 175/2022 i LOMLOE. Eina gratuïta per a docents de Catalunya." />
+  <meta property="og:url" content="https://lamevaescola.com/objectius" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Generador d'Objectius d'Aprenentatge LOMLOE — la meva escola" />
+  <meta name="twitter:description" content="Genera objectius d'aprenentatge concrets i mesurables per a Educació Infantil, Primària i Secundària alineats amb el Decret 175/2022 i LOMLOE. Eina gratuïta per a docents de Catalunya." />
 </head>
 <body>
 
@@ -120,6 +130,10 @@
         <label for="nivell">Nivell educatiu</label>
         <select id="nivell">
           <option value="">— Selecciona —</option>
+          <optgroup label="Educació Infantil">
+            <option>Infantil 1r cicle (0-3 anys)</option>
+            <option>Infantil 2n cicle (3-6 anys)</option>
+          </optgroup>
           <option>Infantil 3-6</option>
           <optgroup label="Primària">
             <option>Primària 1r-2n</option>
@@ -147,7 +161,16 @@
       </div>
     </div>
 
-    <button class="btn-submit" id="btn-generar" onclick="generarObjectius()">Generar objectius d'aprenentatge</button>
+          <div class="field full" style="margin-top:0.5rem;">
+        <label for="ccaa">Comunitat Autònoma</label>
+        <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
+      </div>
+<button class="btn-submit" id="btn-generar" onclick="generarObjectius()">Generar objectius d'aprenentatge</button>
 
     <div class="loader" id="loader">
       <div class="spinner"></div>
@@ -173,15 +196,29 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
-    <a href="/programacio.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Programació d'Aula</a>
-    <a href="/criteris.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Criteris d'Avaluació</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+    <a href="/programacio" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Programació d'Aula</a>
+    <a href="/criteris" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Criteris d'Avaluació</a>
   </div>
 </section>
 
+<section style="max-width:800px;margin:3rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:#2C1A0E">Generador d'Objectius d'Aprenentatge LOMLOE</h2>
+  <p>El Generador d'Objectius d'Aprenentatge LOMLOE és una eina útil per a crear objectius d'aprenentatge mesurables alineats amb el LOMLOE (Llei Orgànica de Medi Ambient). Aquesta eina permet als educadors i formacions crear objectius d'aprenentatge que siguin específics, mesurables, alineats, rellevants i temporitzats.</p>
+  <p>Amb el Generador d'Objectius d'Aprenentatge LOMLOE, pots crear objectius d'aprenentatge que ajudin a millorar la qualitat de la formació i l'aprenentatge. Aquesta eina és particularment útil per als formacions que estiguin alineades amb el LOMLOE, ja que permet crear objectius que siguin alineats amb les normes establies.</p>
+  <h3 style="font-size:1.1rem;font-weight:700;margin:1.5rem 0 0.75rem;color:#2C1A0E">Preguntes freqüents</h3>
+  <dl>
+    <dt style="font-weight:700;margin-top:1rem">Què és el LOMLOE?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">El LOMLOE és la Llei Orgànica de Medi Ambient, que estableix les normes i objectius per a la protecció del medi ambient en Catalunya.</dd>
+    <dt style="font-weight:700;margin-top:1rem">Què fa el Generador d'Objectius d'Aprenentatge LOMLOE?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">El Generador d'Objectius d'Aprenentatge LOMLOE permet crear objectius d'aprenentatge mesurables i alineats amb el LOMLOE, ajudant a millorar la qualitat de la formació i l'aprenentatge.</dd>
+    <dt style="font-weight:700;margin-top:1rem">Què beneficis ofereix el Generador d'Objectius d'Aprenentatge LOMLOE?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">El Generador d'Objectius d'Aprenentatge LOMLOE ofereix una eina útil per a crear objectius d'aprenentatge alineats amb el LOMLOE, ajudant a millorar la qualitat de la formació i l'aprenentatge.</dd>
+  </dl>
+</section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

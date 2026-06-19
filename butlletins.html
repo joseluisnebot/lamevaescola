@@ -82,6 +82,16 @@
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
   <link rel="canonical" href="https://lamevaescola.com/butlletins.html">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Comentaris de Butlletí — la meva escola" />
+  <meta property="og:description" content="Genera comentaris personalitzats per a l'informe trimestral de cada alumne." />
+  <meta property="og:url" content="https://lamevaescola.com/butlletins" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Comentaris de Butlletí — la meva escola" />
+  <meta name="twitter:description" content="Genera comentaris personalitzats per a l'informe trimestral de cada alumne." />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador de Comentaris de Butlletí","url":"https://lamevaescola.com/butlletins.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "En quins idiomes genera els comentaris?", "acceptedAnswer": {"@type": "Answer", "text": "En català i castellà. Pots seleccionar l'idioma abans de generar el comentari, ideal per a centres de Catalunya, País Valencià i Illes Balears, i per a centres de la resta de l'Estat."}}, {"@type": "Question", "name": "Puc indicar si l'alumne té dificultats o altes capacitats?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Les observacions que introdueixes guien el to i el contingut del comentari. Pots indicar punts forts, àrees de millora, actitud, esforç i qualsevol circumstància rellevant com NEE, absentisme o progrés notable durant el trimestre."}}, {"@type": "Question", "name": "Els comentaris sonen naturals?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Estan redactats amb un to càlid, empàtic i professional. Recomanem llegir-los i fer petits ajustos per acabar de personalitzar-los, ja que ningú millor que el docent coneix l'alumne."}}, {"@type": "Question", "name": "Quant de temps estalvio per alumne?", "acceptedAnswer": {"@type": "Answer", "text": "Redactar un comentari de butlletí des de zero pot portar entre 5 i 10 minuts per alumne. Amb el generador, el temps es redueix a menys d'un minut. Per a un grup de 25 alumnes, l'estalvi és de 2 a 4 hores per trimestre."}}, {"@type": "Question", "name": "Puc generar comentaris per a totes les assignatures?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. El generador no està limitat a cap assignatura concreta. Pots usar-lo per a comentaris de Llengua, Matemàtiques, Ciències, Anglès, Educació Física o qualsevol altra àrea del currículum de primària i secundària."}}, {"@type": "Question", "name": "Els comentaris compleixen amb la normativa de protecció de dades?", "acceptedAnswer": {"@type": "Answer", "text": "L'eina no emmagatzema cap dada sobre l'alumnat. Els comentaris es generen i es mostren localment sense guardar res als nostres servidors. La responsabilitat de la gestió de dades dels alumnes correspon al centre educatiu d'acord amb el RGPD."}}, {"@type": "Question", "name": "Puc usar-los per als informes d'adaptacions curriculars?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Pots indicar a les observacions que l'alumne té una adaptació curricular i el generador adapta el redactat per reflectir el progrés en relació als objectius de l'adaptació, no als objectius generals del grup."}}]}</script>
 </head>
@@ -178,15 +188,12 @@
 
         <div class="field full" style="margin-top:0.5rem;">
       <label for="ccaa">Comunitat Autònoma</label>
-      <select id="ccaa">
-        <option value="Catalunya">Catalunya (LOMLOE + Decret 175/2022)</option>
-        <option value="Madrid">Comunitat de Madrid</option>
-        <option value="Andalusia">Andalusia</option>
-        <option value="Comunitat Valenciana">Comunitat Valenciana</option>
-        <option value="País Basc">País Basc</option>
-        <option value="Galícia">Galícia</option>
-        <option value="altra">Altra comunitat (LOMLOE general)</option>
-      </select>
+      <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
     </div>
     <button class="btn-submit" id="btn-generar" onclick="generarButlleti()">Generar comentaris</button>
 
@@ -259,16 +266,16 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/rubriques.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
-    <a href="/calculadora-notes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Calculadora de Notes</a>
-    <a href="/informes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Informes de Tutoria</a>
-  <a href="/feedback.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Feedback per a l'Alumne</a>
-    <a href="/traductor-notes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Traductor de Notes</a>
+    <a href="/rubriques" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Rúbriques</a>
+    <a href="/calculadora-notes" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Calculadora de Notes</a>
+    <a href="/informes" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Informes de Tutoria</a>
+  <a href="/feedback" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Feedback per a l'Alumne</a>
+    <a href="/traductor-notes" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Traductor de Notes</a>
     </div>
 </section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

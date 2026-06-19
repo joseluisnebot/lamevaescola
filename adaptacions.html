@@ -81,6 +81,16 @@
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
   <link rel="canonical" href="https://lamevaescola.com/adaptacions.html">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Adaptacions Curriculars NEE — la meva escola" />
+  <meta property="og:description" content="Adapta qualsevol activitat per a alumnes amb necessitats educatives especials: dislèxia, TDAH, altes capacitats i més." />
+  <meta property="og:url" content="https://lamevaescola.com/adaptacions" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Adaptacions Curriculars NEE — la meva escola" />
+  <meta name="twitter:description" content="Adapta qualsevol activitat per a alumnes amb necessitats educatives especials: dislèxia, TDAH, altes capacitats i més." />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador d'Adaptacions Curriculars NEE","url":"https://lamevaescola.com/adaptacions.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Per a quins tipus de NEE funciona?", "acceptedAnswer": {"@type": "Answer", "text": "Dislèxia, TDAH, altes capacitats, TEA (trastorn de l'espectre autista), discapacitat intel·lectual lleu, dificultats de comprensió lectora, discapacitat visual o auditiva i alumnes nouvinguts amb barreres lingüístiques. Pots combinar més d'una necessitat al mateix alumne."}}, {"@type": "Question", "name": "L'adaptació canvia els objectius d'aprenentatge?", "acceptedAnswer": {"@type": "Answer", "text": "Depèn del tipus d'adaptació. Les ACNS (adaptacions no significatives) adapten la metodologia, els materials i els instruments d'avaluació sense modificar els objectius ni els continguts. Les ACS (adaptacions significatives) sí que poden modificar objectius i continguts mínims, i requereixen la intervenció de l'orientador o orientadora del centre."}}, {"@type": "Question", "name": "Puc adaptar qualsevol activitat?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Enganxa qualsevol activitat en text —exercici, prova escrita, enunciat de problema, text de lectura— i l'eina genera una versió adaptada al perfil de necessitats que indiquis."}}, {"@type": "Question", "name": "Les adaptacions per a alumnes amb TDAH inclouen suports visuals?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Les adaptacions per a alumnes amb TDAH inclouen: fragmentació de les tasques en passos numerats, instruccions breus i clares, negretes per als conceptes clau, recordatoris visuals de l'objectiu i eliminació de distractors en el format de l'activitat."}}, {"@type": "Question", "name": "Com s'adapta una activitat per a alumnes amb TEA?", "acceptedAnswer": {"@type": "Answer", "text": "Per a alumnes amb TEA, l'eina simplifica el llenguatge figuratiu, estructures les tasques de manera molt seqüenciada, elimina ambigüitats, afegeix exemples concrets i proposa alternatives per a les parts que requereixin interacció social o comunicació espontània."}}, {"@type": "Question", "name": "Qui ha d'aprovar les adaptacions curriculars al centre?", "acceptedAnswer": {"@type": "Answer", "text": "Les ACNS les pot aplicar directament el tutor o tutora, coordinant-se amb el mestre o mestra de suport si n'hi ha. Les ACS requereixen un document formal aprovat per l'equip directiu i l'orientació del centre, i en alguns casos la família. L'eina genera un punt de partida que cal validar amb l'equip."}}, {"@type": "Question", "name": "L'eina és gratuïta i sense registre?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La Meva Escola és completament gratuïta i no requereix cap registre ni dada personal. Les adaptacions es generen localment i no s'emmagatzemen als nostres servidors."}}]}</script>
 </head>
@@ -154,15 +164,12 @@
 
         <div class="field full" style="margin-top:0.5rem;">
       <label for="ccaa">Comunitat Autònoma</label>
-      <select id="ccaa">
-        <option value="Catalunya">Catalunya (LOMLOE + Decret 175/2022)</option>
-        <option value="Madrid">Comunitat de Madrid</option>
-        <option value="Andalusia">Andalusia</option>
-        <option value="Comunitat Valenciana">Comunitat Valenciana</option>
-        <option value="País Basc">País Basc</option>
-        <option value="Galícia">Galícia</option>
-        <option value="altra">Altra comunitat (LOMLOE general)</option>
-      </select>
+      <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
     </div>
     <button class="btn-submit" id="btn-generar" onclick="generarAdaptacio()">Generar adaptació</button>
 
@@ -228,15 +235,15 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/simplificador.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Simplificador de Textos</a>
-    <a href="/cartes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Cartes per a Famílies</a>
-    <a href="/normativa.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Normativa Educativa</a>
-  <a href="/feedback.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Feedback per a l'Alumne</a>
+    <a href="/simplificador" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Simplificador de Textos</a>
+    <a href="/cartes" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Cartes per a Famílies</a>
+    <a href="/normativa" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Normativa Educativa</a>
+  <a href="/feedback" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Feedback per a l'Alumne</a>
     </div>
 </section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

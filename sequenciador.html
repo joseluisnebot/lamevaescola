@@ -90,7 +90,17 @@
 
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
-  <link rel="canonical" href="https://lamevaescola.com/sequenciador.html">
+  <link rel="canonical" href="https://lamevaescola.com/sequenciador">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Seqüenciador de Continguts — la meva escola" />
+  <meta property="og:description" content="Organitza els continguts d'una assignatura per trimestres i sessions. Distribució equilibrada i progressiva." />
+  <meta property="og:url" content="https://lamevaescola.com/sequenciador" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Seqüenciador de Continguts — la meva escola" />
+  <meta name="twitter:description" content="Organitza els continguts d'una assignatura per trimestres i sessions. Distribució equilibrada i progressiva." />
 </head>
 <body>
 
@@ -117,7 +127,10 @@
         <label for="nivell">Nivell educatiu</label>
         <select id="nivell">
           <option value="">— Selecciona —</option>
-          <option>Infantil 3-6</option>
+          <optgroup label="Educació Infantil">
+            <option>Infantil 1r cicle (0-3 anys)</option>
+            <option>Infantil 2n cicle (3-6 anys)</option>
+          </optgroup>
           <optgroup label="Primària">
             <option>Primària 1r-2n</option>
             <option>Primària 3r-4t</option>
@@ -159,7 +172,16 @@
       </div>
     </div>
 
-    <button class="btn-submit" id="btn-generar" onclick="generarSequencia()">Generar seqüència de continguts</button>
+          <div class="field full" style="margin-top:0.5rem;">
+        <label for="ccaa">Comunitat Autònoma</label>
+        <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
+      </div>
+<button class="btn-submit" id="btn-generar" onclick="generarSequencia()">Generar seqüència de continguts</button>
 
     <div class="loader" id="loader">
       <div class="spinner"></div>
@@ -185,15 +207,29 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/programacio.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Programació d'Aula</a>
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
-    <a href="/objectius.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
+    <a href="/programacio" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Programació d'Aula</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+    <a href="/objectius" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
   </div>
 </section>
 
+<section style="max-width:800px;margin:3rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:#2C1A0E">Seqüenciador de Continguts Didàctics</h2>
+  <p>El Seqüenciador de Continguts Didàctics és una eina per organitzar els continguts educatius en trimestres i sessions, facilitant la programació i l'implementació eficienta de les assignatures.</p>
+  <p>Aquesta eina és per a tots els professors i educadors que necessiten una estructura clara i organitzada per a la seva assignatura o curs.</p>
+  <h3 style="font-size:1.1rem;font-weight:700;margin:1.5rem 0 0.75rem;color:#2C1A0E">Preguntes freqüents</h3>
+  <dl>
+    <dt style="font-weight:700;margin-top:1rem">Què és el Seqüenciador de Continguts Didàctics?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">És una eina per organitzar els continguts educatius en trimestres i sessions, facilitant la programació i l'implementació eficienta de les assignatures.</dd>
+    <dt style="font-weight:700;margin-top:1rem">Per a qui està dirigit?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">És per a tots els professors i educadors que necessiten una estructura clara i organitzada per a la seva assignatura o curs.</dd>
+    <dt style="font-weight:700;margin-top:1rem">Què problemes resol?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Resol els problemes de falta d'organització, temps d'esborrat i implementació d'assignatures, facilitant la preparació i la transmissió del contingut educatiu.</dd>
+  </dl>
+</section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

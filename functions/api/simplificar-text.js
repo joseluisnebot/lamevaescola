@@ -1,3 +1,27 @@
+
+function getComunitat(ccaa) {
+  const c = {
+    "Catalunya": {
+      decret: "Decret 175/2022 de Catalunya",
+      idioma: "català estàndard",
+      instruccio: "Redacta en català estàndard seguint la normativa de l'Institut d'Estudis Catalans (IEC).",
+      ref: "${com.ref} (Decret 175/2022)"
+    },
+    "Comunitat Valenciana": {
+      decret: "Decret 59/2022 (Primària) i Decret 102/2023 (ESO) de la Comunitat Valenciana",
+      idioma: "valencià estàndard",
+      instruccio: "Redacta en valencià estàndard seguint la normativa de l'Acadèmia Valenciana de la Llengua (AVL). Usa terminologia curricular valenciana.",
+      ref: "currículum de la Comunitat Valenciana (Decret 59/2022 / Decret 102/2023)"
+    },
+    "Illes Balears": {
+      decret: "Decret 32/2023 (Primària) i Decret 39/2022 (ESO) de les Illes Balears",
+      idioma: "català de les Illes Balears",
+      instruccio: "Redacta en la varietat de la llengua catalana pròpia de les Illes Balears. Usa terminologia curricular de les Illes Balears.",
+      ref: "currículum de les Illes Balears (Decret 32/2023 / Decret 39/2022)"
+    }
+  };
+  return c[ccaa] || c["Catalunya"];
+}
 export async function onRequestPost(context) {
   const { request, env } = context;
   const corsHeaders = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" };
@@ -5,6 +29,7 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json();
     const { text, nivell, objectiu = 'simplificar', ccaa = 'Catalunya' } = body;
+    const com = getComunitat(ccaa);
 
     if (!text || !nivell) {
       return new Response(JSON.stringify({ error: "Falten camps obligatoris" }), { status: 400, headers: corsHeaders });
@@ -20,7 +45,7 @@ export async function onRequestPost(context) {
       adaptar_dislexia: 'Adapta el text per a alumnes amb dislèxia: frases simples, paraules familiars, estructura molt clara, evita confusions.',
     }[objectiu] || 'Simplifica el text per fer-lo accessible al nivell indicat.';
 
-    const prompt = `Ets un expert en lingüística i educació especialitzat en adaptació de textos per al currículum de ${ccaa}. Adapta el text en català.
+    const prompt = `Ets un expert en lingüística i educació especialitzat en adaptació de textos per al ${com.ref}. Adapta el text ${com.instruccio}
 
 Text original:
 """
@@ -30,7 +55,7 @@ ${text.slice(0, 2000)}
 Nivell destinatari: ${nivell}
 Objectiu: ${objectiuStr}
 
-Mantén el contingut i les idees principals. El text adaptat ha de ser en català.
+Mantén el contingut i les idees principals. El text adaptat ha de ser ${com.instruccio}
 
 Respon ÚNICAMENT amb un JSON vàlid amb aquest format exacte, sense cap text addicional:
 {

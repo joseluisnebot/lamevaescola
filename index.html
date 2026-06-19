@@ -4,8 +4,24 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La Meva Escola — Eines IA per a docents LOMLOE</title>
-  <meta name="description" content="Eines gratuïtes d'intel·ligència artificial per a mestres i professors. Genera rúbriques, situacions d'aprenentatge, butlletins i més. Alineat amb LOMLOE." />
+  <title>La Meva Escola — Eines gratuïtes per a docents de Catalunya | LOMLOE</title>
+  <meta name="description" content="Eines gratuïtes d'IA per a mestres i professors de Catalunya. Genera situacions d'aprenentatge, rúbriques, adaptacions NEE i més. Alineat amb el Decret 175/2022 i LOMLOE." />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "La Meva Escola",
+    "alternateName": "lamevaescola.com",
+    "url": "https://lamevaescola.com",
+    "description": "Eines digitals gratuïtes per a docents de Catalunya. Situacions d'aprenentatge, rúbriques, adaptacions curriculars i calculadora de notes alineades amb el Decret 175/2022.",
+    "inLanguage": "ca",
+    "publisher": {
+      "@type": "Organization",
+      "name": "La Meva Escola",
+      "url": "https://lamevaescola.com"
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -104,12 +120,80 @@
     }
   </style>
   <link rel="canonical" href="https://lamevaescola.com/">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="La Meva Escola — Eines gratuïtes per a docents de Catalunya | LOMLOE" />
+  <meta property="og:description" content="Eines gratuïtes d'IA per a mestres i professors de Catalunya. Genera situacions d'aprenentatge, rúbriques, adaptacions NEE i més. Alineat amb el Decret 175/2022 i LOMLOE." />
+  <meta property="og:url" content="https://lamevaescola.com/" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="La Meva Escola — Eines gratuïtes per a docents de Catalunya | LOMLOE" />
+  <meta name="twitter:description" content="Eines gratuïtes d'IA per a mestres i professors de Catalunya. Genera situacions d'aprenentatge, rúbriques, adaptacions NEE i més. Alineat amb el Decret 175/2022 i LOMLOE." />
 </head>
 <body>
   <nav>
     <a href="/" class="nav-logo">la meva <span>escola</span></a>
     <span class="nav-badge">Gratuït · Sense registre</span>
   </nav>
+
+  <!-- EL NIU EN DIRECTE — BANNER DESTACAT -->
+  <a href="/niu" class="niu-banner">
+    <div class="niu-inner">
+      <div class="niu-live-badge">
+        <span class="niu-dot"></span>
+        EN DIRECTE
+      </div>
+      <span class="niu-emoji">🪺</span>
+      <div class="niu-text">
+        <strong>El Niu en Directe</strong>
+        <span class="niu-sub">Segueix els ocells en viu amb els teus alumnes — captures cada 30 min</span>
+      </div>
+      <span class="niu-cta">Veure ara →</span>
+    </div>
+  </a>
+  <style>
+    .niu-banner {
+      display: block; text-decoration: none; color: inherit;
+      background: linear-gradient(135deg, #EEF7F2 0%, #F5FBF8 100%);
+      border-bottom: 1.5px solid #C3DFD0;
+      transition: background 0.2s;
+    }
+    .niu-banner:hover { background: linear-gradient(135deg, #E4F3EB 0%, #EDF8F2 100%); }
+    .niu-inner {
+      max-width: 1000px; margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; justify-content: center; gap: 1.1rem; flex-wrap: wrap;
+    }
+    .niu-live-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #FEE2E2; border: 1px solid #FECACA;
+      padding: 0.38rem 1rem; border-radius: 999px; flex-shrink: 0;
+      font-size: 0.73rem; font-weight: 800; color: #DC2626;
+      letter-spacing: 0.1em;
+    }
+    .niu-dot {
+      width: 9px; height: 9px; background: #EF4444;
+      border-radius: 50%; flex-shrink: 0;
+      animation: niu-blink 1s ease-in-out infinite;
+    }
+    @keyframes niu-blink {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+    }
+    .niu-emoji { font-size: 1.9rem; line-height: 1; flex-shrink: 0; }
+    .niu-text { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: center; }
+    .niu-text strong { font-size: 1.05rem; font-weight: 800; color: #1D4E35; }
+    .niu-sub { font-size: 0.88rem; color: #5A8A6E; }
+    .niu-cta {
+      font-size: 0.88rem; font-weight: 700;
+      background: #D4EDE0; color: #1D5C38;
+      padding: 0.55rem 1.35rem; border-radius: 999px;
+      white-space: nowrap; flex-shrink: 0;
+      border: 1px solid #B5D9C6;
+    }
+    @media (max-width: 500px) { .niu-sub { display: none; } }
+  </style>
 
   <section class="hero">
     <div class="hero-pill">✦ Eines IA per a docents</div>
@@ -130,6 +214,35 @@
   <!-- EINES AMB IA anchor -->
   <div id="eines"></div>
 
+  <!-- BANNER INFANTIL -->
+  <div style="max-width:1000px;margin:0 auto 2.5rem;padding:0 1.5rem">
+    <a href="/infantil" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;background:linear-gradient(135deg,#FAE8D8,#FDF8F3);border:1.5px solid #EDD9C8;border-radius:1.25rem;padding:1.25rem 1.75rem;text-decoration:none;color:#2C1A0E;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <span style="font-size:2rem">🧒</span>
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#C2622A;margin-bottom:0.2rem">Etapa específica</div>
+          <div style="font-size:1rem;font-weight:800;letter-spacing:-0.02em">Eines per a Educació Infantil</div>
+          <div style="font-size:0.82rem;color:#8A6A55;margin-top:0.15rem">Situacions, racons, programació i avaluació per al segon cicle</div>
+        </div>
+      </div>
+      <span style="font-size:0.85rem;font-weight:700;color:#C2622A;white-space:nowrap">Veure eines →</span>
+    </a>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.75rem">
+      <a href="/catalunya" style="display:flex;align-items:center;gap:0.75rem;background:white;border:1.5px solid #EDD9C8;border-radius:1rem;padding:0.875rem 1.25rem;text-decoration:none;color:#2C1A0E">
+        <span style="font-size:1.5rem">🔴</span>
+        <div><div style="font-size:0.85rem;font-weight:700">Catalunya</div><div style="font-size:0.75rem;color:#8A6A55;margin-top:0.1rem">Decret 175/2022 · En català</div></div>
+      </a>
+      <a href="/comunitat-valenciana" style="display:flex;align-items:center;gap:0.75rem;background:white;border:1.5px solid #EDD9C8;border-radius:1rem;padding:0.875rem 1.25rem;text-decoration:none;color:#2C1A0E">
+        <span style="font-size:1.5rem">🟠</span>
+        <div><div style="font-size:0.85rem;font-weight:700">Comunitat Valenciana</div><div style="font-size:0.75rem;color:#8A6A55;margin-top:0.1rem">Decret 59/2022 · En valencià</div></div>
+      </a>
+      <a href="/illes-balears" style="display:flex;align-items:center;gap:0.75rem;background:white;border:1.5px solid #EDD9C8;border-radius:1rem;padding:0.875rem 1.25rem;text-decoration:none;color:#2C1A0E">
+        <span style="font-size:1.5rem">🔵</span>
+        <div><div style="font-size:0.85rem;font-weight:700">Illes Balears</div><div style="font-size:0.75rem;color:#8A6A55;margin-top:0.1rem">Decret 32/2023 · En mallorquí</div></div>
+      </a>
+    </div>
+  </div>
+
   <!-- EINES AMB IA -->
   <div class="section ia-section">
     <div class="section-header">
@@ -138,14 +251,14 @@
         <div class="section-title">Eines amb IA</div>
         <div class="section-sub">Genera documents i materials en segons. Adaptats a LOMLOE i al teu currículum.</div>
       </div>
-      <a href="/prompts.html" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.82rem;font-weight:700;color:var(--accent);background:var(--accent-l);padding:0.5rem 1rem;border-radius:999px;text-decoration:none;white-space:nowrap">
+      <a href="/prompts" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.82rem;font-weight:700;color:var(--accent);background:var(--accent-l);padding:0.5rem 1rem;border-radius:999px;text-decoration:none;white-space:nowrap">
         📚 15 prompts gratuïts →
       </a>
     </div>
 
     <div class="ia-grid">
 
-      <a href="/situacions.html" class="tool-card featured">
+      <a href="/situacions" class="tool-card featured">
         <div class="tool-icon">🗺️</div>
         <span class="tool-badge hot">Més demanat</span>
         <div class="tool-name">Situacions d'Aprenentatge</div>
@@ -153,7 +266,7 @@
         <div class="tool-cta">Generar situació →</div>
       </a>
 
-      <a href="/programacio.html" class="tool-card featured">
+      <a href="/programacio" class="tool-card featured">
         <div class="tool-icon">📚</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Programació d'Unitat Didàctica</div>
@@ -161,7 +274,7 @@
         <div class="tool-cta">Generar programació →</div>
       </a>
 
-      <a href="/rubriques.html" class="tool-card">
+      <a href="/rubriques" class="tool-card">
         <div class="tool-icon">📋</div>
         <span class="tool-badge">Popular</span>
         <div class="tool-name">Rúbriques d'Avaluació</div>
@@ -169,7 +282,7 @@
         <div class="tool-cta">Generar rúbrica →</div>
       </a>
 
-      <a href="/preguntes.html" class="tool-card">
+      <a href="/preguntes" class="tool-card">
         <div class="tool-icon">❓</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Preguntes d'Examen</div>
@@ -177,7 +290,7 @@
         <div class="tool-cta">Generar preguntes →</div>
       </a>
 
-      <a href="/activitats.html" class="tool-card">
+      <a href="/activitats" class="tool-card">
         <div class="tool-icon">⚡</div>
         <span class="tool-badge">Popular</span>
         <div class="tool-name">Generador d'Activitats</div>
@@ -185,7 +298,7 @@
         <div class="tool-cta">Generar activitats →</div>
       </a>
 
-      <a href="/simplificador.html" class="tool-card">
+      <a href="/simplificador" class="tool-card">
         <div class="tool-icon">📝</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Simplificador de Textos</div>
@@ -193,7 +306,7 @@
         <div class="tool-cta">Adaptar text →</div>
       </a>
 
-      <a href="/adaptacions.html" class="tool-card">
+      <a href="/adaptacions" class="tool-card">
         <div class="tool-icon">♿</div>
         <span class="tool-badge">Popular</span>
         <div class="tool-name">Adaptacions Curriculars</div>
@@ -201,7 +314,7 @@
         <div class="tool-cta">Generar adaptació →</div>
       </a>
 
-      <a href="/cartes.html" class="tool-card">
+      <a href="/cartes" class="tool-card">
         <div class="tool-icon">✉️</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Cartes per a Famílies</div>
@@ -209,7 +322,7 @@
         <div class="tool-cta">Generar carta →</div>
       </a>
 
-      <a href="/butlletins.html" class="tool-card">
+      <a href="/butlletins" class="tool-card">
         <div class="tool-icon">💬</div>
         <span class="tool-badge">Popular</span>
         <div class="tool-name">Comentaris de Butlletí</div>
@@ -217,7 +330,7 @@
         <div class="tool-cta">Generar comentaris →</div>
       </a>
 
-      <a href="/informes.html" class="tool-card">
+      <a href="/informes" class="tool-card">
         <div class="tool-icon">📄</div>
         <span class="tool-badge">Popular</span>
         <div class="tool-name">Informes d'Avaluació</div>
@@ -225,7 +338,7 @@
         <div class="tool-cta">Generar informe →</div>
       </a>
 
-      <a href="/objectius.html" class="tool-card">
+      <a href="/objectius" class="tool-card">
         <div class="tool-icon">🎯</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Objectius d'Aprenentatge</div>
@@ -233,7 +346,7 @@
         <div class="tool-cta">Generar objectius →</div>
       </a>
 
-      <a href="/comprensio.html" class="tool-card">
+      <a href="/comprensio" class="tool-card">
         <div class="tool-icon">📖</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Comprensió Lectora</div>
@@ -241,7 +354,7 @@
         <div class="tool-cta">Generar preguntes →</div>
       </a>
 
-      <a href="/feedback.html" class="tool-card">
+      <a href="/feedback" class="tool-card">
         <div class="tool-icon">💡</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Feedback per a l'Alumne</div>
@@ -249,7 +362,7 @@
         <div class="tool-cta">Generar feedback →</div>
       </a>
 
-      <a href="/comunicats.html" class="tool-card">
+      <a href="/comunicats" class="tool-card">
         <div class="tool-icon">📢</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Comunicats Oficials</div>
@@ -257,7 +370,7 @@
         <div class="tool-cta">Generar comunicat →</div>
       </a>
 
-      <a href="/traductor-notes.html" class="tool-card">
+      <a href="/traductor-notes" class="tool-card">
         <div class="tool-icon">✍️</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Traductor de Notes</div>
@@ -265,7 +378,7 @@
         <div class="tool-cta">Traduir notes →</div>
       </a>
 
-      <a href="/sequenciador.html" class="tool-card">
+      <a href="/sequenciador" class="tool-card">
         <div class="tool-icon">🗂️</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Seqüenciador de Continguts</div>
@@ -273,7 +386,7 @@
         <div class="tool-cta">Seqüenciar continguts →</div>
       </a>
 
-      <a href="/criteris.html" class="tool-card">
+      <a href="/criteris" class="tool-card">
         <div class="tool-icon">📊</div>
         <span class="tool-badge new">Nou</span>
         <div class="tool-name">Criteris d'Avaluació</div>
@@ -296,79 +409,79 @@
 
     <div class="util-grid">
 
-      <a href="/ruleta.html" class="util-card">
+      <a href="/ruleta" class="util-card">
         <div class="util-icon">🎡</div>
         <div class="util-name">Ruleta de Noms</div>
         <div class="util-desc">Tria un alumne a l'atzar amb animació</div>
       </a>
 
-      <a href="/temporizador.html" class="util-card">
+      <a href="/temporizador" class="util-card">
         <div class="util-icon">⏱️</div>
         <div class="util-name">Temporizador d'Aula</div>
         <div class="util-desc">Compte enrere a pantalla completa</div>
       </a>
 
-      <a href="/torn.html" class="util-card">
+      <a href="/torn" class="util-card">
         <div class="util-icon">🙋</div>
         <div class="util-name">Torn de Paraula</div>
         <div class="util-desc">Gestiona la participació i el torn de cada alumne</div>
       </a>
 
-      <a href="/assistencia.html" class="util-card">
+      <a href="/assistencia" class="util-card">
         <div class="util-icon">✅</div>
         <div class="util-name">Seguiment d'Assistència</div>
         <div class="util-desc">Marca presències, absències i retards. Exporta el resum</div>
       </a>
 
-      <a href="/quiz.html" class="util-card">
+      <a href="/quiz" class="util-card">
         <div class="util-icon">🎮</div>
         <div class="util-name">Quiz Interactiu</div>
         <div class="util-desc">Crea i presenta un quiz per a la classe. Ideal per projectar</div>
       </a>
 
-      <a href="/cronometres.html" class="util-card">
+      <a href="/cronometres" class="util-card">
         <div class="util-icon">⏰</div>
         <div class="util-name">Cronòmetre de Tasques</div>
         <div class="util-desc">Compte enrere visual amb anell de progrés. Pantalla completa per a la PDI</div>
       </a>
 
-      <a href="/diplomes.html" class="util-card">
+      <a href="/diplomes" class="util-card">
         <div class="util-icon">🏅</div>
         <div class="util-name">Generador de Diplomes</div>
         <div class="util-desc">Crea diplomes personalitzats per imprimir i reconèixer l'esforç</div>
       </a>
 
-      <a href="/grups.html" class="util-card">
+      <a href="/grups" class="util-card">
         <div class="util-icon">🎲</div>
         <div class="util-name">Grups Aleatoris</div>
         <div class="util-desc">Divideix la classe en grups equilibrats</div>
       </a>
 
-      <a href="/bingo.html" class="util-card">
+      <a href="/bingo" class="util-card">
         <div class="util-icon">🎱</div>
         <div class="util-name">Bingo de Classe</div>
         <div class="util-desc">Cartrons de bingo personalitzats per imprimir</div>
       </a>
 
-      <a href="/sopa-de-lletres.html" class="util-card">
+      <a href="/sopa-de-lletres" class="util-card">
         <div class="util-icon">🔤</div>
         <div class="util-name">Sopa de Lletres</div>
         <div class="util-desc">Sopes de lletres amb les teves paraules</div>
       </a>
 
-      <a href="/calculadora-notes.html" class="util-card">
+      <a href="/calculadora-notes" class="util-card">
         <div class="util-icon">🧮</div>
         <div class="util-name">Calculadora de Notes</div>
         <div class="util-desc">Nota ponderada i conversió LOMLOE</div>
       </a>
 
-      <a href="/horari.html" class="util-card">
+      <a href="/horari" class="util-card">
         <div class="util-icon">🗓️</div>
         <div class="util-name">Horari Setmanal</div>
         <div class="util-desc">Editor visual d'horari, imprimible</div>
       </a>
 
-      <a href="/calendari.html" class="util-card">
+      <a href="/calendari" class="util-card">
         <div class="util-icon">📅</div>
         <div class="util-name">Calendari Escolar</div>
         <div class="util-desc">Calendari 2025-26 amb festius i vacances</div>
@@ -385,7 +498,7 @@
         <div class="section-title">Normativa educativa al dia</div>
       </div>
     </div>
-    <a href="/normativa.html" style="display:block;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:1.5rem;padding:2rem 2.5rem;text-decoration:none;color:white;">
+    <a href="/normativa" style="display:block;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:1.5rem;padding:2rem 2.5rem;text-decoration:none;color:white;">
       <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
         <div style="font-size:2.5rem">📋</div>
         <div style="flex:1;min-width:200px">
@@ -395,6 +508,55 @@
         <div style="font-size:0.88rem;font-weight:800;background:rgba(255,255,255,0.15);padding:0.6rem 1.25rem;border-radius:999px;white-space:nowrap">Veure normativa →</div>
       </div>
     </a>
+  </div>
+
+  <!-- BLOG OPOSICIONS -->
+  <div class="section" style="margin-bottom:4rem">
+    <div class="section-header" style="margin-bottom:1.25rem;">
+      <div>
+        <div class="section-label">📚 Recursos per a oposicions</div>
+        <div class="section-title">Prepares les oposicions 2026?</div>
+        <div class="section-sub">Guies pràctiques per preparar la programació didàctica alineada amb LOMLOE i el Decret 175/2022.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <a href="/blog/situacions-aprenentatge-oposicions-2026" style="background:var(--surface);border:1.5px solid var(--border);border-radius:1.25rem;padding:1.35rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2622A';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+        <div style="font-size:1.5rem">🗺️</div>
+        <div style="font-size:0.88rem;font-weight:800;letter-spacing:-0.02em;line-height:1.3">Situacions d'Aprenentatge</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.5;flex:1">Estructura, competències i errors freqüents que penalitzen al tribunal.</div>
+        <div style="font-size:0.77rem;font-weight:700;color:var(--accent)">Llegir guia →</div>
+      </a>
+      <a href="/blog/rubriques-avaluacio-oposicions-2026" style="background:var(--surface);border:1.5px solid var(--border);border-radius:1.25rem;padding:1.35rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2622A';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+        <div style="font-size:1.5rem">📊</div>
+        <div style="font-size:0.88rem;font-weight:800;letter-spacing:-0.02em;line-height:1.3">Rúbriques d'Avaluació</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.5;flex:1">Com dissenyar rúbriques competencials que el tribunal valori positivament.</div>
+        <div style="font-size:0.77rem;font-weight:700;color:var(--accent)">Llegir guia →</div>
+      </a>
+      <a href="/blog/adaptacio-curricular-nee-oposicions-2026" style="background:var(--surface);border:1.5px solid var(--border);border-radius:1.25rem;padding:1.35rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2622A';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+        <div style="font-size:1.5rem">🤝</div>
+        <div style="font-size:0.88rem;font-weight:800;letter-spacing:-0.02em;line-height:1.3">Adaptació Curricular NEE</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.5;flex:1">Mesures DUA i atenció a la diversitat integrades a la programació.</div>
+        <div style="font-size:0.77rem;font-weight:700;color:var(--accent)">Llegir guia →</div>
+      </a>
+      <a href="/blog/activitats-competencials-oposicions-2026" style="background:var(--surface);border:1.5px solid var(--border);border-radius:1.25rem;padding:1.35rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2622A';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+        <div style="font-size:1.5rem">⚡</div>
+        <div style="font-size:0.88rem;font-weight:800;letter-spacing:-0.02em;line-height:1.3">Activitats Competencials</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.5;flex:1">Com seqüenciar activitats per nivells cognitius i impressionar el tribunal.</div>
+        <div style="font-size:0.77rem;font-weight:700;color:var(--accent)">Llegir guia →</div>
+      </a>
+      <a href="/blog/comentaris-butlleti-oposicions-2026" style="background:var(--surface);border:1.5px solid var(--border);border-radius:1.25rem;padding:1.35rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2622A';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+        <div style="font-size:1.5rem">📝</div>
+        <div style="font-size:0.88rem;font-weight:800;letter-spacing:-0.02em;line-height:1.3">Comentaris de Butlletí</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.5;flex:1">Exemples de comentaris competencials que les famílies i el tribunal entendran.</div>
+        <div style="font-size:0.77rem;font-weight:700;color:var(--accent)">Llegir guia →</div>
+      </a>
+      <a href="/blog/informes-avaluacio-oposicions-2026" style="background:var(--surface);border:1.5px solid var(--border);border-radius:1.25rem;padding:1.35rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2622A';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+        <div style="font-size:1.5rem">📋</div>
+        <div style="font-size:0.88rem;font-weight:800;letter-spacing:-0.02em;line-height:1.3">Informes d'Avaluació</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.5;flex:1">Estructura, escales i evidències per a informes competencials LOMLOE.</div>
+        <div style="font-size:0.77rem;font-weight:700;color:var(--accent)">Llegir guia →</div>
+      </a>
+    </div>
   </div>
 
   <!-- SUSCRIPCIÓ -->
@@ -408,7 +570,7 @@
         <input id="sub-email" type="email" placeholder="correu@escola.cat" required style="flex:2;min-width:180px;padding:0.7rem 1rem;border-radius:0.6rem;border:none;font-size:0.9rem;font-family:inherit"/>
         <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.75rem;opacity:0.85;cursor:pointer;text-align:left;width:100%;line-height:1.5">
           <input type="checkbox" id="sub-rgpd" required style="margin-top:2px;flex-shrink:0"/>
-          <span>Accepto la <a href="/privacitat.html" style="color:#86EFAC;white-space:nowrap">política de privacitat</a> i el tractament del meu correu per rebre la newsletter. Puc cancel·lar quan vulgui.</span>
+          <span>Accepto la <a href="/privacitat" style="color:#86EFAC;white-space:nowrap">política de privacitat</a> i el tractament del meu correu per rebre la newsletter. Puc cancel·lar quan vulgui.</span>
         </label>
         <button type="submit" style="width:100%;padding:0.8rem;background:#FB923C;color:white;font-weight:800;border:none;border-radius:0.6rem;cursor:pointer;font-size:0.95rem;font-family:inherit">Envia'm els prompts →</button>
       </form>
@@ -420,7 +582,7 @@
 
   <footer>
     <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-    <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+    <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
   </footer>
 
 <script>

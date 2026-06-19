@@ -85,6 +85,16 @@
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
   <link rel="canonical" href="https://lamevaescola.com/activitats.html">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Generador d'Activitats — la meva escola" />
+  <meta property="og:description" content="Genera 5 activitats creatives per a qualsevol tema, assignatura i nivell educatiu. Alineat amb LOMLOE." />
+  <meta property="og:url" content="https://lamevaescola.com/activitats" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Generador d'Activitats — la meva escola" />
+  <meta name="twitter:description" content="Genera 5 activitats creatives per a qualsevol tema, assignatura i nivell educatiu. Alineat amb LOMLOE." />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador d'Activitats Educatives","url":"https://lamevaescola.com/activitats.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quantes activitats genera cada vegada?", "acceptedAnswer": {"@type": "Answer", "text": "Genera 5 activitats diferents per consulta, cadascuna amb descripció, objectius d'aprenentatge, agrupament recomanat, durada estimada i materials necessaris."}}, {"@type": "Question", "name": "Les activitats inclouen treball cooperatiu?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. El generador proposa una combinació d'activitats individuals, per parelles i en grup per fomentar la cooperació i la col·laboració entre l'alumnat, seguint les metodologies actives recomanades per la LOMLOE."}}, {"@type": "Question", "name": "Puc demanar activitats per a un context concret?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Com més detall donis sobre el context (tema concret, habilitats a treballar, material disponible, tipus d'aula), més ajustades seran les activitats generades. Pots indicar si vols activitats per a sortida escolar, aula d'informàtica, pati o espai exterior."}}, {"@type": "Question", "name": "Les activitats estan alineades amb la LOMLOE?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Cada activitat especifica les competències clau i específiques que treballa, en línia amb el currículum LOMLOE i el Decret 175/2022 de Catalunya. Pots usar-les directament a la teva programació d'aula."}}, {"@type": "Question", "name": "Funciona per a educació especial i aules inclusives?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Pots indicar que el grup té alumnes amb NEE i el generador proposa activitats amb múltiples punts d'entrada perquè tots els alumnes puguin participar al seu nivell. Per a adaptacions individuals, complementa-ho amb el generador d'adaptacions curriculars de La Meva Escola."}}, {"@type": "Question", "name": "Per a quins nivells educatius funciona?", "acceptedAnswer": {"@type": "Answer", "text": "Per a tots els nivells de primària (1r a 6è) i ESO (1r a 4t). Pots especificar el curs i l'assignatura, i l'eina adapta la complexitat, el vocabulari i el tipus d'activitat al nivell indicat."}}, {"@type": "Question", "name": "Necessito registre per usar-lo?", "acceptedAnswer": {"@type": "Answer", "text": "No. La Meva Escola és completament gratuïta i sense registre. Accedeix, descriu el que necessites i obté les activitats a l'instant."}}]}</script>
 </head>
@@ -181,15 +191,12 @@
 
         <div class="field full" style="margin-top:0.5rem;">
       <label for="ccaa">Comunitat Autònoma</label>
-      <select id="ccaa">
-        <option value="Catalunya">Catalunya (LOMLOE + Decret 175/2022)</option>
-        <option value="Madrid">Comunitat de Madrid</option>
-        <option value="Andalusia">Andalusia</option>
-        <option value="Comunitat Valenciana">Comunitat Valenciana</option>
-        <option value="País Basc">País Basc</option>
-        <option value="Galícia">Galícia</option>
-        <option value="altra">Altra comunitat (LOMLOE general)</option>
-      </select>
+      <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
     </div>
     <button class="btn-submit" id="btn-generar" onclick="generarActivitats()">Generar 5 activitats</button>
 
@@ -238,16 +245,16 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/programacio.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Programació d'Aula</a>
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
-    <a href="/preguntes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Preguntes</a>
-  <a href="/comprensio.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Comprensió Lectora</a>
-    <a href="/objectius.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
+    <a href="/programacio" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Programació d'Aula</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+    <a href="/preguntes" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Generador de Preguntes</a>
+  <a href="/comprensio" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Comprensió Lectora</a>
+    <a href="/objectius" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
     </div>
 </section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

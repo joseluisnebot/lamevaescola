@@ -5,7 +5,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generador de Rúbriques LOMLOE — la meva escola</title>
-  <meta name="description" content="Genera rúbriques d'avaluació per competències en 30 segons. Alineat amb LOMLOE." />
+  <meta name="description" content="Genera rúbriques d'avaluació i graelles d'observació per a Infantil, Primària i Secundària en 30 segons. Alineades amb LOMLOE i el Decret 175/2022. Gratuït per a docents." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -89,8 +89,18 @@
 
     footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
   </style>
-  <link rel="canonical" href="https://lamevaescola.com/rubriques.html">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador de Rúbriques LOMLOE","url":"https://lamevaescola.com/rubriques.html","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+  <link rel="canonical" href="https://lamevaescola.com/rubriques">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Generador de Rúbriques LOMLOE — la meva escola" />
+  <meta property="og:description" content="Genera rúbriques d'avaluació i graelles d'observació per a Infantil, Primària i Secundària en 30 segons. Alineades amb LOMLOE i el Decret 175/2022. Gratuït per a docents." />
+  <meta property="og:url" content="https://lamevaescola.com/rubriques" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="ca_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Generador de Rúbriques LOMLOE — la meva escola" />
+  <meta name="twitter:description" content="Genera rúbriques d'avaluació i graelles d'observació per a Infantil, Primària i Secundària en 30 segons. Alineades amb LOMLOE i el Decret 175/2022. Gratuït per a docents." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Generador de Rúbriques LOMLOE","url":"https://lamevaescola.com/rubriques","applicationCategory":"EducationalApplication","inLanguage":"ca","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quines assignatures cobreix el generador de rúbriques?", "acceptedAnswer": {"@type": "Answer", "text": "Totes les assignatures de l'educació obligatòria: Llengua Catalana, Llengua Castellana, Matemàtiques, Ciències Naturals, Ciències Socials, Anglès, Educació Física, Música, Educació Artística, Tecnologia i Digitalització i Educació en Valors Cívics i Ètics. Funciona tant per a primària com per a ESO."}}, {"@type": "Question", "name": "Les rúbriques estan alineades amb el currículum català?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Totes les rúbriques generades segueixen la nomenclatura i els criteris d'avaluació establerts per la LOMLOE i el Decret 175/2022 del currículum de primària i secundària de Catalunya. Els indicadors d'assoliment fan referència explícita a les competències específiques de cada àrea."}}, {"@type": "Question", "name": "Puc imprimir la rúbrica?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Pots descarregar-la directament en PDF llesta per imprimir, o copiar-la en format taula per enganxar-la a Google Sheets, Excel o al teu processador de textos. El format és net i llegible per als alumnes."}}, {"@type": "Question", "name": "Quants nivells d'assoliment inclou la rúbrica?", "acceptedAnswer": {"@type": "Answer", "text": "Quatre nivells seguint la terminologia de la LOMLOE: Iniciació (no assolit), En procés (assoliment baix), Assoliment satisfactori i Excel·lent. Cada nivell inclou un descriptor detallat per facilitar l'avaluació objectiva."}}, {"@type": "Question", "name": "Puc usar la rúbrica per a l'avaluació entre iguals?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Les rúbriques generades estan redactades en un llenguatge entenedor que permet que els propis alumnes les usin per avaluar el treball dels seus companys o per fer autoavaluació. Molts docents les adapten lleugerament per fer-les encara més accessibles per a l'alumnat."}}, {"@type": "Question", "name": "Funciona per a treballs en grup, projectes i exposicions orals?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Pots especificar el tipus de tasca al formulari: presentació oral, treball escrit, projecte col·laboratiu, experiment, obra artística, etc. L'eina adapta els indicadors al format de la tasca indicada."}}, {"@type": "Question", "name": "És gratuït i sense registre?", "acceptedAnswer": {"@type": "Answer", "text": "Completament gratuït i sense registre ni límit d'ús. La Meva Escola és una plataforma d'eines IA per a docents de Catalunya i Espanya, de codi obert i sense publicitat."}}]}</script>
 </head>
 <body>
@@ -135,6 +145,10 @@
         <label for="nivell">Nivell educatiu</label>
         <select id="nivell">
           <option value="">— Selecciona —</option>
+          <optgroup label="Educació Infantil">
+            <option>Infantil 1r cicle (0-3 anys)</option>
+            <option>Infantil 2n cicle (3-6 anys)</option>
+          </optgroup>
           <optgroup label="Primària">
             <option>Primària 1r-2n</option>
             <option>Primària 3r-4t</option>
@@ -170,24 +184,18 @@
 
       <div class="field full">
         <label for="criteri">Criteri d'avaluació</label>
-        <textarea id="criteri" placeholder="Ex: L'alumne és capaç d'escriure textos narratius coherents, utilitzant connectors adequats i respectant les normes ortogràfiques bàsiques."></textarea>
+        <textarea id="criteri" placeholder="Exemple: Produeix textos escrits adequats al context, amb cohesió i correcció lingüística..."></textarea>
       </div>
-    </div>
 
-    <div class="field full" style="margin-top:0.5rem;">
-      <label for="ccaa">Comunitat Autònoma</label>
-      <select id="ccaa">
-        <option value="Catalunya">Catalunya (LOMLOE + Decret 175/2022)</option>
-        <option value="Madrid">Comunitat de Madrid</option>
-        <option value="Andalusia">Andalusia</option>
-        <option value="Comunitat Valenciana">Comunitat Valenciana</option>
-        <option value="País Basc">País Basc</option>
-        <option value="Galícia">Galícia</option>
-        <option value="Castella i Lleó">Castella i Lleó</option>
-        <option value="Aragó">Aragó</option>
-        <option value="Canàries">Canàries</option>
-        <option value="altra">Altra comunitat (LOMLOE general)</option>
-      </select>
+      <div class="field full" style="margin-top:0.5rem;">
+        <label for="ccaa">Comunitat Autònoma</label>
+        <select id="ccaa" onchange="localStorage.setItem('lme_ccaa',this.value)">
+          <option value="Catalunya">Catalunya — Decret 175/2022</option>
+          <option value="Comunitat Valenciana">Comunitat Valenciana — Decret 59/2022</option>
+          <option value="Illes Balears">Illes Balears — Decret 32/2023</option>
+        </select>
+        <script>(function(){ var s=localStorage.getItem('lme_ccaa'); if(s){var el=document.getElementById('ccaa');if(el)el.value=s;} })();</script>
+      </div>
     </div>
     <button class="btn-submit" id="btn-generar" onclick="generarRubrica()">Generar rúbrica</button>
 
@@ -249,16 +257,30 @@
 <section style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
   <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Eines relacionades</p>
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a href="/butlletins.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Butlletins d'Avaluació</a>
-    <a href="/calculadora-notes.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Calculadora de Notes</a>
-    <a href="/situacions.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
-  <a href="/criteris.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Criteris d'Avaluació</a>
-    <a href="/objectius.html" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
+    <a href="/butlletins" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Butlletins d'Avaluació</a>
+    <a href="/calculadora-notes" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Calculadora de Notes</a>
+    <a href="/situacions" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Situacions d'Aprenentatge</a>
+  <a href="/criteris" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Criteris d'Avaluació</a>
+    <a href="/objectius" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Objectius d'Aprenentatge</a>
     </div>
+</section>
+<section style="max-width:800px;margin:3rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:#2C1A0E">Generador de Rúbriques d'Avaluació LOMLOE</h2>
+  <p>El Generador de Rúbriques d'Avaluació LOMLOE és una eina útil per crear rúbriques d'avaluació per competències en només 30 segons. És ideal per a educadors i formacions que necessiten avaluar competències específiques de les seves alumnats.</p>
+  <p>Aquesta eina ofereix una solució pràctica i eficienta per a la creació de rúbriques d'avaluació basades en el LOMLOE (Llibre d'Objectius de Mesura de les Llibreries Òbliques d'Educatiu). Ofereix valors a més d'ajudar a les institucions educatives a millorar la qualitat de la seva formació i aporta més objectivitat a l'avaluació dels alumnats.</p>
+  <h3 style="font-size:1.1rem;font-weight:700;margin:1.5rem 0 0.75rem;color:#2C1A0E">Preguntes freqüents</h3>
+  <dl>
+    <dt style="font-weight:700;margin-top:1rem">Què és LOMLOE?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">LOMLOE és un llibre d'objectius de mesura de les llibreries òbliques d'educatiu que ofereix criteris per avaluar les competències dels alumnats.</dd>
+    <dt style="font-weight:700;margin-top:1rem">Què ofereix el Generador de Rúbriques d'Avaluació LOMLOE?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Aquesta eina ofereix una solució pràctica i eficienta per a la creació de rúbriques d'avaluació basades en el LOMLOE, facilitant el procés d'avaluació dels alumnats.</dd>
+    <dt style="font-weight:700;margin-top:1rem">Què és una rúbrica d'avaluació?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Una rúbrica d'avaluació és un instrument que utilitza criteris predeterminats per a la qualificació d'un treball o projecte, ajudant a millorar la qualitat i l'objectivitat de l'avaluació.</dd>
+  </dl>
 </section>
 <footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
   <strong>la meva escola</strong> · Eines gratuïtes per a docents de Catalunya i Espanya<br>
-  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat.html" style="color:var(--accent)">Privacitat i Cookies</a></span>
+  <span style="margin-top:0.25rem;display:inline-block">Alineat amb <strong>LOMLOE</strong> · <a href="/privacitat" style="color:var(--accent)">Privacitat i Cookies</a></span>
 </footer>
 
 <script>

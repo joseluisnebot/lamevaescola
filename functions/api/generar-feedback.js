@@ -1,3 +1,27 @@
+
+function getComunitat(ccaa) {
+  const c = {
+    "Catalunya": {
+      decret: "Decret 175/2022 de Catalunya",
+      idioma: "català estàndard",
+      instruccio: "Redacta en català estàndard seguint la normativa de l'Institut d'Estudis Catalans (IEC).",
+      ref: "${com.ref} (Decret 175/2022)"
+    },
+    "Comunitat Valenciana": {
+      decret: "Decret 59/2022 (Primària) i Decret 102/2023 (ESO) de la Comunitat Valenciana",
+      idioma: "valencià estàndard",
+      instruccio: "Redacta en valencià estàndard seguint la normativa de l'Acadèmia Valenciana de la Llengua (AVL). Usa terminologia curricular valenciana.",
+      ref: "currículum de la Comunitat Valenciana (Decret 59/2022 / Decret 102/2023)"
+    },
+    "Illes Balears": {
+      decret: "Decret 32/2023 (Primària) i Decret 39/2022 (ESO) de les Illes Balears",
+      idioma: "català de les Illes Balears",
+      instruccio: "Redacta en la varietat de la llengua catalana pròpia de les Illes Balears. Usa terminologia curricular de les Illes Balears.",
+      ref: "currículum de les Illes Balears (Decret 32/2023 / Decret 39/2022)"
+    }
+  };
+  return c[ccaa] || c["Catalunya"];
+}
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -22,7 +46,7 @@ export async function onRequestPost(context) {
       });
     }
 
-    const prompt = `Ets un expert en pedagogia i comunicació educativa. Genera feedback personalitzat per a un alumne/a en català.
+    const prompt = `Ets un expert en pedagogia i comunicació educativa. Genera feedback personalitzat per a un alumne/a ${com.instruccio}
 
 Dades de l'alumne/a:
 - Nom: ${nom}
