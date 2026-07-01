@@ -9,15 +9,40 @@ const LIMIT_PER_MIN = {
 };
 const DEFAULT_LIMIT = 15;     // generadors d'IA i resta: 15/min per IP
 
+async function verifyTurnstile(token, secret, ip) {
+  try {
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret, response: token, remoteip: ip }),
+    });
+    const d = await r.json();
+    return d.success === true;
+  } catch (e) {
+    return false;
+  }
+}
+
 export async function onRequest(context) {
   const { request, env, next } = context;
 
   // El preflight CORS no consumeix quota
   if (request.method === "OPTIONS") return next();
 
+  const ip = request.headers.get("CF-Connecting-IP") || "0.0.0.0";
+
+  // Turnstile (s'activa sol quan hi ha TURNSTILE_SECRET configurat).
+  // Token vàlid -> passa sense límit. Token absent/invàlid -> cau al rate-limit
+  // de sota (fail-safe: mai bloquegem en dur, així no trenquem cap eina).
+  if (env.TURNSTILE_SECRET && request.method === "POST") {
+    const token = request.headers.get("cf-turnstile-token");
+    if (token && (await verifyTurnstile(token, env.TURNSTILE_SECRET, ip))) {
+      return next();
+    }
+  }
+
   try {
     if (env.DB) {
-      const ip = request.headers.get("CF-Connecting-IP") || "0.0.0.0";
       const path = new URL(request.url).pathname;
       const limit = LIMIT_PER_MIN[path] || DEFAULT_LIMIT;
       const win = Math.floor(Date.now() / 60000); // finestra d'1 minut
