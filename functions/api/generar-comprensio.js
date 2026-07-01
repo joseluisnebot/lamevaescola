@@ -46,8 +46,9 @@ export async function onRequestPost(context) {
       });
     }
 
-    const tipusStr = tipus && tipus.length > 0
-      ? tipus.join(", ")
+    const tipusArr = Array.isArray(tipus) ? tipus : (tipus ? [tipus] : []);
+    const tipusStr = tipusArr.length > 0
+      ? tipusArr.join(", ")
       : "Literals, Inferencials, Valoració crítica";
 
     const prompt = `Ets un expert en comprensió lectora i didàctica de la llengua. Genera preguntes de comprensió ${com.instruccio}

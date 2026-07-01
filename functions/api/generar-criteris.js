@@ -33,6 +33,7 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json();
     const { assignatura, nivell, competencia, nombre, trimestre } = body;
+    const com = getComunitat(body.ccaa || 'Catalunya');
 
     if (!assignatura || !nivell || !competencia) {
       return new Response(JSON.stringify({ error: "Falten camps obligatoris" }), {

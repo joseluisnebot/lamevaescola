@@ -33,6 +33,7 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json();
     const { nom, situacio, millora, puntFort, nivell, destinatari, tono } = body;
+    const com = getComunitat(body.ccaa || 'Catalunya');
 
     if (!nom || !situacio || !millora || !puntFort || !nivell || !destinatari || !tono) {
       return new Response(JSON.stringify({ error: "Falten camps obligatoris" }), {
