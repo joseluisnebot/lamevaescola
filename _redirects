@@ -1,3 +1,6 @@
+# Bloquejar fitxers de configuració (no s'han de servir com a assets web)
+/wrangler.toml  /  302
+
 # www → apex (301 permanent)
 https://www.lamevaescola.com/* https://lamevaescola.com/:splat 301
 
