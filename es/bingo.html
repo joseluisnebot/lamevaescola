@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Bingo para Imprimir — Gratis para clase</title>
+  <meta name="description" content="Crea cartones de bingo personalizados para imprimir en segundos. Escribe tus palabras y genera un cartón distinto para cada alumno. Gratis, sin registro." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#FDF8F3;--surface:#FFFFFF;--border:#EDD9C8;--text:#2C1A0E;--muted:#8A6A55;--accent:#C2622A;--accent-l:#FAE8D8;--accent-d:#8B3A18; }
+    body { font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh; }
+    nav { display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50; }
+    .hero { text-align:center;padding:3.5rem 1.5rem 2.5rem;max-width:620px;margin:0 auto; }
+    .hero-pill { display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-l);color:var(--accent-d);font-size:0.75rem;font-weight:700;padding:0.35rem 0.9rem;border-radius:999px;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase; }
+    h1 { font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-0.04em;margin-bottom:0.75rem; }
+    h1 span { color:var(--accent); }
+    .hero-sub { font-size:1rem;color:var(--muted);line-height:1.65; }
+    .main { max-width:760px;margin:0 auto;padding:0 1.5rem 4rem; }
+    .card { background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;box-shadow:0 4px 24px rgba(45,106,79,0.08);padding:2rem;margin-bottom:2rem; }
+    .field { display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem; }
+    label { font-size:0.82rem;font-weight:600;color:var(--text); }
+    input, select, textarea { background:#F7F9F7;border:1.5px solid #DDE8DD;border-radius:0.6rem;padding:0.65rem 0.9rem;font-size:0.9rem;font-family:inherit;color:var(--text);outline:none;transition:border-color 0.15s;width:100%; }
+    input:focus, select:focus, textarea:focus { border-color:#2D6A4F; }
+    textarea { resize:vertical;min-height:120px;line-height:1.7; }
+    .hint { font-size:0.75rem;color:var(--muted);margin-top:0.25rem; }
+    .btn-row { display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:0.5rem; }
+    .btn-submit { flex:1;min-width:160px;background:#2D6A4F;color:#fff;font-weight:700;font-size:0.92rem;border:none;border-radius:0.75rem;padding:0.85rem;cursor:pointer;font-family:inherit; }
+    .btn-submit:hover { background:#1B4332; }
+    .error-box { display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;border-radius:0.75rem;padding:0.9rem 1.1rem;font-size:0.88rem;margin-top:1rem; }
+    .error-box.active { display:block; }
+    .cartrons-wrap { display:none; }
+    .cartrons-wrap.active { display:block; }
+    .cartrons-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.5rem; }
+    @media(max-width:560px){ .cartrons-grid { grid-template-columns:1fr; } }
+    .cartro { border:2px solid var(--border);border-radius:1rem;overflow:hidden;break-inside:avoid; }
+    .cartro-header { background:var(--accent);color:white;text-align:center;padding:0.6rem;font-size:0.82rem;font-weight:700; }
+    .cartro-grid { display:grid;gap:2px;padding:0.5rem;background:var(--border); }
+    .cartro-cell { background:white;text-align:center;font-size:0.78rem;font-weight:600;padding:0.45rem 0.2rem;min-height:38px;display:flex;align-items:center;justify-content:center;line-height:1.2; }
+    .cartro-cell.free { background:var(--accent-l);color:var(--accent-d);font-weight:800; }
+    .actions { display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.5rem; }
+    .btn-action { background:var(--accent-l);color:var(--accent-d);border:none;border-radius:0.6rem;padding:0.6rem 1.1rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit; }
+    footer { text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B; }
+    @media print {
+      nav, .card:first-of-type, .actions, footer, .seo-block { display:none!important; }
+      .cartrons-wrap { display:block!important; }
+      .cartrons-grid { grid-template-columns:1fr 1fr; }
+      body { background:white; }
+    }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/es/bingo">
+  <link rel="alternate" hreflang="es" href="https://lamevaescola.com/es/bingo" />
+  <link rel="alternate" hreflang="ca" href="https://lamevaescola.com/bingo" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Generador de Bingo para Imprimir — Gratis para clase" />
+  <meta property="og:description" content="Crea cartones de bingo personalizados para imprimir en segundos. Escribe tus palabras y genera un cartón distinto para cada alumno. Gratis, sin registro." />
+  <meta property="og:url" content="https://lamevaescola.com/es/bingo" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Generador de Bingo para Imprimir — Gratis para clase" />
+  <meta name="twitter:description" content="Crea cartones de bingo personalizados para imprimir en segundos. Gratis, sin registro." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuántas palabras necesito para generar el bingo?","acceptedAnswer":{"@type":"Answer","text":"Depende del tamaño del cartón: 9 palabras para 3×3, 16 para 4×4 y 24 para 5×5 (la casilla central es libre). Cuantas más palabras pongas por encima del mínimo, más diferentes serán los cartones entre sí."}},{"@type":"Question","name":"¿Todos los cartones son diferentes?","acceptedAnswer":{"@type":"Answer","text":"Cada cartón se genera con una selección aleatoria de las palabras que has escrito, así que con suficientes palabras cada alumno tiene un cartón distinto. Si pones justo el mínimo, todos los cartones llevarán las mismas palabras cambiadas de sitio."}},{"@type":"Question","name":"¿Sirve para cualquier asignatura?","acceptedAnswer":{"@type":"Answer","text":"Sí, porque las palabras las escribes tú. Funciona con vocabulario de inglés, términos científicos, autores, fechas históricas, resultados de multiplicaciones o cualquier contenido que quieras repasar."}},{"@type":"Question","name":"¿Cómo imprimo los cartones?","acceptedAnswer":{"@type":"Answer","text":"Con el botón Imprimir todos, que abre el diálogo de impresión del navegador con los cartones ya maquetados a dos por fila. Desde ahí puedes imprimir en papel o elegir Guardar como PDF."}},{"@type":"Question","name":"¿Cómo se juega al bingo en clase?","acceptedAnswer":{"@type":"Answer","text":"El profesor va diciendo las palabras en voz alta, o haciendo preguntas cuya respuesta es una de las palabras, y los alumnos tachan las que tienen en su cartón. Gana quien complete una línea o el cartón entero. Funciona muy bien como repaso antes de un examen o para cerrar una sesión."}},{"@type":"Question","name":"¿Es gratis y hace falta registrarse?","acceptedAnswer":{"@type":"Answer","text":"Es gratis y no hay que registrarse. Todo se genera en tu navegador: las palabras que escribes no se envían a ningún servidor."}}]}</script>
+</head>
+<body>
+<nav>
+  <a href="/es/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/es/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Todas las herramientas</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">🎱 Sin IA</div>
+  <h1>Generador de <span>bingo para imprimir</span></h1>
+  <p class="hero-sub">Escribe tus palabras y genera un cartón distinto para cada alumno.<br>Listo para imprimir en un clic.</p>
+</section>
+
+<div class="main">
+  <div class="card">
+    <div class="field">
+      <label for="titol">Título del bingo</label>
+      <input type="text" id="titol" placeholder="Ej: Bingo de vocabulario de inglés, Bingo de capitales..." value="Bingo de clase" />
+    </div>
+    <div class="field">
+      <label for="mida">Tamaño del cartón</label>
+      <select id="mida">
+        <option value="3">3×3 (9 casillas)</option>
+        <option value="4">4×4 (16 casillas)</option>
+        <option value="5" selected>5×5 (25 casillas, casilla libre en el centro)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="nombre">Número de cartones</label>
+      <select id="nombre">
+        <option value="4">4 cartones</option>
+        <option value="6">6 cartones</option>
+        <option value="8" selected>8 cartones</option>
+        <option value="12">12 cartones</option>
+        <option value="16">16 cartones</option>
+        <option value="24">24 cartones</option>
+        <option value="30">30 cartones</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="paraules">Palabras o números (uno por línea)</label>
+      <textarea id="paraules" placeholder="gato&#10;perro&#10;pájaro&#10;pez&#10;serpiente&#10;tortuga&#10;león&#10;tigre&#10;elefante&#10;jirafa&#10;..."></textarea>
+      <div class="hint">Necesitas al menos <span id="min-paraules">24</span> palabras para cartones 5×5.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-submit" onclick="generarBingo()">🎱 Generar cartones</button>
+    </div>
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <div class="cartrons-wrap" id="cartrons-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;">
+      <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:-0.02em;" id="cartrons-title"></h2>
+      <div class="actions" style="margin:0;">
+        <button class="btn-action" onclick="regenerar()">🔄 Volver a mezclar</button>
+        <button class="btn-action" onclick="window.print()">🖨️ Imprimir todos</button>
+      </div>
+    </div>
+    <div class="cartrons-grid" id="cartrons-grid"></div>
+  </div>
+</div>
+
+<section class="seo-block" style="max-width:800px;margin:3rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:#2C1A0E">Cartones de bingo personalizados, listos para imprimir</h2>
+  <p>Este generador crea <strong>cartones de bingo para imprimir</strong> con las palabras que tú decidas. Escribes la lista, eliges el tamaño del cartón y cuántos quieres, y cada cartón sale con las palabras colocadas al azar, de manera que no hay dos iguales si tienes suficientes palabras.</p>
+  <p>El bingo funciona bien en clase porque convierte un repaso en un juego sin que el profesor tenga que preparar nada: la misma lista de vocabulario que ibas a dictar sirve de material. Se usa mucho para idiomas, para tablas de multiplicar y para repasar terminología antes de un examen.</p>
+  <p style="margin-top:0.75rem">Todo ocurre en tu navegador. Las palabras que escribes no salen de tu ordenador y no hay que crear ninguna cuenta.</p>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin:1.5rem 0 0.75rem;color:#2C1A0E">Preguntas frecuentes</h3>
+  <dl>
+    <dt style="font-weight:700;margin-top:1rem">¿Cuántas palabras necesito?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Nueve para cartones 3×3, dieciséis para 4×4 y veinticuatro para 5×5, porque la casilla central es libre. Cuantas más pongas por encima del mínimo, más se diferencian los cartones entre sí.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Todos los cartones son diferentes?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Cada cartón coge una selección aleatoria de tu lista. Si pones justo el mínimo, todos llevarán las mismas palabras cambiadas de sitio; con el doble de palabras, cada cartón es claramente distinto.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Sirve para cualquier asignatura?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Sí, porque el contenido lo escribes tú: vocabulario de idiomas, términos científicos, autores, fechas, resultados de operaciones o cualquier cosa que quieras repasar.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Cómo imprimo los cartones?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Con el botón «Imprimir todos» se abre el diálogo de impresión del navegador, ya maquetado a dos cartones por fila y sin el formulario. Desde ahí puedes imprimir en papel o elegir «Guardar como PDF».</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Se guardan mis palabras para la próxima vez?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">No. Al recargar la página la lista se borra. Si vas a usar la misma lista a menudo, guárdala en un documento aparte y pégala cada vez.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Es gratis?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Sí, gratis y sin registro.</dd>
+  </dl>
+</section>
+
+<section class="seo-block" style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Otras herramientas</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/es/grupos" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Grupos aleatorios</a>
+    <a href="/es/ruleta" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Ruleta de nombres</a>
+    <a href="/es/horario" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Horario semanal</a>
+    <a href="/es/prompts" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Prompts para profesores</a>
+  </div>
+</section>
+
+<footer>
+  <strong>la meva escola</strong> · Herramientas gratuitas para profesores<br>
+  <span style="margin-top:0.25rem;display:inline-block">
+    <a href="/bingo" style="color:var(--accent)" hreflang="ca">Versió en català</a> ·
+    <a href="/privacitat" style="color:var(--accent)">Privacidad y cookies</a>
+  </span>
+</footer>
+
+<script>
+let lastParaules = [];
+let lastConfig = {};
+
+document.getElementById('mida').addEventListener('change', updateHint);
+function updateHint() {
+  const m = parseInt(document.getElementById('mida').value);
+  const needed = m === 5 ? m*m - 1 : m*m;
+  document.getElementById('min-paraules').textContent = needed;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function generarBingo() {
+  const titol = document.getElementById('titol').value.trim() || 'Bingo';
+  const mida = parseInt(document.getElementById('mida').value);
+  const nombre = parseInt(document.getElementById('nombre').value);
+  const paraules = document.getElementById('paraules').value.split('\n').map(p => p.trim()).filter(Boolean);
+  const errorBox = document.getElementById('error-box');
+  errorBox.className = 'error-box';
+
+  const needed = mida === 5 ? mida * mida - 1 : mida * mida;
+  if (paraules.length < needed) {
+    errorBox.textContent = `Necesitas al menos ${needed} palabras para cartones ${mida}×${mida}. Ahora tienes ${paraules.length}.`;
+    errorBox.className = 'error-box active';
+    return;
+  }
+
+  lastParaules = paraules;
+  lastConfig = { titol, mida, nombre };
+  renderBingo(titol, mida, nombre, paraules);
+}
+
+function regenerar() {
+  if (lastParaules.length) renderBingo(lastConfig.titol, lastConfig.mida, lastConfig.nombre, lastParaules);
+}
+
+function renderBingo(titol, mida, nombre, paraules) {
+  const grid = document.getElementById('cartrons-grid');
+  grid.innerHTML = '';
+  document.getElementById('cartrons-title').textContent = `${nombre} cartones — ${titol}`;
+
+  for (let c = 0; c < nombre; c++) {
+    const selec = shuffle(paraules).slice(0, mida === 5 ? mida * mida - 1 : mida * mida);
+    const hasFree = mida === 5;
+    if (hasFree) selec.splice(Math.floor(selec.length / 2), 0, '★ LIBRE');
+
+    const div = document.createElement('div');
+    div.className = 'cartro';
+    div.innerHTML = `<div class="cartro-header">${titol} — Cartón ${c + 1}</div>
+      <div class="cartro-grid" style="grid-template-columns:repeat(${mida},1fr);">
+        ${selec.map((p, i) => {
+          const isFree = hasFree && i === Math.floor(selec.length / 2);
+          return `<div class="cartro-cell${isFree ? ' free' : ''}">${p}</div>`;
+        }).join('')}
+      </div>`;
+    grid.appendChild(div);
+  }
+
+  document.getElementById('cartrons-wrap').className = 'cartrons-wrap active';
+}
+</script>
+<script src="/cookies.js"></script>
+</body>
+</html>

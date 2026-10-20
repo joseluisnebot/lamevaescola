@@ -45,3 +45,10 @@ https://www.lamevaescola.com/* https://lamevaescola.com/:splat 301
 /comunitat-valenciana.html  /comunitat-valenciana  301
 /illes-balears.html  /illes-balears  301
 /catalunya.html  /catalunya  301
+
+# Versión en castellano (test 20/10/2026) — misma regla de quitar el .html
+/es/bingo.html  /es/bingo  301
+/es/grupos.html  /es/grupos  301
+/es/horario.html  /es/horario  301
+/es/ruleta.html  /es/ruleta  301
+/es/prompts.html  /es/prompts  301

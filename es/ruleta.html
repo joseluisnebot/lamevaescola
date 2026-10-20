@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruleta de Nombres para Clase — Elegir alumno al azar</title>
+  <meta name="description" content="Ruleta de nombres para elegir alumnos al azar en clase. Escribe la lista, gira y sale un nombre. Se proyecta bien en la pizarra digital. Gratis y sin registro.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F3; --surface: #FFFFFF; --border: #EDD9C8;
+      --text: #2C1A0E; --muted: #8A6A55;
+      --accent: #C2622A; --accent-l: #FAE8D8; --accent-d: #8B3A18;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column; }
+    main { flex:1;max-width:1100px;margin:0 auto;padding:2rem 1.5rem;width:100%; }
+    h1 { font-size:clamp(1.5rem,4vw,2rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:0.35rem; }
+    .subtitle { font-size:0.92rem;color:var(--muted);margin-bottom:2rem; }
+    .layout { display:grid;grid-template-columns:340px 1fr;gap:2rem;align-items:start; }
+    @media (max-width:760px) { .layout { grid-template-columns:1fr; } }
+    .card { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem; }
+    label { display:block;font-size:0.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem; }
+    textarea { width:100%;min-height:160px;border:1px solid var(--border);border-radius:8px;padding:0.75rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--text);background:var(--bg);resize:vertical;outline:none;transition:border-color 0.15s; }
+    textarea:focus { border-color:var(--accent); }
+    .btn { display:inline-flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.6rem 1.2rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;border:none;transition:background 0.15s,transform 0.1s; }
+    .btn:active { transform:scale(0.97); }
+    .btn-primary { background:var(--accent);color:#fff;width:100%;margin-top:0.75rem;padding:0.7rem 1.2rem;font-size:0.92rem; }
+    .btn-primary:hover { background:var(--accent-d); }
+    .btn-secondary { background:var(--accent-l);color:var(--accent-d);width:100%;margin-top:0.5rem;padding:0.7rem 1.2rem;font-size:0.92rem; }
+    .btn-secondary:hover { background:#c3e0d1; }
+    .btn-spin { background:var(--accent);color:#fff;font-size:1.15rem;font-weight:800;padding:0.85rem 2rem;border-radius:50px;width:100%;margin-top:1rem;letter-spacing:-0.01em; }
+    .btn-spin:hover:not(:disabled) { background:var(--accent-d); }
+    .btn-spin:disabled { background:#aaa;cursor:not-allowed; }
+    .checkbox-row { display:flex;align-items:center;gap:0.5rem;margin-top:1rem;font-size:0.88rem;color:var(--muted);cursor:pointer; }
+    .checkbox-row input[type=checkbox] { width:16px;height:16px;accent-color:var(--accent);cursor:pointer; }
+    .wheel-wrap { display:flex;flex-direction:column;align-items:center;gap:0.5rem; }
+    .wheel-container { position:relative;display:flex;align-items:center;justify-content:center; }
+    canvas { display:block;border-radius:50%; }
+    .pointer { position:absolute;top:-2px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:30px solid #1A1917;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));z-index:10; }
+    .result-box { width:100%;margin-top:1.25rem;padding:1.25rem;background:var(--accent-l);border:2px solid var(--accent);border-radius:12px;text-align:center;display:none; }
+    .result-box.visible { display:block; }
+    .result-label { font-size:0.78rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem; }
+    .result-name { font-size:clamp(1.6rem,5vw,2.5rem);font-weight:800;color:var(--accent-d);letter-spacing:-0.03em;line-height:1.1; }
+    .empty-state { text-align:center;padding:2rem 1rem;color:var(--muted);font-size:0.9rem; }
+    .empty-state .icon { font-size:2.5rem;margin-bottom:0.5rem; }
+    .section-title { font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:0.75rem; }
+  </style>
+  <link rel="canonical" href="https://lamevaescola.com/es/ruleta">
+  <link rel="alternate" hreflang="es" href="https://lamevaescola.com/es/ruleta" />
+  <link rel="alternate" hreflang="ca" href="https://lamevaescola.com/ruleta" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ruleta de Nombres para Clase — Elegir alumno al azar" />
+  <meta property="og:description" content="Ruleta de nombres para elegir alumnos al azar en clase. Escribe la lista, gira y sale un nombre. Gratis y sin registro." />
+  <meta property="og:url" content="https://lamevaescola.com/es/ruleta" />
+  <meta property="og:image" content="https://lamevaescola.com/youtube-banner.png" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="La Meva Escola" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ruleta de Nombres para Clase — Elegir alumno al azar" />
+  <meta name="twitter:description" content="Escribe la lista, gira y sale un nombre. Gratis y sin registro." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Ruleta de nombres para clase","url":"https://lamevaescola.com/es/ruleta","applicationCategory":"EducationalApplication","inLanguage":"es","isAccessibleForFree":true,"provider":{"@type":"Organization","name":"La Meva Escola","url":"https://lamevaescola.com"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Se guardan los nombres para la próxima clase?","acceptedAnswer":{"@type":"Answer","text":"No. Al recargar la página la lista se borra. Si usas siempre el mismo grupo, guarda los nombres en un documento y pégalos cada vez."}},{"@type":"Question","name":"¿Puedo evitar que salga dos veces el mismo alumno?","acceptedAnswer":{"@type":"Answer","text":"Sí. Marcando la casilla Quitar el ganador de la próxima tirada, cada nombre que sale desaparece de la ruleta, de modo que van saliendo todos sin repetirse. Con el botón Restaurar lista vuelves a tener a todos."}},{"@type":"Question","name":"¿Funciona sin conexión a internet?","acceptedAnswer":{"@type":"Answer","text":"Una vez cargada la página, la ruleta funciona sin conexión, porque todo el cálculo y la animación ocurren en el navegador. Si recargas sin internet, no cargará."}},{"@type":"Question","name":"¿Se puede proyectar en la pizarra digital?","acceptedAnswer":{"@type":"Answer","text":"Sí. La ruleta se dibuja grande y el nombre ganador aparece en letra muy visible, pensado para verse desde el fondo del aula. También puedes girar pulsando la barra espaciadora."}},{"@type":"Question","name":"¿Es realmente aleatorio?","acceptedAnswer":{"@type":"Answer","text":"Sí. El giro se calcula con el generador de números aleatorios del navegador y no hay forma de dirigirlo, así que ningún alumno puede pensar que hay favoritismo."}},{"@type":"Question","name":"¿Cuántos nombres puedo poner?","acceptedAnswer":{"@type":"Answer","text":"Necesitas al menos dos. No hay un máximo, pero a partir de unos treinta nombres el texto de cada sector se vuelve pequeño en pantalla."}}]}</script>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(253,248,243,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #DDE8DD;position:sticky;top:0;z-index:50;">
+  <a href="/es/" style="font-size:1.1rem;font-weight:800;color:#1A1917;text-decoration:none;letter-spacing:-0.03em;">la meva <span style="color:#2D6A4F">escola</span></a>
+  <a href="/es/" style="font-size:0.82rem;color:#6B7B6B;text-decoration:none;">← Todas las herramientas</a>
+</nav>
+
+<main>
+  <h1>🎡 Ruleta de nombres</h1>
+  <p class="subtitle">Elige un alumno al azar delante de toda la clase.</p>
+
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="section-title">Lista de alumnos</div>
+        <label for="names-input">Un nombre por línea</label>
+        <textarea id="names-input" placeholder="Ana&#10;Bruno&#10;Carla&#10;David&#10;Elena"></textarea>
+        <button class="btn btn-primary" id="btn-load">Cargar en la ruleta</button>
+        <button class="btn btn-secondary" id="btn-reset-list">Restaurar lista completa</button>
+        <label class="checkbox-row">
+          <input type="checkbox" id="chk-remove">
+          Quitar el ganador de la próxima tirada
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="wheel-wrap">
+          <div class="wheel-container" id="wheel-container">
+            <div class="pointer" id="pointer"></div>
+            <canvas id="wheel-canvas"></canvas>
+          </div>
+
+          <div id="empty-state" class="empty-state">
+            <div class="icon">🎡</div>
+            <div>Añade nombres para activar la ruleta</div>
+          </div>
+
+          <button class="btn btn-spin" id="btn-spin" disabled>¡Girar!</button>
+
+          <div class="result-box" id="result-box">
+            <div class="result-label">Ha salido</div>
+            <div class="result-name" id="result-name">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section class="seo-block" style="max-width:800px;margin:3rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:#2C1A0E">Elegir un alumno al azar, a la vista de todos</h2>
+  <p>Escribes los nombres de tu clase, cargas la lista y giras. La <strong>ruleta de nombres</strong> da vueltas, va haciendo tic al pasar por cada sector y se detiene en uno. El nombre sale en letra grande para que se lea desde el fondo del aula.</p>
+  <p>Lo útil no es el azar en sí, es que el azar sea <em>visible</em>. Cuando el profesor señala a alguien siempre hay quien piensa que le toca más veces; cuando lo decide una ruleta girando en la pizarra, esa discusión desaparece. Y además genera expectación, que para una clase de última hora no es poco.</p>
+  <p style="margin-top:0.75rem">Si marcas «quitar el ganador de la próxima tirada», cada nombre que sale se retira de la ruleta y así participan todos antes de que se repita nadie. Puedes girar también con la barra espaciadora, sin tener que acertar con el ratón en la pizarra digital.</p>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin:1.5rem 0 0.75rem;color:#2C1A0E">Preguntas frecuentes</h3>
+  <dl>
+    <dt style="font-weight:700;margin-top:1rem">¿Se guardan los nombres para mañana?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">No. Al recargar la página hay que volver a pegar la lista. Ten los nombres en un documento y pégalos; es cuestión de dos segundos.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Puedo evitar que salga dos veces el mismo?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Sí, marcando la casilla «quitar el ganador de la próxima tirada». Cada nombre que sale se retira, y con «restaurar lista completa» vuelven todos.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Funciona sin internet?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Una vez cargada la página, sí: todo se calcula en el navegador. Lo que no funcionará es recargarla si el wifi del centro ha caído.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Se ve bien en la pizarra digital?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Está pensado para eso: la ruleta se dibuja a buen tamaño y el nombre ganador aparece en letra muy grande. Puedes girar con la barra espaciadora para no tener que apuntar con el ratón.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Hay sonido?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Sí, un tic mientras gira y una pequeña melodía al parar. Si no quieres sonido, baja el volumen del ordenador.</dd>
+    <dt style="font-weight:700;margin-top:1rem">¿Cuántos nombres admite?</dt>
+    <dd style="margin:0.25rem 0 0 0;color:#6B4C38">Mínimo dos y sin máximo, aunque pasados unos treinta el texto de cada sector se queda pequeño.</dd>
+  </dl>
+</section>
+
+<section class="seo-block" style="max-width:800px;margin:2rem auto 0;padding:0 1.5rem 2rem">
+  <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A6A55;margin-bottom:0.75rem">Otras herramientas</p>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+    <a href="/es/grupos" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Grupos aleatorios</a>
+    <a href="/es/bingo" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Bingo para imprimir</a>
+    <a href="/es/horario" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Horario semanal</a>
+    <a href="/es/prompts" style="display:inline-flex;align-items:center;background:#FAE8D8;color:#8B3A18;font-size:0.82rem;font-weight:600;padding:0.45rem 1rem;border-radius:999px;text-decoration:none">Prompts para profesores</a>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:2rem 1.5rem;border-top:1px solid #DDE8DD;font-size:0.78rem;color:#6B7B6B;">
+  <strong>la meva escola</strong> · Herramientas gratuitas para profesores<br>
+  <a href="/ruleta" style="color:#2D6A4F" hreflang="ca">Versió en català</a> ·
+  <a href="/privacitat" style="color:#2D6A4F">Privacidad y cookies</a>
+</footer>
+<script src="/cookies.js"></script>
+
+<script>
+  const COLORS = ['#2D6A4F','#FB923C','#A78BFA','#F59E0B','#34D399','#60A5FA','#F87171','#818CF8'];
+
+  const canvas = document.getElementById('wheel-canvas');
+  const ctx = canvas.getContext('2d');
+  const btnSpin = document.getElementById('btn-spin');
+  const btnLoad = document.getElementById('btn-load');
+  const btnResetList = document.getElementById('btn-reset-list');
+  const namesInput = document.getElementById('names-input');
+  const resultBox = document.getElementById('result-box');
+  const resultName = document.getElementById('result-name');
+  const chkRemove = document.getElementById('chk-remove');
+  const emptyState = document.getElementById('empty-state');
+
+  let names = [];
+  let originalNames = [];
+  let spinning = false;
+  let currentAngle = 0;
+  let animFrame = null;
+
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function playTick(freq = 600, vol = 0.15) {
+    try {
+      const ac = getAudioCtx();
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(vol, ac.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.06);
+      osc.start(ac.currentTime);
+      osc.stop(ac.currentTime + 0.06);
+    } catch(e) {}
+  }
+
+  function playWin() {
+    try {
+      const ac = getAudioCtx();
+      [523, 659, 784, 1047].forEach((f, i) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.frequency.value = f;
+        osc.type = 'sine';
+        const t = ac.currentTime + i * 0.12;
+        gain.gain.setValueAtTime(0.18, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        osc.start(t);
+        osc.stop(t + 0.18);
+      });
+    } catch(e) {}
+  }
+
+  function getSize() {
+    return Math.min(500, window.innerWidth * 0.9);
+  }
+
+  function setCanvasSize() {
+    const size = getSize();
+    canvas.width = size;
+    canvas.height = size;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+  }
+
+  function drawWheel(highlightIndex = -1) {
+    setCanvasSize();
+    const size = canvas.width;
+    const cx = size / 2;
+    const cy = size / 2;
+    const r = size / 2 - 4;
+
+    ctx.clearRect(0, 0, size, size);
+
+    if (names.length === 0) {
+      emptyState.style.display = 'block';
+      canvas.style.display = 'none';
+      document.getElementById('pointer').style.display = 'none';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    canvas.style.display = 'block';
+    document.getElementById('pointer').style.display = 'block';
+
+    const slice = (2 * Math.PI) / names.length;
+
+    for (let i = 0; i < names.length; i++) {
+      const startAngle = currentAngle + i * slice;
+      const endAngle = startAngle + slice;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = COLORS[i % COLORS.length];
+      ctx.fill();
+
+      if (i === highlightIndex) {
+        ctx.save();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(startAngle + slice / 2);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#fff';
+      const fontSize = Math.min(16, Math.max(9, r / (names.length * 0.6)));
+      ctx.font = `600 ${fontSize}px Inter, sans-serif`;
+      ctx.shadowColor = 'rgba(0,0,0,0.4)';
+      ctx.shadowBlur = 3;
+      const maxLen = Math.max(8, Math.floor(r * 0.55 / (fontSize * 0.6)));
+      let label = names[i].trim();
+      if (label.length > maxLen) label = label.substring(0, maxLen - 1) + '…';
+      ctx.fillText(label, r - 10, fontSize / 3);
+      ctx.restore();
+    }
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  function loadNames() {
+    const raw = namesInput.value.trim().split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    if (raw.length < 2) {
+      alert('Añade al menos 2 nombres para activar la ruleta.');
+      return;
+    }
+    names = [...raw];
+    originalNames = [...raw];
+    currentAngle = -Math.PI / 2;
+    drawWheel();
+    btnSpin.disabled = false;
+    resultBox.classList.remove('visible');
+  }
+
+  function getWinnerIndex() {
+    const slice = (2 * Math.PI) / names.length;
+    let pAngle = ((-Math.PI / 2) - currentAngle) % (2 * Math.PI);
+    if (pAngle < 0) pAngle += 2 * Math.PI;
+    return Math.floor(pAngle / slice) % names.length;
+  }
+
+  let lastTickSegment = -1;
+
+  function spin() {
+    if (spinning || names.length < 2) return;
+    spinning = true;
+    btnSpin.disabled = true;
+    resultBox.classList.remove('visible');
+    lastTickSegment = -1;
+
+    const totalRotation = (Math.PI * 2) * (5 + Math.random() * 5);
+    const duration = 3000 + Math.random() * 2000;
+    const startAngle = currentAngle;
+    const startTime = performance.now();
+
+    function easeOut(t) {
+      return 1 - Math.pow(1 - t, 4);
+    }
+
+    function frame(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = easeOut(t);
+      currentAngle = startAngle + totalRotation * eased;
+
+      if (names.length > 1) {
+        const slice = (2 * Math.PI) / names.length;
+        let pAngle = ((-Math.PI / 2) - currentAngle) % (2 * Math.PI);
+        if (pAngle < 0) pAngle += 2 * Math.PI;
+        const seg = Math.floor(pAngle / slice) % names.length;
+        if (seg !== lastTickSegment) {
+          const speed = (1 - eased);
+          const vol = Math.min(0.2, 0.05 + speed * 0.2);
+          const freq = 400 + speed * 400;
+          playTick(freq, vol);
+          lastTickSegment = seg;
+        }
+      }
+
+      drawWheel();
+
+      if (t < 1) {
+        animFrame = requestAnimationFrame(frame);
+      } else {
+        currentAngle = startAngle + totalRotation;
+        const winner = getWinnerIndex();
+        drawWheel(winner);
+        spinning = false;
+        btnSpin.disabled = false;
+
+        const winnerName = names[winner];
+        resultName.textContent = winnerName;
+        resultBox.classList.add('visible');
+        playWin();
+
+        if (chkRemove.checked) {
+          names.splice(winner, 1);
+          if (names.length < 2) {
+            btnSpin.disabled = true;
+            if (names.length === 1) {
+              setTimeout(() => {
+                alert('Solo queda 1 alumno: ' + names[0]);
+              }, 300);
+            } else {
+              setTimeout(() => {
+                alert('No quedan alumnos en la ruleta.');
+              }, 300);
+            }
+          }
+          setTimeout(() => drawWheel(), 1200);
+        }
+      }
+    }
+
+    animFrame = requestAnimationFrame(frame);
+  }
+
+  btnLoad.addEventListener('click', loadNames);
+  btnSpin.addEventListener('click', spin);
+  btnResetList.addEventListener('click', () => {
+    if (originalNames.length > 0) {
+      names = [...originalNames];
+      namesInput.value = originalNames.join('\n');
+      currentAngle = -Math.PI / 2;
+      drawWheel();
+      btnSpin.disabled = false;
+      resultBox.classList.remove('visible');
+    }
+  });
+
+  window.addEventListener('resize', () => { drawWheel(); });
+
+  currentAngle = -Math.PI / 2;
+  drawWheel();
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.target.matches('textarea, input') && !spinning && !btnSpin.disabled) {
+      e.preventDefault();
+      spin();
+    }
+  });
+</script>
+</body>
+</html>
