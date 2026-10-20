@@ -9,7 +9,10 @@ Plataforma educativa enfocada en acompañamiento infantil. Proyecto de la mujer 
 ## Deploy
 ```bash
 cd /root/lamevaescola
-export CLOUDFLARE_API_TOKEN=KbzsvBydROCvDbDtOab3dJHV_6w5REZhPnJkheix
+# El token NO se guarda aquí: este repo es público y GitHub rechaza el push.
+# Está en la memoria del agente (credentials.md, token maestro agente-ia-master-v2).
+# El antiguo KbzsvByd… caducó el 20/10/2026 y daba "Invalid access token [code: 9109]".
+export CLOUDFLARE_API_TOKEN=<token maestro de credentials.md>
 export CLOUDFLARE_ACCOUNT_ID=0c4d9c91bb0f3a4c905545ecc158ec65
 npx wrangler pages deploy . --project-name=lamevaescola --branch=main
 ```
